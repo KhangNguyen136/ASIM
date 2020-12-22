@@ -1,0 +1,46 @@
+PODS:
+  - DatePicker (1.3.1):
+    - Extended
+  - DropDown (2.3.13)
+  - Extended (1.0.5)
+  - Realm (10.1.2):
+    - Realm/Headers (= 10.1.2)
+  - Realm/Headers (10.1.2)
+  - RealmSwift (10.1.2):
+    - Realm (= 10.1.2)
+  - SCLAlertView (0.8)
+  - ScrollViewController (1.1.2)
+  - SearchTextField (1.2.4)
+
+DEPENDENCIES:
+  - DatePicker (~> 1.3.0)
+  - DropDown
+  - RealmSwift
+  - SCLAlertView
+  - ScrollViewController (~> 1.1)
+  - SearchTextField
+
+SPEC REPOS:
+  trunk:
+    - DatePicker
+    - DropDown
+    - Extended
+    - Realm
+    - RealmSwift
+    - SCLAlertView
+    - ScrollViewController
+    - SearchTextField
+
+SPEC CHECKSUMS:
+  DatePicker: 05ddbd2b57d00ce6f44c1f0611ced32f948d33a6
+  DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
+  Extended: c463225e0c29b2823847866c1b106827772ac678
+  Realm: 031fdd4be7094d01b43af1a5e49766ab644bb800
+  RealmSwift: 43cf2e114baa9d17d34eb81e7d0def31f21cd444
+  SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
+  ScrollViewController: f7a3cb0e655f354e71f7fb6144cf0c7fd7854b8b
+  SearchTextField: 40dc3cc57def5a211f263cac263622c163bbc25a
+
+PODFILE CHECKSUM: e42048ab3f0c03ac70a22391c6fc008ed00dbeb9
+
+COCOAPODS: 1.10.0
