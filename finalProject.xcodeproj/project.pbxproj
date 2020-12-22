@@ -11,6 +11,7 @@
 		575A6A58CE9DE50D718ADAE3 /* Pods_finalProject_finalProjectUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0441D9C958AB7E390FACFC87 /* Pods_finalProject_finalProjectUITests.framework */; };
 		9FD178A20D2CA1DE9A3FEF52 /* Pods_finalProjectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F3FE369D7F62F58B0093548 /* Pods_finalProjectTests.framework */; };
 		DE19306F2590883C001B5D53 /* DepositView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE19306E2590883C001B5D53 /* DepositView.swift */; };
+		DE84DA1A2592303800E7D4D0 /* AllSavingAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE84DA192592303800E7D4D0 /* AllSavingAccountCell.swift */; };
 		DEAC0A692590C87A0000F378 /* PickAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAC0A682590C87A0000F378 /* PickAccountView.swift */; };
 		DEAC0A6B2590C89A0000F378 /* PickAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAC0A6A2590C89A0000F378 /* PickAccountCell.swift */; };
 		DEAC0A6E2590DC250000F378 /* ChoiceAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAC0A6C2590DC220000F378 /* ChoiceAccountView.swift */; };
@@ -95,6 +96,7 @@
 		A86DEE0A7FBF21E354ABA869 /* Pods-finalProject-finalProjectUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-finalProject-finalProjectUITests.debug.xcconfig"; path = "Target Support Files/Pods-finalProject-finalProjectUITests/Pods-finalProject-finalProjectUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		AA01FDC3187D05B28034DA42 /* Pods_finalProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_finalProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE19306E2590883C001B5D53 /* DepositView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepositView.swift; sourceTree = "<group>"; };
+		DE84DA192592303800E7D4D0 /* AllSavingAccountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllSavingAccountCell.swift; sourceTree = "<group>"; };
 		DEAC0A682590C87A0000F378 /* PickAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickAccountView.swift; sourceTree = "<group>"; };
 		DEAC0A6A2590C89A0000F378 /* PickAccountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickAccountCell.swift; sourceTree = "<group>"; };
 		DEAC0A6C2590DC220000F378 /* ChoiceAccountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChoiceAccountView.swift; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 				DE19306E2590883C001B5D53 /* DepositView.swift */,
 				DEAC0A682590C87A0000F378 /* PickAccountView.swift */,
 				DEAC0A6A2590C89A0000F378 /* PickAccountCell.swift */,
+				DE84DA192592303800E7D4D0 /* AllSavingAccountCell.swift */,
 			);
 			path = account;
 			sourceTree = "<group>";
@@ -640,6 +643,7 @@
 				F1538C4D257DE79200531002 /* filterHistoryVC.swift in Sources */,
 				DEFDCC1B258F822600A0FDDB /* SavingAccountView.swift in Sources */,
 				F1538C4F257DE79200531002 /* homeVC.swift in Sources */,
+				DE84DA1A2592303800E7D4D0 /* AllSavingAccountCell.swift in Sources */,
 				F16655A92570168A007B8D80 /* Data.swift in Sources */,
 				DEFDCC1A258F822600A0FDDB /* AddAccumulateCell.swift in Sources */,
 				DEFDCC0D258F81EB00A0FDDB /* NameAccountViewCell.swift in Sources */,

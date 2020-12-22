@@ -498,3 +498,32 @@ class Accumulate: Object{
     @objc dynamic var enddate: Date = Date()
 
 }
+class savingAccount: Object{
+    @objc dynamic var name: String = ""
+    @objc dynamic var id: Int = 0
+    override static func primaryKey() -> String? {
+        return "id"
+    }
+    @objc dynamic var startdate: Date = Date()
+    @objc dynamic var currency: String = "VND"
+    @objc dynamic var bank: String = ""
+    @objc dynamic var term: String = ""
+    @objc dynamic var interestRate: Float = 0
+    @objc dynamic var freeInterestRate: Float = 0
+    @objc dynamic var numDays: Int = 365
+    @objc dynamic var interestPaid: Int = 0
+    @objc dynamic var termEnded: Int = 0
+    @objc dynamic var srcAccountType: String = ""
+    @objc dynamic var srcAccountName:String = ""
+    @objc dynamic var destAccountType: String = ""
+    @objc dynamic var destAccountName:String = ""
+    @objc dynamic var descrip: String = ""
+    @objc dynamic var includeRecord: Bool = false
+    @objc dynamic var ammount: Float = 0
+    @objc dynamic var state: Bool = false //1: Done, 0: not finish
+    func incrementID() -> Int {
+           let realm = try! Realm()
+           return (realm.objects(savingAccount.self).max(ofProperty: "id") as Int? ?? 0) + 1
+    }
+
+}

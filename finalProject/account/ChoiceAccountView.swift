@@ -13,12 +13,14 @@ class ChoiceAccountView: UIViewController {
     var accountMode:Bool = false
     var bankingMode:Bool = false
     var timeMode: Bool = false
+    var termmMode: Bool = false
     let currencyLabel = ["Vietnamese Dong", "United States Dollar"]
     let accountLabel = ["Cash", "Banking Account"]
     let abbrName = ["ACB", "TPBank","DAB","SeABank","ABBANK","BacABank","VietCapitalBank","MSB","TCB","KienLongBank","Nam A Bank","NCB","VPBank","HDBank","OCB","MB","PVcombank","VIB","SCB","SGB","SHB","STB","VAB","BVB","VietBank","PG Bank","EIB","LPB","VCB","CTG","BIDV","NHCSXH/VBSP","VDB","CB","Oceanbank","GPBank","Agribank"]
     let bankName = ["Ngân hàng Á Châu","Ngân hàng Tiên Phong","Ngân hàng Đông Á","Ngân hàng Đông Nam Á","Ngân hàng An Bình","Ngân hàng Bắc Á","Ngân hàng Bản Việt","Hàng Hải Việt Nam","Kỹ Thương Việt Nam","Kiên Long","Nam Á","Quốc Dân","Việt Nam Thịnh Vượng","Phát triển nhà Thành phố Hồ Chí Minh","Phương Đông","Quân đội","Đại chúng","Quốc tế","Sài Gòn","Sài Gòn Công Thương","Sài Gòn-Hà Nội","Sài Gòn Thương Tín","Việt Á","Bảo Việt","Việt Nam Thương Tín","Xăng dầu Petrolimex","Xuất Nhập khẩu Việt Nam","Bưu điện Liên Việt","Ngoại thương Việt Nam","Công Thương Việt Nam","Đầu tư và Phát triển Việt Nam","Ngân hàng Chính sách xã hội","Ngân hàng Phát triển Việt Nam","Ngân hàng Xây dựng","Ngân hàng Đại Dương","Ngân hàng Dầu Khí Toàn Cầu","Ngân hàng Nông nghiệp và Phát triển Nông thôn VN"]
     let bankImg = ["bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank"]
     let howLong = ["1 month", "3 months", "6 months","1 year","2 years","5 years", "10 years", "other"]
+    let term = ["1 week","2 weeks", "3 weeks","1 month", "3 months", "6 months","12 months"]
     var backgroundImage: UIImageView!
 
     @IBAction func backBtn(_ sender: Any) {
@@ -60,6 +62,9 @@ extension ChoiceAccountView: UITableViewDataSource, UITableViewDelegate {
         else if timeMode == true{
             return howLong.count
         }
+        else if termmMode == true{
+            return term.count
+        }
         return 0
     }
     
@@ -89,6 +94,12 @@ extension ChoiceAccountView: UITableViewDataSource, UITableViewDelegate {
             cell.imgIcon.image = UIImage(named: "date")
             return cell
         }
+         else if termmMode == true{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ChoiceAccountViewCell", for: indexPath) as! ChoiceAccountViewCell
+            cell.txtText.text = term[indexPath.row]
+            cell.imgIcon.image = UIImage(named: "date")
+            return cell
+        }
         return UITableViewCell()
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -113,6 +124,12 @@ extension ChoiceAccountView: UITableViewDataSource, UITableViewDelegate {
             if indexPath.row != 7{ NotificationCenter.default.post(name: NSNotification.Name(rawValue: "timeNotification"), object: nil, userInfo: ["time": howLong[indexPath.row]])}
             dismiss(animated: true, completion: nil)
         }
+        else if termmMode == true{
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "termNotification"), object: nil, userInfo: ["term": term[indexPath.row]])
+            dismiss(animated: true, completion: nil)
+        }
+            
+        
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if bankingMode == true {
@@ -127,4 +144,5 @@ static let currNotification = Notification.Name("currNotification")
 static let bankNotification = Notification.Name("bankNotification")
 static let accountNotification = Notification.Name("accountNotification")
 static let timeNotification = Notification.Name("timeNotification")
+static let termNotification = Notification.Name("termNotification")
 }

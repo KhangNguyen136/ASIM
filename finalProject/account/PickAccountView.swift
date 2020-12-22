@@ -19,13 +19,15 @@ class PickAccountView: UIViewController {
         let realm = try! Realm()
                let cashAccount = realm.objects(Account.self)
                let bankingAccount = realm.objects(BankingAccount.self)
+
+
                for obj in cashAccount{
 
                let name = obj.name
                let balance = obj.balance
                if obj.active == true{
                    allAccount.append(displayAccout(name: name, balance: balance,img: UIImage(named: "Cash")!, type: AccountType.cash))
-                }
+                }}
                 for obj in bankingAccount{
 
                 let name = obj.name
@@ -37,7 +39,6 @@ class PickAccountView: UIViewController {
         }
     }
     
-}
 
 extension PickAccountView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
