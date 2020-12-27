@@ -21,6 +21,11 @@ class homeVC: UIViewController {
     var _balance: Float = 0
     var _income: Float = 0
     var _expense: Float = 0
+    override var shouldAutorotate: Bool{
+        get{
+            return false
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.

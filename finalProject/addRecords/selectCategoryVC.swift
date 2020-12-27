@@ -4,15 +4,14 @@
 //
 //  Created by Khang Nguyen on 11/28/20.
 //
-
 import UIKit
 
 class selectCategoryVC: UIViewController,selectLendOrBorrowDelegate {
     func didSelectLendOrBorrow(_type: Int, temp: polyRecord) {
         self.delegate?.didSelectRepayOrCollectDebt(_type: _type, temp: temp)
         self.navigationController?.popViewController(animated: false)
-        
     }
+    
     var selectedSection = -1
     var selectedRow = -1
     weak var delegate: selectCategoryDelegate? = nil
@@ -21,7 +20,14 @@ class selectCategoryVC: UIViewController,selectLendOrBorrowDelegate {
     var isOpened : [Bool] = []
     var dataSource :[[String]] = []
     @IBOutlet weak var listTv: UITableView!
-    override func viewDidLoad() {
+    
+    func getData(section: Int, row: Int, _type: Int, _delegate: selectCategoryDelegate) {
+        type = _type
+        delegate = _delegate
+        selectedSection = section
+        selectedRow = row
+    }
+    func loadData()  {
         switch type {
         case 0:
             dataSource = categoryValues().expense
@@ -31,14 +37,28 @@ class selectCategoryVC: UIViewController,selectLendOrBorrowDelegate {
             }
         case 1:
             dataSource = categoryValues().income
+        case -1:
+            return
         default:
             dataSource = categoryValues().other
         }
+        if type == 0 && selectedSection != -1
+        {
+            isOpened[selectedSection] = true
+        }
+        listTv.reloadData()
+        if selectedRow != -1
+        {
 
+            listTv.selectRow(at: IndexPath(row: selectedRow, section: selectedSection), animated: true, scrollPosition: .none)
+        }
+    }
+    override func viewDidLoad() {
+        
         listTv.register(categoryCell.self, forCellReuseIdentifier: "categoryCell")
         listTv.register(categoryCell.self, forCellReuseIdentifier: "detailCategoryCell")
+        loadData()
         super.viewDidLoad()
-        
         // Do any additional setup after loading the view.
     }
     
@@ -155,13 +175,15 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
             if isOpened[indexPath.section] == true
                 {
                 listTv.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+                selectedSection = indexPath.section
+                selectedRow = indexPath.row
+                return
                 }
-            selectedSection = indexPath.section
-            selectedRow = indexPath.row
+            selectedRow = -1
+            selectedSection = -1
             return
         }
         didSelectedCategory(section: indexPath.section, row: indexPath.row)
         }
-    
 }
 

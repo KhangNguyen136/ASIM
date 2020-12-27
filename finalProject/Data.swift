@@ -102,6 +102,10 @@ class Expense: Record{
     func undoTransaction() -> Void {
         print("Undo transaction of expense with \(amount), category: \(categoryValues().expense[category][detailCategory])")
         srcAccount?.income(_amount: amount)
+        if borrowRecord != nil
+        {
+            borrowRecord?.borrow?.undoRepay(_amount: amount)
+        }
     }
 }
 
@@ -133,6 +137,10 @@ class Income: Record{
     func undoTransaction() -> Void {
         print("Undo transaction of income with \(amount), category: \(categoryValues().income[0][category])")
         srcAccount?.expense(_amount: amount)
+        if lendRecord != nil
+            {
+            lendRecord?.lend?.undoCollect(_amount: amount)
+            }
     }
 }
 
@@ -352,7 +360,9 @@ class Adjustment: Record{
     @objc dynamic var category: Int = -1
     @objc dynamic var detailCategory: Int = -1
     @objc dynamic var tempRecord: polyRecord? = nil
-    func getData(_amount: Float,_type: Int,_descript: String,_srcAccount: polyAccount,_location: String,_srcImg: String,_date: Date, _subType: Int,_different: Float, _category: Int, _detailCategory: Int, _tempRecord: polyRecord?)
+    @objc dynamic var person: String = ""
+
+    func getData(_amount: Float,_type: Int,_descript: String,_srcAccount: polyAccount,_location: String,_srcImg: String,_date: Date, _subType: Int,_different: Float, _category: Int, _detailCategory: Int, _tempRecord: polyRecord?,_person: String)
     {
         super.getData(_amount: _amount, _type: _type, _descript: _descript, _srcAccount: _srcAccount, _location: _location, _srcImg: _srcImg,_date: _date)
         subType = _subType
@@ -360,6 +370,7 @@ class Adjustment: Record{
         tempRecord = _tempRecord
         category = _category
         detailCategory = _detailCategory
+        person = _person
         doTransaction()
     }
     func doTransaction() -> Void {
@@ -417,6 +428,7 @@ class polyRecord: Object{
     @objc dynamic var transfer: Transfer? = nil
     @objc dynamic var adjustment: Adjustment? = nil
     @objc dynamic var type : Int = -1
+    @objc dynamic var isUploaded : Bool = false
 }
 class Account: Object{
     @objc dynamic var name: String = ""
@@ -439,6 +451,7 @@ class Account: Object{
     
 }
 class BankingAccount:Account {
+    
      @objc dynamic var bankName: String = ""
      @objc dynamic var bankImg: String = ""
 
@@ -448,7 +461,8 @@ class polyAccount: Object{
     @objc dynamic var cashAcc: Account? = nil
     @objc dynamic var bankingAcc: BankingAccount? = nil
     @objc dynamic var type : Int = -1
-    @objc dynamic var id: Int = -1
+    @objc dynamic var isUploaded : Bool = false
+
     func getname() -> String{
         if type == 1{
             return cashAcc!.name
