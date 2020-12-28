@@ -45,7 +45,7 @@ class sectionFilterHistoryCell: UITableViewCell {
 }
 
 class seclectDateFilterHistoryCell: UITableViewCell {
-    var date: Date? = Date()
+    var date: Date? = nil
     @IBOutlet weak var content: UILabel!
     
     override func awakeFromNib() {
@@ -59,7 +59,7 @@ class seclectDateFilterHistoryCell: UITableViewCell {
                 // Create picker object
                 let datePicker = DatePicker()
                 // Setup
-                datePicker.setup(beginWith: nil, min: minDate, max: maxDate) { (selected, date) in
+                datePicker.setup(beginWith: Date(), min: minDate, max: maxDate) { (selected, date) in
                     if selected, let selectedDate = date {
                         self.date = selectedDate
                         sender.setTitle(selectedDate.string(), for: .normal)

@@ -10,6 +10,11 @@ import RealmSwift
 
 class accountVC: UIViewController {
     var backgroundImage: UIImageView!
+    override var shouldAutorotate: Bool{
+        get{
+            return false
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.backgroundImage = UIImageView(image: UIImage(named: "background-1"))

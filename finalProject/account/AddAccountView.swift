@@ -122,8 +122,12 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
             acc.includeReport = false
             let realm = try! Realm()
             if editMode == false{
+            let tempPolyAcc = polyAccount()
+                tempPolyAcc.type = 1
+                tempPolyAcc.cashAcc = acc
             try! realm.write {
-                realm.add(acc)
+                realm.add(tempPolyAcc)
+                print(realm.configuration.fileURL)
                 }
             }
             else{
@@ -152,8 +156,11 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
             acc.bankImg = imgName
             let realm = try! Realm()
             if editMode == false{
+            let tempPolyAcc = polyAccount()
+                tempPolyAcc.type = 2
+                tempPolyAcc.bankingAcc = acc
             try! realm.write {
-                realm.add(acc)
+                realm.add(tempPolyAcc)
                 }}
             else{
                 let updAccount = realm.objects(BankingAccount.self).filter("name == '\(nameEdit)'").first

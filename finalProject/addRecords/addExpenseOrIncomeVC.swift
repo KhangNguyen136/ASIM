@@ -1,14 +1,14 @@
 //
-//  addRecordVC.swift
+//  addExpenseOrIncomeVC.swift
 //  finalProject
 //
-//  Created by Khang Nguyen on 11/22/20.
+//  Created by Khang Nguyen on 12/26/20.
 //
 
 import UIKit
+import SearchTextField
 import DropDown
 import RealmSwift
-import SearchTextField
 
 protocol selectCategoryDelegate: class {
     func didSelectCategory(section: Int, row: Int)
@@ -22,7 +22,7 @@ protocol selectLendOrBorrowDelegate: class {
     func didSelectLendOrBorrow(_type: Int, temp: polyRecord)
 }
 
-class addExOrInVC: UIViewController,selectCategoryDelegate,selectAccountDelegate {
+class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectAccountDelegate {
     
     var type = 0
     var category = -1
@@ -33,6 +33,9 @@ class addExOrInVC: UIViewController,selectCategoryDelegate,selectAccountDelegate
     var userInfor: User? = nil
     
     var srcAccount: polyAccount? = nil
+    
+    @IBOutlet weak var amount: UITextField!
+    
     @IBOutlet weak var chooseTypeRecordBtn: UIButton!
     
     @IBOutlet weak var chooseCategoryBtn: UIButton!
@@ -40,9 +43,7 @@ class addExOrInVC: UIViewController,selectCategoryDelegate,selectAccountDelegate
     @IBOutlet weak var dateTime: UIDatePicker!
     
     @IBOutlet weak var unit: UILabel!
-    
-    @IBOutlet weak var amount: UITextField!
-    
+        
     @IBOutlet weak var chooseAccountBtn: UIButton!
     
     @IBOutlet weak var personTF: SearchTextField!
@@ -51,10 +52,12 @@ class addExOrInVC: UIViewController,selectCategoryDelegate,selectAccountDelegate
     
     @IBOutlet weak var eventTF: SearchTextField!
     
-    @IBOutlet weak var scrollview: UIScrollView!
-    @IBOutlet weak var contentView: UIView!
-    
     @IBOutlet weak var descript: UITextField!
+    
+    @IBOutlet weak var chooseImageBtn: UIButton!
+    
+    var imagePicker = UIImagePickerController()
+
     let dropDown = DropDown()
     
     func loadData() {
@@ -89,21 +92,8 @@ class addExOrInVC: UIViewController,selectCategoryDelegate,selectAccountDelegate
         eventTF.theme.font = UIFont.systemFont(ofSize: 15)
         eventTF.maxNumberOfResults = 5
     }
-    func resetData() {
-        amount.text = ""
-        descript.text = ""
-        personTF.text = ""
-        chooseCategoryBtn.setTitle("Select category", for: .normal)
-        locationTF.text = ""
-        eventTF.text = ""
-    }
-    override func viewDidLoad() {
-        chooseTypeRecordBtn.semanticContentAttribute = .forceRightToLeft
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-    }
-    
     func didSelectAccount(temp: polyAccount, name: String) {
+        
         srcAccount = temp
         chooseAccountBtn.setTitle(name, for: .normal)
         return
@@ -119,6 +109,7 @@ class addExOrInVC: UIViewController,selectCategoryDelegate,selectAccountDelegate
             
             tempRecord = temp
             chooseCategoryBtn.setTitle("Repayment", for: .normal)
+            
             let borrow = temp.borrow
             amount.text = String(borrow!.remain)
             personTF.text = String(borrow!.lender)
@@ -128,6 +119,7 @@ class addExOrInVC: UIViewController,selectCategoryDelegate,selectAccountDelegate
         {
             category = 0
             detailCategory = 4
+            
             tempRecord = temp
             chooseCategoryBtn.setTitle("Collecting debt", for: .normal)
             
@@ -136,12 +128,18 @@ class addExOrInVC: UIViewController,selectCategoryDelegate,selectAccountDelegate
             personTF.text = String(lend!.borrower)
             descript.text = "Collect debt from " + lend!.borrower
         }
-        
-        
     }
     func didSelectCategory(section: Int, row: Int) {
-        tempRecord = nil
-        
+        if tempRecord != nil
+        {
+            tempRecord = nil
+            descript.text = ""
+            personTF.text = ""
+        }
+        if section == category && row == detailCategory
+        {
+        return
+        }
         category = section
         detailCategory = row
         if(type == 0)
@@ -153,30 +151,7 @@ class addExOrInVC: UIViewController,selectCategoryDelegate,selectAccountDelegate
             chooseCategoryBtn.setTitle(categoryValues().income[section][row], for: .normal)
         }
     }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-//        super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: {context in
-            print("Rotating screen!")
-        }, completion: {context in
-            print("Rotated screen!")
-        })
-    }
-    
-    @IBAction func chooseCategory(_ sender: Any) {
-        let dest = self.storyboard?.instantiateViewController(identifier: "selectCategoryVC") as! selectCategoryVC
-        dest.delegate = self
-        dest.type = type
-        self.navigationController?.pushViewController(dest, animated: false)
-    }
-    
-    @IBAction func chooseAccount(_ sender: Any) {
-        let dest = self.storyboard?.instantiateViewController(identifier: "selectAccountVC") as! selectAccountVC
-        dest.delegate = self
-        self.navigationController?.pushViewController(dest, animated: false)
-    }
-    
-    @IBAction func saveRecord(_ sender: Any) {
+    @IBAction func clickSave(_ sender: Any) {
         if Float(amount.text ?? "0") == 0 || amount.text == ""
         {
             print("You have to enter amount!")
@@ -233,13 +208,11 @@ class addExOrInVC: UIViewController,selectCategoryDelegate,selectAccountDelegate
             }
         }
         print(realm.configuration.fileURL!)
-        
         //reset vc
         guard var viewcontrollers = self.navigationController?.viewControllers else { return }
         if viewcontrollers.count == 1
         {
-        let dest = self.storyboard?.instantiateViewController(identifier: "addExOrInVC") as! addExOrInVC
-
+        let dest = self.storyboard?.instantiateViewController(identifier: "addExpenseOrIncomeVC") as! addExpenseOrIncomeVC
         _ = viewcontrollers.popLast()
         viewcontrollers.append(dest)
         dest.type = type
@@ -250,16 +223,24 @@ class addExOrInVC: UIViewController,selectCategoryDelegate,selectAccountDelegate
             self.navigationController?.popViewController(animated: false)
         }
     }
+    @IBAction func chooseCategory(_ sender: Any) {
+        let dest = self.storyboard?.instantiateViewController(identifier: "selectCategoryVC") as! selectCategoryVC
+        dest.getData(section: self.category, row: self.detailCategory,_type: self.type,_delegate: self)
+        self.navigationController?.pushViewController(dest, animated: true)
+    }
+    
+    @IBAction func chooseAccount(_ sender: Any) {
+        let dest = self.storyboard?.instantiateViewController(identifier: "selectAccountVC") as! selectAccountVC
+        dest.delegate = self
+        self.navigationController?.pushViewController(dest, animated: false)
+    }
     
     @IBAction func chooseType(_ sender: UIButton) {
         let dropDown = DropDown()
-
         // The view to which the drop down will appear on
         dropDown.anchorView = sender // UIView or UIBarButtonItem
-
         // The list of items to display. Can be changed dynamically
         dropDown.dataSource = categoryValues().typeRecord
-
         /*** IMPORTANT PART FOR CUSTOM CELLS ***/
         dropDown.cellNib = UINib(nibName: "typeRecord", bundle: nil)
 
@@ -290,6 +271,7 @@ class addExOrInVC: UIViewController,selectCategoryDelegate,selectAccountDelegate
                         self?.amount.textColor = UIColor.green
                         self?.personTF.placeholder = "Payer"
                     }
+                    
                 case 2,3:
                     guard var viewcontrollers = self?.navigationController?.viewControllers else { return }
                     let dest = self?.storyboard?.instantiateViewController(identifier: "addLendOrBorrowVC") as! addLendOrBorrowVC
@@ -301,18 +283,14 @@ class addExOrInVC: UIViewController,selectCategoryDelegate,selectAccountDelegate
                 
                 case 4:
                     guard var viewcontrollers = self?.navigationController?.viewControllers else { return }
-
                     let dest = self?.storyboard?.instantiateViewController(identifier: "addTransferVc") as! addTransferVc
-
                     _ = viewcontrollers.popLast()
                     viewcontrollers.append(dest)
 //                    dest.type = index
                     self?.navigationController?.setViewControllers(viewcontrollers, animated: false)
                 case 5:
                     guard var viewcontrollers = self?.navigationController?.viewControllers else { return }
-
                     let dest = self?.storyboard?.instantiateViewController(identifier: "addAdjustmentVC") as! addAdjustmentVC
-
                     _ = viewcontrollers.popLast()
                     viewcontrollers.append(dest)
 //                    dest.type = index
@@ -325,9 +303,84 @@ class addExOrInVC: UIViewController,selectCategoryDelegate,selectAccountDelegate
         }
         dropDown.show()
         }
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidLoad() {
         loadData()
-        super.viewWillAppear(false)
+        chooseTypeRecordBtn.semanticContentAttribute = .forceRightToLeft
+
+        super.viewDidLoad()
+
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
+
+        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
+
+    // MARK: - Table view data source
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
     }
-    
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        return 10
+    }
+
+    /*
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+
+        // Configure the cell...
+
+        return cell
+    }
+    */
+
+    /*
+    // Override to support conditional editing of the table view.
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the specified item to be editable.
+        return true
+    }
+    */
+
+    /*
+    // Override to support editing the table view.
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            // Delete the row from the data source
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }    
+    }
+    */
+
+    /*
+    // Override to support rearranging the table view.
+    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+
+    }
+    */
+
+    /*
+    // Override to support conditional rearranging of the table view.
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the item to be re-orderable.
+        return true
+    }
+    */
+
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+    }
+    */
+
+}

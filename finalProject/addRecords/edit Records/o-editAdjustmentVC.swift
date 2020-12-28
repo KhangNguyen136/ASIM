@@ -1,15 +1,15 @@
 //
-//  editAdjustmentVC.swift
+//  addAdjustmentVC.swift
 //  finalProject
 //
-//  Created by Khang Nguyen on 12/27/20.
+//  Created by Khang Nguyen on 11/28/20.
 //
 
 import UIKit
 import RealmSwift
 import SearchTextField
 
-class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategoryDelegate {
+class editAdjustmentVCOld: UIViewController,selectAccountDelegate,selectCategoryDelegate {
     func didSelectRepayOrCollectDebt(_type: Int, temp: polyRecord) {
         tempRecord = temp
         if(_type == 0)
@@ -21,7 +21,6 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
             chooseCategoryBtn.setTitle("Repayment", for: .normal)
             let borrow = temp.borrow
             descript.text = "Repay for " + borrow!.lender
-            personTF.text = borrow?.lender
         }
         else
         {
@@ -31,7 +30,6 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
             chooseCategoryBtn.setTitle("Collecting debt", for: .normal)
             let lend = temp.lend
             descript.text = "Collect debt from " + lend!.borrower
-            personTF.text = lend?.borrower
         }
     }
 
@@ -49,7 +47,6 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
     var category = -1
     var detailCategory = -1
     
-    @IBOutlet weak var subTypeTitle: UILabel!
     @IBOutlet weak var typeReccord: UIButton!
     @IBOutlet weak var chooseAccountBtn: UIButton!
     @IBOutlet weak var chooseCategoryBtn: UIButton!
@@ -59,8 +56,6 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
     @IBOutlet weak var different: UILabel!
     @IBOutlet weak var dateTime: UIDatePicker!
     @IBOutlet weak var locationTF: SearchTextField!
-    @IBOutlet weak var personTF: SearchTextField!
-
     
     func loadData()  {
         if record == nil
@@ -68,10 +63,11 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
             return
         }
         let temp = record?.adjustment
+        acctualBalance.text = String(temp!.amount)
         locationTF.text = temp?.location ?? ""
-        personTF.text = temp?.person ?? ""
         dateTime.date = temp?.date ?? Date()
         descript.text = temp?.descript
+        srcAccount = temp?.srcAccount
         subtype = temp!.subType
         category = temp!.category
         detailCategory = temp!.detailCategory
@@ -80,40 +76,32 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         _acttualBalance = (record?.adjustment!.amount)!
         acctualBalance.text = String(_acttualBalance)
         
-        _different = temp!.different
+        _currentBalance = (srcAccount?.getBalance())!
+        currentBalance.text = String(_currentBalance) + "$"
         
-        if temp?.subType == 0
+        _different = temp!.different
+        different.text = String(_different) + "$"
+        if subtype == 0
         {
             different.textColor = UIColor.red
-            subTypeTitle.text = "Expense"
         }
         else
         {
             different.textColor = UIColor.green
-            subTypeTitle.text = "Income"
         }
-        
-        didSelectAccount(temp: temp!.srcAccount!, name: temp!.srcAccount!.getname())
-        
         let userInfor = realm.objects(User.self)[0]
         var tempStr : [String] = []
         tempStr.append(contentsOf: userInfor.locations)
         locationTF.filterStrings(tempStr)
         locationTF.theme.font = UIFont.systemFont(ofSize: 15)
         locationTF.maxNumberOfResults = 5
-        
-        tempStr = []
-        tempStr.append(contentsOf: userInfor.persons)
-        personTF.filterStrings(tempStr)
-        personTF.theme.font = UIFont.systemFont(ofSize: 15)
-        personTF.maxNumberOfResults = 5
     }
-
     override func viewDidLoad() {
         typeReccord.clipsToBounds = true
         typeReccord.layer.cornerRadius = typeReccord.frame.width/8
         loadData()
         super.viewDidLoad()
+
         // Do any additional setup after loading the view.
     }
     
@@ -134,35 +122,44 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
             chooseCategoryBtn.setTitle(categoryValues().income[0][detailCategory], for: .normal)
         }
     }
-    func loadRootSrcAccount( )
-    {
-        let temp = record?.adjustment
-        if temp?.subType == 0
-        {
-            _currentBalance = temp!.amount + temp!.different
-            currentBalance.text = String(_currentBalance) + "$"
-        }
-        else
-        {
-            _currentBalance = temp!.amount - temp!.different
-            currentBalance.text = String(_currentBalance) + "$"
-        }
-    }
+    
     func didSelectAccount(temp: polyAccount, name: String) {
         srcAccount = temp
         chooseAccountBtn.setTitle(name, for: .normal)
-
-        if temp.getname() == record!.adjustment!.srcAccount!.getname()
-        {
-            loadRootSrcAccount()
-            
-        }
-        else
-        {
         _currentBalance = (srcAccount?.getBalance())!
         currentBalance.text = String(_currentBalance) + "$"
+        
+        if _currentBalance == _acttualBalance
+        {
+        _different = 0
+        different.text = "0 $"
+        subtype = 1
         }
-        changedAcctualBalance(UIButton())
+        else if _currentBalance < _acttualBalance
+            {
+            if subtype == 0
+            {
+                category = -1
+                detailCategory = -1
+                chooseCategoryBtn.setTitle("Select category", for: .normal)
+                subtype = 1
+            }
+            _different = _acttualBalance - _currentBalance
+            different.text = String(_different) + "$"
+            different.textColor = UIColor.green
+        }
+        else{
+            if subtype == 1
+            {
+                category = -1
+                detailCategory = -1
+                chooseCategoryBtn.setTitle("Select category", for: .normal)
+                subtype = 0
+            }
+            _different = _currentBalance - _acttualBalance
+            different.text = String(_different) + "$"
+            different.textColor = UIColor.red
+        }
     }
     @IBAction func chooseAccount(_ sender: Any) {
         let sb = UIStoryboard(name: "Main", bundle: nil)
@@ -185,41 +182,37 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         {
         _different = 0
         different.text = "0 $"
-        subTypeTitle.text = "Difference"
-        different.textColor = UIColor.black
-        subtype = -1
+        subtype = 1
         }
         else if _currentBalance < _acttualBalance
             {
-            if subtype != 1
+            if subtype == 0
             {
                 category = -1
                 detailCategory = -1
                 chooseCategoryBtn.setTitle("Select category", for: .normal)
                 subtype = 1
-                different.textColor = UIColor.green
-                subTypeTitle.text = "Income"
             }
             _different = _acttualBalance - _currentBalance
             different.text = String(_different)
+            different.textColor = UIColor.green
         }
         else{
-            if subtype != 0
+            if subtype == 1
             {
                 category = -1
                 detailCategory = -1
                 chooseCategoryBtn.setTitle("Select category", for: .normal)
                 subtype = 0
-                different.textColor = UIColor.red
-                subTypeTitle.text = "Expense"
             }
             _different = _currentBalance - _acttualBalance
             different.text = String(_different)
+            different.textColor = UIColor.red
         }
     }
     
     @IBAction func clickSaveRecord(_ sender: Any) {
-        if _different == 0 || subtype == -1
+        if _different == 0
         {
             print("You have to enter changed amount of source account!")
             return
@@ -238,18 +231,13 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         try! realm.write{
             record?.adjustment?.undoTransaction()
             
-            record?.adjustment?.getData(_amount: _acttualBalance, _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: "srcImage",_date: dateTime.date,_subType: subtype, _different: _different,_category: category,_detailCategory: detailCategory,_tempRecord: tempRecord,_person: personTF.text ?? "")
+            record?.adjustment?.getData(_amount: _acttualBalance, _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: "srcImage",_date: dateTime.date,_subType: subtype, _different: _different,_category: category,_detailCategory: detailCategory,_tempRecord: tempRecord,_person: "")
             let userInfor = realm.objects(User.self)[0]
-            var tempStr = locationTF.text ?? ""
+            let tempStr = locationTF.text ?? ""
             if tempStr.isEmpty == false && userInfor.locations.contains(tempStr) == false
             {
                 userInfor.locations.append(tempStr)
             }
-            tempStr = personTF.text ?? ""
-            if tempStr.isEmpty == false && userInfor.persons.contains(tempStr) == false
-            {
-                userInfor.persons.append(tempStr)
-                }
         }
         print("Update a adjustment")
        
@@ -259,6 +247,8 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         
     }
     
+    
+
     @IBAction func clickDelte(_ sender: Any) {
         try! realm.write{
             record?.adjustment?.undoTransaction()
@@ -270,72 +260,4 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         historyDelegate?.editedRecord()
         self.navigationController?.popViewController(animated: false)
     }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 11
-    }
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

@@ -12,22 +12,33 @@ protocol editRecordDelegate: class {
     func editedRecord()
 }
 protocol chooseFilterTypeDelegate: class {
-    func didSelectedFilterHistory(row: Int, section: Int)
-    func didSelectedFilterByCustom(id: (Int,Int))
+    func didSelectedFilterHistory(row: Int, section: Int, title: String)
+    func didSelectedFilterByCustom(id: (Int,Int), start: Date, end: Date, title: String)
 }
+
 struct sectionInfor {
     var day: String = ""
     var totalIncome: Float = 0
     var totalExpense: Float = 0
     var records: [polyRecord] = []
 }
+
 class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
-    func didSelectedFilterByCustom(id: (Int, Int)) {
-        
-    }
     
-    func didSelectedFilterHistory(row: Int, section: Int) {
+    func didSelectedFilterByCustom(id: (Int, Int), start: Date, end: Date, title: String) {
+        print("Filter by custom from \(startDate?.string() ?? "") to \(endDate?.string() ?? "")")
+        startDate = start
+        endDate = end
+        filterBy = id
+        filterBtn.setTitle(title, for: .normal)
+        loadData()
+    }
+    var startDate: Date? = nil
+    var endDate: Date? = nil
+    
+    func didSelectedFilterHistory(row: Int, section: Int, title: String) {
         filterBy = (section,row)
+        filterBtn.setTitle(title, for: .normal)
         loadData()
     }
     
@@ -35,7 +46,8 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
         loadData()
         listTv.reloadData()
     }
-    var filterBy: (Int, Int) = (0,0)
+    
+    var filterBy: (Int, Int) = (2,1)
 
     @IBOutlet weak var expense: UILabel!
     @IBOutlet weak var income: UILabel!
@@ -50,39 +62,77 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
     let formatter = DateFormatter()
     let realm = try! Realm()
     
-    func filterByDate(by: (Int,Int),date: Date) -> Bool {
-        switch by {
-        case (2,0):
-            print("This month")
+    func filterByDate(date: Date) -> Bool {
+        switch filterBy {
         case (2,1):
-            print("Last month")
+//            print("This month")
+            if Calendar.current.isDateInThisMonth(date)           {
+            return true
+            }
+            return false
         case (2,2):
-            print("Select month")
-        case (1,0):
-            print("This weeek")
+//            print("Last month")
+            if Calendar.current.isDateInLastMonth(date)
+            {
+                return true
+            }
+            return false
+
         case (1,1):
-            print("Last week")
-        case (0,0):
-            print("Today")
+//            print("This weeek")
+            
+            if Calendar.current.isDateInThisWeek(date)
+            {
+                return true
+            }
+            return false
+
+        case (1,2):
+//            print("Last week")
+            if Calendar.current.isDateInLastWeek(date)
+            {
+                return true
+            }
+            return false
+
         case (0,1):
-            print("Yesterday")
+//            print("Today")
+    
+            if Calendar.current.isDateInToday(date)
+            {
+                return true
+            }
+            return false
+
         case (0,2):
-            print("Select day")
-        case (3,0):
-            print("Quarter I")
-        case (3,1):
-            print("Quarter II")
-        case (3,2):
-            print("Quarter III")
-        case (3,3):
-            print("Quarter IV")
+//            print("Yesterday")
+            if Calendar.current.isDateInYesterday(date)         {
+            return true
+            }
+            return false
+        case (0,3):
+//            print("Select day")
+//            if date.compare(startDate!) == .orderedSame
+            if date == startDate
+            {
+            return true
+            }
+            return false
+
         case (4,0):
-            print("All")
+//            print("All")
+            return true
+
         default:
-            print("Custom")
+            if date.isBetweeen(date: startDate!, andDate: endDate!)
+                {
+                return true
+            }
+            return false
+
         }
-        return true
     }
+
     func loadData() {
         totalIncome = 0
         totalExpense = 0
@@ -95,6 +145,10 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
             switch i.type {
             case 0:
                 let temp = i.expense
+                if filterByDate(date: (temp?.date)!) == false
+                {
+                    continue
+                }
                 totalExpense += temp!.amount
                 let daystr = formatter.string(from: temp!.date)
                 let id = days.firstIndex(of: daystr)
@@ -113,6 +167,10 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
                 }
             case 1:
                 let temp = i.income
+                if filterByDate(date: (temp?.date)!) == false
+                {
+                    continue
+                }
                 totalIncome += temp!.amount
                 let daystr = formatter.string(from: temp!.date)
                 let id = days.firstIndex(of: daystr)
@@ -131,6 +189,10 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
                 }
             case 2:
                 let temp = i.lend
+                if filterByDate(date: (temp?.date)!) == false
+                {
+                    continue
+                }
                 totalExpense += temp!.amount
                 let daystr = formatter.string(from: temp!.date)
                 let id = days.firstIndex(of: daystr)
@@ -149,6 +211,10 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
                 }
             case 3:
                 let temp = i.borrow
+                if filterByDate(date: (temp?.date)!) == false
+                {
+                    continue
+                }
                 totalIncome += temp!.amount
                 let daystr = formatter.string(from: temp!.date)
                 let id = days.firstIndex(of: daystr)
@@ -167,6 +233,10 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
                 }
             case 5:
                 let temp = i.adjustment
+                if filterByDate(date: (temp?.date)!) == false
+                {
+                    continue
+                }
                 if temp?.subType == 0
                 {
                     totalExpense += temp!.different
@@ -209,6 +279,10 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
             default:
                 //transfer
                 let temp = i.transfer
+                if filterByDate(date: (temp?.date)!) == false
+                {
+                    continue
+                }
                 let daystr = formatter.string(from: temp!.date)
                 let id = days.firstIndex(of: daystr)
                 if id == nil
@@ -226,6 +300,7 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
         }
         income.text = String(totalIncome)
         expense.text = String(totalExpense)
+        listTv.reloadData()
     }
     func insertHistorySection(tempSection: sectionInfor, _tempDate: String)  {
         let tempDate = formatter.date(from: _tempDate)!
@@ -256,7 +331,8 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
     
     @IBAction func filterHistory(_ sender: Any) {
         let dest = self.storyboard?.instantiateViewController(identifier: "filterHistoryVC") as! filterHistoryVC
-//        dest.delegate = self
+        dest.delegate = self
+        dest.getData(section: filterBy.0, row: filterBy.1)
         self.navigationController?.pushViewController(dest, animated: false)
     }
 }
@@ -322,3 +398,41 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
     }
 }
 
+extension Calendar {
+  private var currentDate: Date { return Date() }
+
+  func isDateInThisWeek(_ date: Date) -> Bool {
+    return isDate(date, equalTo: currentDate, toGranularity: .weekOfYear)
+  }
+
+  func isDateInThisMonth(_ date: Date) -> Bool {
+    return isDate(date, equalTo: currentDate, toGranularity: .month)
+  }
+
+  func isDateInLastWeek(_ date: Date) -> Bool {
+    guard let nextWeek = self.date(byAdding: DateComponents(weekOfYear: -1), to: currentDate) else {
+      return false
+    }
+    return isDate(date, equalTo: nextWeek, toGranularity: .weekOfYear)
+  }
+
+  func isDateInLastMonth(_ date: Date) -> Bool {
+    guard let nextMonth = self.date(byAdding: DateComponents(month: -1), to: currentDate) else {
+      return false
+    }
+    return isDate(date, equalTo: nextMonth, toGranularity: .month)
+  }
+
+  func isDateInFollowingMonth(_ date: Date) -> Bool {
+    guard let followingMonth = self.date(byAdding: DateComponents(month: 2), to: currentDate) else {
+      return false
+    }
+    return isDate(date, equalTo: followingMonth, toGranularity: .month)
+  }
+}
+
+extension Date {
+    func isBetweeen(date date1: Date, andDate date2: Date) -> Bool {
+        return date1.compare(self) == self.compare(date2)
+    }
+}

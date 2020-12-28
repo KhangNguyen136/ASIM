@@ -30,10 +30,10 @@
 		DEFDCC1D258F822600A0FDDB /* AddSavingAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFDCC16258F822500A0FDDB /* AddSavingAccount.swift */; };
 		DEFDCC1E258F822600A0FDDB /* AccumulateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFDCC17258F822500A0FDDB /* AccumulateAccountView.swift */; };
 		F149F10D257EBAE700FBB2AB /* editRecord.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F149F10C257EBAE700FBB2AB /* editRecord.storyboard */; };
-		F149F115257EBB0900FBB2AB /* editAdjustmentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F149F111257EBB0900FBB2AB /* editAdjustmentVC.swift */; };
-		F149F122257EBBEC00FBB2AB /* editTransferVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = F149F11F257EBBEC00FBB2AB /* editTransferVc.swift */; };
-		F149F123257EBBEC00FBB2AB /* editExOrInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F149F120257EBBEC00FBB2AB /* editExOrInVC.swift */; };
-		F149F124257EBBEC00FBB2AB /* editLendOrBorrowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F149F121257EBBEC00FBB2AB /* editLendOrBorrowVC.swift */; };
+		F149F115257EBB0900FBB2AB /* o-editAdjustmentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F149F111257EBB0900FBB2AB /* o-editAdjustmentVC.swift */; };
+		F149F122257EBBEC00FBB2AB /* o-editTransferVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = F149F11F257EBBEC00FBB2AB /* o-editTransferVc.swift */; };
+		F149F123257EBBEC00FBB2AB /* o-editExOrInVC-o.swift in Sources */ = {isa = PBXBuildFile; fileRef = F149F120257EBBEC00FBB2AB /* o-editExOrInVC-o.swift */; };
+		F149F124257EBBEC00FBB2AB /* o-editLendOrBorrowVC-o.swift in Sources */ = {isa = PBXBuildFile; fileRef = F149F121257EBBEC00FBB2AB /* o-editLendOrBorrowVC-o.swift */; };
 		F1538C4C257DE79200531002 /* historyVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C2F257DE79200531002 /* historyVc.swift */; };
 		F1538C4D257DE79200531002 /* filterHistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C30257DE79200531002 /* filterHistoryVC.swift */; };
 		F1538C4E257DE79200531002 /* historyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C31257DE79200531002 /* historyCell.swift */; };
@@ -42,22 +42,23 @@
 		F1538C51257DE79200531002 /* otherVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C37257DE79200531002 /* otherVC.swift */; };
 		F1538C5A257DE79200531002 /* categoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C42257DE79200531002 /* categoryCell.swift */; };
 		F1538C5B257DE79200531002 /* selectAccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C43257DE79200531002 /* selectAccountVC.swift */; };
-		F1538C5C257DE79200531002 /* addExOrInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C44257DE79200531002 /* addExOrInVC.swift */; };
 		F1538C5D257DE79200531002 /* typeRecord.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1538C45257DE79200531002 /* typeRecord.xib */; };
 		F1538C5E257DE79200531002 /* selectCategoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C46257DE79200531002 /* selectCategoryVC.swift */; };
-		F1538C5F257DE79200531002 /* addLendOrBorrowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C47257DE79200531002 /* addLendOrBorrowVC.swift */; };
 		F1538C60257DE79200531002 /* accountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C48257DE79200531002 /* accountCell.swift */; };
 		F1538C61257DE79200531002 /* typeRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C49257DE79200531002 /* typeRecord.swift */; };
-		F1538C62257DE79200531002 /* addTransferVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C4A257DE79200531002 /* addTransferVc.swift */; };
-		F1538C63257DE79200531002 /* addAdjustmentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C4B257DE79200531002 /* addAdjustmentVC.swift */; };
 		F1547C38256B18B9001CD0AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1547C37256B18B9001CD0AB /* AppDelegate.swift */; };
 		F1547C3A256B18B9001CD0AB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1547C39256B18B9001CD0AB /* SceneDelegate.swift */; };
 		F1547C41256B18BB001CD0AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1547C40256B18BB001CD0AB /* Assets.xcassets */; };
 		F1547C4F256B18BB001CD0AB /* finalProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1547C4E256B18BB001CD0AB /* finalProjectTests.swift */; };
 		F1547C5A256B18BB001CD0AB /* finalProjectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1547C59256B18BB001CD0AB /* finalProjectUITests.swift */; };
+		F1564746259465A700365C23 /* imagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1564745259465A700365C23 /* imagePicker.swift */; };
+		F157487D2597E7A400DBF2F9 /* addExpenseOrIncomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F157487C2597E7A400DBF2F9 /* addExpenseOrIncomeVC.swift */; };
+		F15748822597FE4100DBF2F9 /* addLendOrBorrowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15748812597FE4100DBF2F9 /* addLendOrBorrowVC.swift */; };
 		F157582A2582C2C200FB0D13 /* lendOrBorrowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15758292582C2C200FB0D13 /* lendOrBorrowCell.swift */; };
 		F157582F2582C2DD00FB0D13 /* chooseLendOrBorrowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F157582E2582C2DD00FB0D13 /* chooseLendOrBorrowVC.swift */; };
 		F15EFB7425927F5F0071F94F /* filterHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15EFB7325927F5F0071F94F /* filterHistoryCell.swift */; };
+		F160D6F22597122B00ACB5AD /* personInforVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F160D6F12597122B00ACB5AD /* personInforVC.swift */; };
+		F160D6FC2597298900ACB5AD /* YourDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F160D6FB2597298900ACB5AD /* YourDataVC.swift */; };
 		F16655A92570168A007B8D80 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16655A82570168A007B8D80 /* Data.swift */; };
 		F17015C32585EAD4008DE4E9 /* loginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17015C22585EAD4008DE4E9 /* loginVC.swift */; };
 		F1716BBB257F538000BBB419 /* report.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1716BB1257F538000BBB419 /* report.storyboard */; };
@@ -65,6 +66,13 @@
 		F1716BBD257F538000BBB419 /* other.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1716BB5257F538000BBB419 /* other.storyboard */; };
 		F1716BBE257F538000BBB419 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1716BB7257F538000BBB419 /* Main.storyboard */; };
 		F1716BBF257F538000BBB419 /* account.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1716BB9257F538000BBB419 /* account.storyboard */; };
+		F17AE8F72595165400F44EB1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F17AE8F62595165300F44EB1 /* GoogleService-Info.plist */; };
+		F1D08F9E2598851700382264 /* editExOrInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D08F9D2598851700382264 /* editExOrInVC.swift */; };
+		F1D08FA32598852F00382264 /* editLendOrBorrowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D08FA22598852F00382264 /* editLendOrBorrowVC.swift */; };
+		F1D08FA82598854200382264 /* editTransferVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D08FA72598854200382264 /* editTransferVc.swift */; };
+		F1D08FAD2598855B00382264 /* editAdjustmentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D08FAC2598855B00382264 /* editAdjustmentVC.swift */; };
+		F1D851FA25985D6C001C6440 /* addTransferVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D851F925985D6C001C6440 /* addTransferVC.swift */; };
+		F1D851FF25985F41001C6440 /* addAdjustmentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D851FE25985F41001C6440 /* addAdjustmentVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,10 +122,10 @@
 		DEFDCC16258F822500A0FDDB /* AddSavingAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSavingAccount.swift; sourceTree = "<group>"; };
 		DEFDCC17258F822500A0FDDB /* AccumulateAccountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccumulateAccountView.swift; sourceTree = "<group>"; };
 		F149F10C257EBAE700FBB2AB /* editRecord.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = editRecord.storyboard; sourceTree = "<group>"; };
-		F149F111257EBB0900FBB2AB /* editAdjustmentVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = editAdjustmentVC.swift; sourceTree = "<group>"; };
-		F149F11F257EBBEC00FBB2AB /* editTransferVc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = editTransferVc.swift; sourceTree = "<group>"; };
-		F149F120257EBBEC00FBB2AB /* editExOrInVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = editExOrInVC.swift; sourceTree = "<group>"; };
-		F149F121257EBBEC00FBB2AB /* editLendOrBorrowVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = editLendOrBorrowVC.swift; sourceTree = "<group>"; };
+		F149F111257EBB0900FBB2AB /* o-editAdjustmentVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "o-editAdjustmentVC.swift"; sourceTree = "<group>"; };
+		F149F11F257EBBEC00FBB2AB /* o-editTransferVc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "o-editTransferVc.swift"; sourceTree = "<group>"; };
+		F149F120257EBBEC00FBB2AB /* o-editExOrInVC-o.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "o-editExOrInVC-o.swift"; sourceTree = "<group>"; };
+		F149F121257EBBEC00FBB2AB /* o-editLendOrBorrowVC-o.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "o-editLendOrBorrowVC-o.swift"; sourceTree = "<group>"; };
 		F1538C2F257DE79200531002 /* historyVc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = historyVc.swift; sourceTree = "<group>"; };
 		F1538C30257DE79200531002 /* filterHistoryVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = filterHistoryVC.swift; sourceTree = "<group>"; };
 		F1538C31257DE79200531002 /* historyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = historyCell.swift; sourceTree = "<group>"; };
@@ -126,14 +134,10 @@
 		F1538C37257DE79200531002 /* otherVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = otherVC.swift; sourceTree = "<group>"; };
 		F1538C42257DE79200531002 /* categoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = categoryCell.swift; sourceTree = "<group>"; };
 		F1538C43257DE79200531002 /* selectAccountVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = selectAccountVC.swift; sourceTree = "<group>"; };
-		F1538C44257DE79200531002 /* addExOrInVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addExOrInVC.swift; sourceTree = "<group>"; };
 		F1538C45257DE79200531002 /* typeRecord.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = typeRecord.xib; sourceTree = "<group>"; };
 		F1538C46257DE79200531002 /* selectCategoryVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = selectCategoryVC.swift; sourceTree = "<group>"; };
-		F1538C47257DE79200531002 /* addLendOrBorrowVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addLendOrBorrowVC.swift; sourceTree = "<group>"; };
 		F1538C48257DE79200531002 /* accountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = accountCell.swift; sourceTree = "<group>"; };
 		F1538C49257DE79200531002 /* typeRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = typeRecord.swift; sourceTree = "<group>"; };
-		F1538C4A257DE79200531002 /* addTransferVc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addTransferVc.swift; sourceTree = "<group>"; };
-		F1538C4B257DE79200531002 /* addAdjustmentVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addAdjustmentVC.swift; sourceTree = "<group>"; };
 		F1547C34256B18B9001CD0AB /* finalProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = finalProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1547C37256B18B9001CD0AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F1547C39256B18B9001CD0AB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -145,9 +149,14 @@
 		F1547C55256B18BB001CD0AB /* finalProjectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = finalProjectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1547C59256B18BB001CD0AB /* finalProjectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = finalProjectUITests.swift; sourceTree = "<group>"; };
 		F1547C5B256B18BB001CD0AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F1564745259465A700365C23 /* imagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imagePicker.swift; sourceTree = "<group>"; };
+		F157487C2597E7A400DBF2F9 /* addExpenseOrIncomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addExpenseOrIncomeVC.swift; sourceTree = "<group>"; };
+		F15748812597FE4100DBF2F9 /* addLendOrBorrowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addLendOrBorrowVC.swift; sourceTree = "<group>"; };
 		F15758292582C2C200FB0D13 /* lendOrBorrowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lendOrBorrowCell.swift; sourceTree = "<group>"; };
 		F157582E2582C2DD00FB0D13 /* chooseLendOrBorrowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chooseLendOrBorrowVC.swift; sourceTree = "<group>"; };
 		F15EFB7325927F5F0071F94F /* filterHistoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = filterHistoryCell.swift; sourceTree = "<group>"; };
+		F160D6F12597122B00ACB5AD /* personInforVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = personInforVC.swift; sourceTree = "<group>"; };
+		F160D6FB2597298900ACB5AD /* YourDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourDataVC.swift; sourceTree = "<group>"; };
 		F16655A82570168A007B8D80 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		F17015C22585EAD4008DE4E9 /* loginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginVC.swift; sourceTree = "<group>"; };
 		F1716BB2257F538000BBB419 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = report.storyboard; sourceTree = "<group>"; };
@@ -155,6 +164,13 @@
 		F1716BB6257F538000BBB419 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = other.storyboard; sourceTree = "<group>"; };
 		F1716BB8257F538000BBB419 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Main.storyboard; sourceTree = "<group>"; };
 		F1716BBA257F538000BBB419 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = account.storyboard; sourceTree = "<group>"; };
+		F17AE8F62595165300F44EB1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F1D08F9D2598851700382264 /* editExOrInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = editExOrInVC.swift; sourceTree = "<group>"; };
+		F1D08FA22598852F00382264 /* editLendOrBorrowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = editLendOrBorrowVC.swift; sourceTree = "<group>"; };
+		F1D08FA72598854200382264 /* editTransferVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = editTransferVc.swift; sourceTree = "<group>"; };
+		F1D08FAC2598855B00382264 /* editAdjustmentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = editAdjustmentVC.swift; sourceTree = "<group>"; };
+		F1D851F925985D6C001C6440 /* addTransferVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addTransferVC.swift; sourceTree = "<group>"; };
+		F1D851FE25985F41001C6440 /* addAdjustmentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addAdjustmentVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,11 +224,15 @@
 		F15304EB257EAB8500F09423 /* edit Records */ = {
 			isa = PBXGroup;
 			children = (
-				F149F120257EBBEC00FBB2AB /* editExOrInVC.swift */,
-				F149F121257EBBEC00FBB2AB /* editLendOrBorrowVC.swift */,
-				F149F11F257EBBEC00FBB2AB /* editTransferVc.swift */,
-				F149F111257EBB0900FBB2AB /* editAdjustmentVC.swift */,
+				F149F120257EBBEC00FBB2AB /* o-editExOrInVC-o.swift */,
+				F149F121257EBBEC00FBB2AB /* o-editLendOrBorrowVC-o.swift */,
+				F149F11F257EBBEC00FBB2AB /* o-editTransferVc.swift */,
+				F149F111257EBB0900FBB2AB /* o-editAdjustmentVC.swift */,
 				F149F10C257EBAE700FBB2AB /* editRecord.storyboard */,
+				F1D08F9D2598851700382264 /* editExOrInVC.swift */,
+				F1D08FA22598852F00382264 /* editLendOrBorrowVC.swift */,
+				F1D08FA72598854200382264 /* editTransferVc.swift */,
+				F1D08FAC2598855B00382264 /* editAdjustmentVC.swift */,
 			);
 			path = "edit Records";
 			sourceTree = "<group>";
@@ -248,6 +268,8 @@
 			isa = PBXGroup;
 			children = (
 				F1538C37257DE79200531002 /* otherVC.swift */,
+				F160D6F12597122B00ACB5AD /* personInforVC.swift */,
+				F160D6FB2597298900ACB5AD /* YourDataVC.swift */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -282,10 +304,10 @@
 			isa = PBXGroup;
 			children = (
 				F15304EB257EAB8500F09423 /* edit Records */,
-				F1538C44257DE79200531002 /* addExOrInVC.swift */,
-				F1538C47257DE79200531002 /* addLendOrBorrowVC.swift */,
-				F1538C4A257DE79200531002 /* addTransferVc.swift */,
-				F1538C4B257DE79200531002 /* addAdjustmentVC.swift */,
+				F157487C2597E7A400DBF2F9 /* addExpenseOrIncomeVC.swift */,
+				F15748812597FE4100DBF2F9 /* addLendOrBorrowVC.swift */,
+				F1D851F925985D6C001C6440 /* addTransferVC.swift */,
+				F1D851FE25985F41001C6440 /* addAdjustmentVC.swift */,
 				F1538C46257DE79200531002 /* selectCategoryVC.swift */,
 				F1538C42257DE79200531002 /* categoryCell.swift */,
 				F15758292582C2C200FB0D13 /* lendOrBorrowCell.swift */,
@@ -294,6 +316,7 @@
 				F1538C48257DE79200531002 /* accountCell.swift */,
 				F1538C45257DE79200531002 /* typeRecord.xib */,
 				F1538C49257DE79200531002 /* typeRecord.swift */,
+				F1564745259465A700365C23 /* imagePicker.swift */,
 			);
 			path = addRecords;
 			sourceTree = "<group>";
@@ -333,6 +356,7 @@
 				F1538C34257DE79200531002 /* report */,
 				F1547C40256B18BB001CD0AB /* Assets.xcassets */,
 				F1547C45256B18BB001CD0AB /* Info.plist */,
+				F17AE8F62595165300F44EB1 /* GoogleService-Info.plist */,
 				F1547C37256B18B9001CD0AB /* AppDelegate.swift */,
 				F1547C39256B18B9001CD0AB /* SceneDelegate.swift */,
 				F16655A82570168A007B8D80 /* Data.swift */,
@@ -496,6 +520,7 @@
 				F1716BBD257F538000BBB419 /* other.storyboard in Resources */,
 				DEFDCC18258F822600A0FDDB /* CustomView.xib in Resources */,
 				F1716BBC257F538000BBB419 /* LaunchScreen.storyboard in Resources */,
+				F17AE8F72595165400F44EB1 /* GoogleService-Info.plist in Resources */,
 				F1716BBF257F538000BBB419 /* account.storyboard in Resources */,
 				F1547C41256B18BB001CD0AB /* Assets.xcassets in Resources */,
 			);
@@ -626,9 +651,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				DEFDCC19258F822600A0FDDB /* AddAccumulateView.swift in Sources */,
-				F1538C63257DE79200531002 /* addAdjustmentVC.swift in Sources */,
 				DEFDCC1E258F822600A0FDDB /* AccumulateAccountView.swift in Sources */,
-				F149F115257EBB0900FBB2AB /* editAdjustmentVC.swift in Sources */,
+				F149F115257EBB0900FBB2AB /* o-editAdjustmentVC.swift in Sources */,
 				DEAC0A6B2590C89A0000F378 /* PickAccountCell.swift in Sources */,
 				F157582A2582C2C200FB0D13 /* lendOrBorrowCell.swift in Sources */,
 				DEFDCC1D258F822600A0FDDB /* AddSavingAccount.swift in Sources */,
@@ -636,38 +660,46 @@
 				DEFDCC10258F81EB00A0FDDB /* AddAcountViewCell.swift in Sources */,
 				DEFDCC0E258F81EB00A0FDDB /* NormalAccount.swift in Sources */,
 				DEFDCC1C258F822600A0FDDB /* CustomView.swift in Sources */,
+				F157487D2597E7A400DBF2F9 /* addExpenseOrIncomeVC.swift in Sources */,
+				F1D08FA82598854200382264 /* editTransferVc.swift in Sources */,
 				F1538C60257DE79200531002 /* accountCell.swift in Sources */,
+				F1D851FF25985F41001C6440 /* addAdjustmentVC.swift in Sources */,
 				F1538C4D257DE79200531002 /* filterHistoryVC.swift in Sources */,
+				F1D08FA32598852F00382264 /* editLendOrBorrowVC.swift in Sources */,
 				DEFDCC1B258F822600A0FDDB /* SavingAccountView.swift in Sources */,
 				F1538C4F257DE79200531002 /* homeVC.swift in Sources */,
 				F16655A92570168A007B8D80 /* Data.swift in Sources */,
+				F1D08F9E2598851700382264 /* editExOrInVC.swift in Sources */,
 				DEFDCC1A258F822600A0FDDB /* AddAccumulateCell.swift in Sources */,
 				DEFDCC0D258F81EB00A0FDDB /* NameAccountViewCell.swift in Sources */,
-				F1538C5C257DE79200531002 /* addExOrInVC.swift in Sources */,
-				F149F124257EBBEC00FBB2AB /* editLendOrBorrowVC.swift in Sources */,
+				F149F124257EBBEC00FBB2AB /* o-editLendOrBorrowVC-o.swift in Sources */,
 				F1538C4C257DE79200531002 /* historyVc.swift in Sources */,
 				DE19306F2590883C001B5D53 /* DepositView.swift in Sources */,
+				F1D08FAD2598855B00382264 /* editAdjustmentVC.swift in Sources */,
 				F157582F2582C2DD00FB0D13 /* chooseLendOrBorrowVC.swift in Sources */,
 				F1547C38256B18B9001CD0AB /* AppDelegate.swift in Sources */,
 				F1538C61257DE79200531002 /* typeRecord.swift in Sources */,
 				DEFDCC08258F81EB00A0FDDB /* AllNormalAccountCell.swift in Sources */,
 				F15EFB7425927F5F0071F94F /* filterHistoryCell.swift in Sources */,
 				F1538C50257DE79200531002 /* reportVC.swift in Sources */,
+				F160D6FC2597298900ACB5AD /* YourDataVC.swift in Sources */,
 				DEFDCC09258F81EB00A0FDDB /* BankingCell.swift in Sources */,
 				F1538C5E257DE79200531002 /* selectCategoryVC.swift in Sources */,
-				F1538C62257DE79200531002 /* addTransferVc.swift in Sources */,
 				F1538C5A257DE79200531002 /* categoryCell.swift in Sources */,
+				F160D6F22597122B00ACB5AD /* personInforVC.swift in Sources */,
 				DEAC0A6E2590DC250000F378 /* ChoiceAccountView.swift in Sources */,
 				DEAC0A6F2590DC250000F378 /* ChoiceAccountViewCell.swift in Sources */,
 				DEFDCC0A258F81EB00A0FDDB /* AddAccountView.swift in Sources */,
 				F1547C3A256B18B9001CD0AB /* SceneDelegate.swift in Sources */,
 				F1538C51257DE79200531002 /* otherVC.swift in Sources */,
-				F149F122257EBBEC00FBB2AB /* editTransferVc.swift in Sources */,
+				F1564746259465A700365C23 /* imagePicker.swift in Sources */,
+				F149F122257EBBEC00FBB2AB /* o-editTransferVc.swift in Sources */,
 				F1538C5B257DE79200531002 /* selectAccountVC.swift in Sources */,
-				F149F123257EBBEC00FBB2AB /* editExOrInVC.swift in Sources */,
+				F15748822597FE4100DBF2F9 /* addLendOrBorrowVC.swift in Sources */,
+				F1D851FA25985D6C001C6440 /* addTransferVC.swift in Sources */,
+				F149F123257EBBEC00FBB2AB /* o-editExOrInVC-o.swift in Sources */,
 				DEFDCC0F258F81EB00A0FDDB /* accountVC.swift in Sources */,
 				F17015C32585EAD4008DE4E9 /* loginVC.swift in Sources */,
-				F1538C5F257DE79200531002 /* addLendOrBorrowVC.swift in Sources */,
 				DEAC0A692590C87A0000F378 /* PickAccountView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -876,7 +908,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = joh.finalProject;
+				PRODUCT_BUNDLE_IDENTIFIER = ASIM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -896,7 +928,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = joh.finalProject;
+				PRODUCT_BUNDLE_IDENTIFIER = ASIM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
