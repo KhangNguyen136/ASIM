@@ -429,6 +429,74 @@ class polyRecord: Object{
     @objc dynamic var adjustment: Adjustment? = nil
     @objc dynamic var type : Int = -1
     @objc dynamic var isUploaded : Bool = false
+    func getDescript() -> String {
+        switch type {
+        case 0:
+            return expense!.descript
+        case 1:
+            return income!.descript
+        case 2:
+            return lend!.descript
+        case 3:
+            return borrow!.descript
+        case 4:
+            return transfer!.descript
+        default:
+            return adjustment!.descript
+        }
+    }
+    func getCategory() -> String {
+        switch type {
+        case 0:
+            return categoryValues().expense[expense!.category][expense!.detailCategory]
+        case 1:
+            return categoryValues().income[0][income!.category]
+        case 2:
+            return "Lend"
+        case 3:
+            return "Borrow"
+        case 4:
+            return "Transfer"
+        default:
+            if adjustment!.subType == 0
+            {
+                return categoryValues().expense[adjustment!.category][adjustment!.detailCategory]
+            }
+            return categoryValues().income[0][adjustment!.detailCategory]
+        }
+    }
+    func getTypeRecord() -> String {
+        switch type {
+        case 0:
+            return "expense"
+        case 1:
+            return "income"
+        case 2:
+            return "lend"
+        case 3:
+            return "borrow"
+        case 4:
+            return "transfer"
+        default:
+            return "adjustment"
+        }
+    }
+    func getPerson() -> String {
+        switch type {
+        case 0:
+            return expense!.payee
+        case 1:
+            return income!.payer
+        case 2:
+            return lend!.borrower
+        case 3:
+            return borrow!.lender
+        case 4:
+            return ""
+        default:
+            return adjustment!.person
+        }
+    }
 }
 class Account: Object{
     @objc dynamic var name: String = ""

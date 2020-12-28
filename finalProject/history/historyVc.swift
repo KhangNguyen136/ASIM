@@ -44,7 +44,13 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
     
     func editedRecord() {
         loadData()
-        listTv.reloadData()
+//        if searchActive == true
+//        {
+//            searchBarCancelButtonClicked(searchBar)
+//            return
+//        }
+//        listTv.reloadData()
+        searchBarCancelButtonClicked(searchBar)
     }
     
     var filterBy: (Int, Int) = (2,1)
@@ -56,8 +62,13 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
     @IBOutlet weak var filterBtn: UIButton!
     
     @IBOutlet weak var listTv: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
+    
+    var searchActive: Bool = false
+    var searchBarValue = ""
     
     var dataSource : [sectionInfor] = []
+    var filtered: [polyRecord] = []
     var days: [String] = []
     let formatter = DateFormatter()
     let realm = try! Realm()
@@ -326,9 +337,10 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
         listTv.register(historyCell.self, forCellReuseIdentifier: "historyCell")
         loadData()
         
+        searchBar.showsCancelButton = false
+        searchBar.delegate = self
         super.viewDidLoad()
     }
-    
     @IBAction func filterHistory(_ sender: Any) {
         let dest = self.storyboard?.instantiateViewController(identifier: "filterHistoryVC") as! filterHistoryVC
         dest.delegate = self
@@ -336,17 +348,85 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
         self.navigationController?.pushViewController(dest, animated: false)
     }
 }
+extension historyVC : UISearchBarDelegate{
+    
+//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+//            searchActive = true
+//        }
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+            searchActive = false
+        }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchActive = false;
+
+        searchBar.text = nil
+        searchBar.resignFirstResponder()
+        listTv.resignFirstResponder()
+        self.searchBar.showsCancelButton = false
+        listTv.reloadData()
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+            searchActive = false
+        }
+
+    func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
+            return true
+        }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+
+        if searchText.isEmpty == true
+        {
+            searchActive = false
+            listTv.reloadData()
+            return
+        }
+                self.searchActive = true;
+                self.searchBar.showsCancelButton = true
+                filtered = []
+
+                for i in dataSource
+                {
+                    for j in i.records
+                    {
+                        if j.getDescript().lowercased().contains(searchText.lowercased()) ||
+                            j.getCategory().lowercased().contains(searchText.lowercased())  ||
+                            j.getTypeRecord().lowercased().contains(searchText.lowercased()) ||
+                            j.getPerson().lowercased().contains(searchText.lowercased())
+                        {
+                            filtered.append(j)
+                        }
+                    }
+                }
+                self.listTv.reloadData()
+        }
+}
 
 extension historyVC: UITableViewDelegate, UITableViewDataSource
 {
     func numberOfSections(in tableView: UITableView) -> Int {
+        if searchActive == true
+        {
+            return 1
+        }
         return days.count
     }
 func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    if searchActive == true
+    {
+        return filtered.count
+    }
     return dataSource[section].records.count + 1
 }
 
 func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    if searchActive == true
+    {
+        let cell: historyCell = listTv.dequeueReusableCell(withIdentifier: "historyRow", for: indexPath) as! historyCell
+        
+        cell.getData(_record: filtered[indexPath.row])
+        
+        return cell
+    }
     if indexPath.row == 0
     {
         let cell: sectionHistoryCell = listTv.dequeueReusableCell(withIdentifier: "sectionHistoryRow", for: indexPath) as! sectionHistoryCell
@@ -363,13 +443,21 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
     }
 }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0
+        var temp: polyRecord
+        if searchActive == true
         {
-            listTv.deselectRow(at: indexPath, animated: false)
-            return
+            temp = filtered[indexPath.row]
+        }
+        else
+        {
+            if indexPath.row == 0
+            {
+                listTv.deselectRow(at: indexPath, animated: false)
+                return
+            }
+            temp = dataSource[indexPath.section].records[indexPath.row-1]
         }
         let sb = UIStoryboard(name: "editRecord", bundle: nil)
-        let temp = dataSource[indexPath.section].records[indexPath.row-1]
         switch temp.type {
         case 0,1:
             let dest = sb.instantiateViewController(identifier: "editExOrInVC") as! editExOrInVC
@@ -396,6 +484,14 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
 
         }
     }
+}
+
+extension historyVC: UISearchResultsUpdating{
+    func updateSearchResults(for searchController: UISearchController) {
+        return
+    }
+    
+    
 }
 
 extension Calendar {
@@ -436,3 +532,4 @@ extension Date {
         return date1.compare(self) == self.compare(date2)
     }
 }
+
