@@ -31,10 +31,6 @@
 		DEFDCC1D258F822600A0FDDB /* AddSavingAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFDCC16258F822500A0FDDB /* AddSavingAccount.swift */; };
 		DEFDCC1E258F822600A0FDDB /* AccumulateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFDCC17258F822500A0FDDB /* AccumulateAccountView.swift */; };
 		F149F10D257EBAE700FBB2AB /* editRecord.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F149F10C257EBAE700FBB2AB /* editRecord.storyboard */; };
-		F149F115257EBB0900FBB2AB /* o-editAdjustmentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F149F111257EBB0900FBB2AB /* o-editAdjustmentVC.swift */; };
-		F149F122257EBBEC00FBB2AB /* o-editTransferVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = F149F11F257EBBEC00FBB2AB /* o-editTransferVc.swift */; };
-		F149F123257EBBEC00FBB2AB /* o-editExOrInVC-o.swift in Sources */ = {isa = PBXBuildFile; fileRef = F149F120257EBBEC00FBB2AB /* o-editExOrInVC-o.swift */; };
-		F149F124257EBBEC00FBB2AB /* o-editLendOrBorrowVC-o.swift in Sources */ = {isa = PBXBuildFile; fileRef = F149F121257EBBEC00FBB2AB /* o-editLendOrBorrowVC-o.swift */; };
 		F1538C4C257DE79200531002 /* historyVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C2F257DE79200531002 /* historyVc.swift */; };
 		F1538C4D257DE79200531002 /* filterHistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C30257DE79200531002 /* filterHistoryVC.swift */; };
 		F1538C4E257DE79200531002 /* historyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C31257DE79200531002 /* historyCell.swift */; };
@@ -124,10 +120,6 @@
 		DEFDCC16258F822500A0FDDB /* AddSavingAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSavingAccount.swift; sourceTree = "<group>"; };
 		DEFDCC17258F822500A0FDDB /* AccumulateAccountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccumulateAccountView.swift; sourceTree = "<group>"; };
 		F149F10C257EBAE700FBB2AB /* editRecord.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = editRecord.storyboard; sourceTree = "<group>"; };
-		F149F111257EBB0900FBB2AB /* o-editAdjustmentVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "o-editAdjustmentVC.swift"; sourceTree = "<group>"; };
-		F149F11F257EBBEC00FBB2AB /* o-editTransferVc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "o-editTransferVc.swift"; sourceTree = "<group>"; };
-		F149F120257EBBEC00FBB2AB /* o-editExOrInVC-o.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "o-editExOrInVC-o.swift"; sourceTree = "<group>"; };
-		F149F121257EBBEC00FBB2AB /* o-editLendOrBorrowVC-o.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "o-editLendOrBorrowVC-o.swift"; sourceTree = "<group>"; };
 		F1538C2F257DE79200531002 /* historyVc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = historyVc.swift; sourceTree = "<group>"; };
 		F1538C30257DE79200531002 /* filterHistoryVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = filterHistoryVC.swift; sourceTree = "<group>"; };
 		F1538C31257DE79200531002 /* historyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = historyCell.swift; sourceTree = "<group>"; };
@@ -226,10 +218,6 @@
 		F15304EB257EAB8500F09423 /* edit Records */ = {
 			isa = PBXGroup;
 			children = (
-				F149F120257EBBEC00FBB2AB /* o-editExOrInVC-o.swift */,
-				F149F121257EBBEC00FBB2AB /* o-editLendOrBorrowVC-o.swift */,
-				F149F11F257EBBEC00FBB2AB /* o-editTransferVc.swift */,
-				F149F111257EBB0900FBB2AB /* o-editAdjustmentVC.swift */,
 				F149F10C257EBAE700FBB2AB /* editRecord.storyboard */,
 				F1D08F9D2598851700382264 /* editExOrInVC.swift */,
 				F1D08FA22598852F00382264 /* editLendOrBorrowVC.swift */,
@@ -655,7 +643,6 @@
 			files = (
 				DEFDCC19258F822600A0FDDB /* AddAccumulateView.swift in Sources */,
 				DEFDCC1E258F822600A0FDDB /* AccumulateAccountView.swift in Sources */,
-				F149F115257EBB0900FBB2AB /* o-editAdjustmentVC.swift in Sources */,
 				DEAC0A6B2590C89A0000F378 /* PickAccountCell.swift in Sources */,
 				F157582A2582C2C200FB0D13 /* lendOrBorrowCell.swift in Sources */,
 				DEFDCC1D258F822600A0FDDB /* AddSavingAccount.swift in Sources */,
@@ -676,7 +663,6 @@
 				F1D08F9E2598851700382264 /* editExOrInVC.swift in Sources */,
 				DEFDCC1A258F822600A0FDDB /* AddAccumulateCell.swift in Sources */,
 				DEFDCC0D258F81EB00A0FDDB /* NameAccountViewCell.swift in Sources */,
-				F149F124257EBBEC00FBB2AB /* o-editLendOrBorrowVC-o.swift in Sources */,
 				F1538C4C257DE79200531002 /* historyVc.swift in Sources */,
 				DE19306F2590883C001B5D53 /* DepositView.swift in Sources */,
 				F1D08FAD2598855B00382264 /* editAdjustmentVC.swift in Sources */,
@@ -697,11 +683,9 @@
 				F1547C3A256B18B9001CD0AB /* SceneDelegate.swift in Sources */,
 				F1538C51257DE79200531002 /* otherVC.swift in Sources */,
 				F1564746259465A700365C23 /* imagePicker.swift in Sources */,
-				F149F122257EBBEC00FBB2AB /* o-editTransferVc.swift in Sources */,
 				F1538C5B257DE79200531002 /* selectAccountVC.swift in Sources */,
 				F15748822597FE4100DBF2F9 /* addLendOrBorrowVC.swift in Sources */,
 				F1D851FA25985D6C001C6440 /* addTransferVC.swift in Sources */,
-				F149F123257EBBEC00FBB2AB /* o-editExOrInVC-o.swift in Sources */,
 				DEFDCC0F258F81EB00A0FDDB /* accountVC.swift in Sources */,
 				F17015C32585EAD4008DE4E9 /* loginVC.swift in Sources */,
 				DEAC0A692590C87A0000F378 /* PickAccountView.swift in Sources */,

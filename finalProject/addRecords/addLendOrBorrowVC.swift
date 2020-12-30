@@ -63,6 +63,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         {
             amount.textColor = UIColor.red
             personTF.placeholder = "Borrower"
+            descript.text = personTF.text! + " took out a loan"
             type = 2
             selectTypeRecord.setTitle("Lend", for: .normal)
             chooseCategoryBtn.setTitle(categoryValues().other[0][category], for: .normal)
@@ -72,7 +73,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
             type = 3
             amount.textColor = UIColor.green
             personTF.placeholder = "Lender"
-
+            descript.text = "Borrowed money from " + personTF.text!
             selectTypeRecord.setTitle("Borrow", for: .normal)
             chooseCategoryBtn.setTitle(categoryValues().other[0][category], for: .normal)
         }
@@ -140,7 +141,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         }
         else
         {
-            descript.text = "Borrowed money from" + personTF.text!
+            descript.text = "Borrowed money from " + personTF.text!
         }
     }
     
@@ -374,7 +375,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
     }
     */
 
