@@ -8,6 +8,8 @@
 import UIKit
 import RealmSwift
 import SearchTextField
+import SCLAlertView
+import FirebaseDatabase
 
 class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategoryDelegate {
     func didSelectRepayOrCollectDebt(_type: Int, temp: polyRecord) {
@@ -36,6 +38,7 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
     }
 
     let realm = try! Realm()
+    var userInfor: User? = nil
     var historyDelegate : editRecordDelegate? = nil
     var record: polyRecord? = nil
     var tempRecord: polyRecord? = nil
@@ -219,56 +222,78 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
     }
     
     @IBAction func clickSaveRecord(_ sender: Any) {
-        if _different == 0 || subtype == -1
-        {
-            print("You have to enter changed amount of source account!")
-            return
-        }
         if srcAccount == nil
         {
             print("You have to choose account for this action!")
+            SCLAlertView().showError("You have to choose source account!", subTitle: "")
             return
         }
+        if _different == 0 || subtype == -1
+        {
+            print("You have to enter changed amount of source account!")
+            SCLAlertView().showError("Difference must be nonzero!", subTitle: "")
+            return
+        }
+
         if category == -1 || detailCategory == -1
         {
             print("You have to choose category for this action!")
+            SCLAlertView().showError("You have to choose category!", subTitle: "")
             return
         }
-        
         try! realm.write{
             record?.adjustment?.undoTransaction()
             
             record?.adjustment?.getData(_amount: _acttualBalance, _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: "srcImage",_date: dateTime.date,_subType: subtype, _different: _different,_category: category,_detailCategory: detailCategory,_tempRecord: tempRecord,_person: personTF.text ?? "")
-            let userInfor = realm.objects(User.self)[0]
+            record?.isChanged = true
+            userInfor = realm.objects(User.self)[0]
             var tempStr = locationTF.text ?? ""
-            if tempStr.isEmpty == false && userInfor.locations.contains(tempStr) == false
+            if tempStr.isEmpty == false && userInfor!.locations.contains(tempStr) == false
             {
-                userInfor.locations.append(tempStr)
+                userInfor!.locations.append(tempStr)
             }
             tempStr = personTF.text ?? ""
-            if tempStr.isEmpty == false && userInfor.persons.contains(tempStr) == false
+            if tempStr.isEmpty == false && userInfor!.persons.contains(tempStr) == false
             {
-                userInfor.persons.append(tempStr)
+                userInfor!.persons.append(tempStr)
                 }
         }
         print("Update a adjustment")
-       
+        SCLAlertView().showSuccess("Transaction updated!", subTitle: record?.getDescript() ?? "")
         historyDelegate?.editedRecord()
         //pop after save
-            self.navigationController?.popViewController(animated: false)
+        self.navigationController?.popViewController(animated: false)
         
     }
     
     @IBAction func clickDelte(_ sender: Any) {
-        try! realm.write{
-            record?.adjustment?.undoTransaction()
-        realm.delete((record?.adjustment)!)
-        realm.delete(record!)
+        let appearance = SCLAlertView.SCLAppearance(
+            showCloseButton: false
+        )
+        let msg = SCLAlertView(appearance: appearance)
+        msg.addButton("Yes", action: { [self] in
+            try! realm.write{
+                record?.adjustment?.undoTransaction()
+                if record?.isUploaded == true
+                {
+                    record?.isDeleted = true
+                }
+                    else
+                {
+                realm.delete((record?.adjustment)!)
+                realm.delete(record!)
+                }
         }
         
         print("Deleted a adjustment")
+            SCLAlertView().showSuccess("Transaction deleted!", subTitle: "")
         historyDelegate?.editedRecord()
         self.navigationController?.popViewController(animated: false)
+        })
+        msg.addButton("No", action: {
+            msg.dismiss(animated: false, completion: nil)
+        })
+        msg.showWarning("Attention!", subTitle: "Deleted data cannot be recovered. Do you want to continue?")
     }
 
     // MARK: - Table view data source

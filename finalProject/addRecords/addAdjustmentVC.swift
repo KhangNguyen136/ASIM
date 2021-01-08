@@ -9,6 +9,7 @@ import UIKit
 import DropDown
 import RealmSwift
 import SearchTextField
+import SCLAlertView
 
 class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategoryDelegate {
     
@@ -231,19 +232,23 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
         }
     }
     @IBAction func clickSaveRecord(_ sender: Any) {
-        if _different == 0
-        {
-            print("You have to enter changed amount of source account!")
-            return
-        }
         if srcAccount == nil
         {
             print("You have to choose account for this action!")
+            SCLAlertView().showError("You have to choose source account!", subTitle: "")
             return
         }
+        if _different == 0
+        {
+            print("You have to enter changed amount of source account!")
+            SCLAlertView().showError("Difference must be nonzero!", subTitle: "")
+            return
+        }
+
         if category == -1 || detailCategory == -1
         {
             print("You have to choose category for this action!")
+            SCLAlertView().showError("You have to choose category!", subTitle: "")
             return
         }
         //create
@@ -253,6 +258,7 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
         let temp1 = polyRecord()
             temp1.adjustment = temp
             temp1.type = 5
+//            temp1.isChanged = true
         
         realm.add(temp1)
         userInfor?.records.append(temp1)
@@ -268,6 +274,7 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
             }
         }
         
+        SCLAlertView().showSuccess("Transaction added!", subTitle: descript.text ?? "")
         //reset view
         guard var viewcontrollers = self.navigationController?.viewControllers else { return }
         if viewcontrollers.count == 1

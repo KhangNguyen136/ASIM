@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import SCLAlertView
 
 class selectAccountVC: UIViewController {
     var delegate: selectAccountDelegate? = nil
@@ -20,14 +21,9 @@ class selectAccountVC: UIViewController {
             self.navigationItem.title = "Select destination account"
         }
         let temp = realm.objects(polyAccount.self)
-        if temp.isEmpty
-        {
-            print("There's no account actived")
-            return
-        }
         for i in temp
         {
-            if i.type == 1 && i.cashAcc?.active == true
+            if i.type == 1 && i.cashAcc?.active == true && i.isDeleted == false
             {
                 dataSource.append(i)
             }
@@ -35,6 +31,12 @@ class selectAccountVC: UIViewController {
             {
                 dataSource.append(i)
             }
+        }
+        if dataSource.isEmpty
+        {
+            SCLAlertView().showWarning("No account active", subTitle: "Add or active account to continue!")
+            self.navigationController?.popViewController(animated: true)
+            return
         }
     }
     

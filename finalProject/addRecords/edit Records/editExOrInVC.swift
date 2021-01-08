@@ -8,6 +8,8 @@
 import UIKit
 import RealmSwift
 import SearchTextField
+import SCLAlertView
+import FirebaseDatabase
 
 class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDelegate {
     
@@ -195,16 +197,19 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
         if  _amount == 0 || amount.text == ""
         {
             print("You have to enter amount!")
+            SCLAlertView().showError("Amount must be nonzero!", subTitle: "")
             return
         }
         if category == -1
         {
             print("You have to choose category of record!")
+            SCLAlertView().showError("You have to choose category!", subTitle: "")
             return
         }
         if srcAccount == nil
         {
             print("You have to choose account for this action!")
+            SCLAlertView().showError("You have to choose source account!", subTitle: "")
             return
         }
         //check if data changed?
@@ -222,7 +227,6 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
                 temp?.getData(_amount: _amount!, _type: type, _descript: descript.text ?? "", _srcAccount: srcAccount!, _person: personTF.text ?? "", _location: locationTF.text ?? "", _event: eventTF.text ?? "", _srcImg: "", _date: dateTime.date, _category: category, _detailCategory: detailCategory, _borrowRecord: tempRecord)
                 print("Updated an expense!")
             }
-
          }
         else
         {
@@ -242,6 +246,8 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
 //            }
 
         }
+            record?.isChanged = true
+            SCLAlertView().showSuccess("Transaction updated!", subTitle: descript.text ?? "")
             let userInfor = realm.objects(User.self)[0]
             var tempStr = locationTF.text ?? ""
             if tempStr.isEmpty == false && userInfor.locations.contains(tempStr) == false
@@ -266,26 +272,53 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
     }
     
     @IBAction func clickDelete(_ sender: Any) {
-        try! realm.write{
-            if record?.type == 0
+        let appearance = SCLAlertView.SCLAppearance(
+            showCloseButton: false
+        )
+        let msg = SCLAlertView(appearance: appearance)
+        msg.addButton("Yes", action: { [self] in
+            try! realm.write{
+            if record?.isUploaded == true
             {
-                record?.expense?.undoTransaction()
-                realm.delete((record?.expense)!)
-                print("Deleted a expense!")
+                //mark record to be deleted and delete it when sync
+                record?.isDeleted = true
+                if record?.type == 0
+                {
+                    record?.expense?.undoTransaction()
+                    print("Mark an expense as deleted!")
+                }
+                else
+                {
+                    record?.income?.undoTransaction()
+                    print("Deleted ab income as deleted!")
+                }
             }
             else
             {
-                record?.income?.undoTransaction()
-                realm.delete((record?.income)!)
-                print("Deleted a income!")
-
+                if record?.type == 0
+                {
+                    record?.expense?.undoTransaction()
+                    realm.delete((record?.expense)!)
+                    print("Deleted a expense!")
+                }
+                else
+                {
+                    record?.income?.undoTransaction()
+                    realm.delete((record?.income)!)
+                    print("Deleted a income!")
+                }
+                //remove value in database
+                realm.delete(record!)
             }
-            realm.delete(record!)
-
-        }
-        
-        historyDelegate?.editedRecord()
-        self.navigationController?.popViewController(animated: false)
+            }
+            SCLAlertView().showSuccess("Transaction deleted!", subTitle: "")
+            historyDelegate?.editedRecord()
+            self.navigationController?.popViewController(animated: false)
+        })
+        msg.addButton("No", action: {
+            msg.dismiss(animated: false, completion: nil)
+        })
+        msg.showWarning("Attention!", subTitle: "Deleted data cannot be recovered. Do you want to continue?")
     }
     override func viewWillAppear(_ animated: Bool) {
         chooseTypeRecordBtn.setTitle(categoryValues().typeRecord[type],for: .normal)

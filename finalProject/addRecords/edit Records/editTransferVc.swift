@@ -8,6 +8,8 @@
 import UIKit
 import RealmSwift
 import SearchTextField
+import SCLAlertView
+import FirebaseDatabase
 
 protocol selectDestinationAccountDelegate: class {
     func didSelectDestAccount(temp: polyAccount,name: String)
@@ -99,11 +101,19 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
         if (amount.text! as NSString).floatValue == 0
         {
             print("You have to enter amount!")
+            SCLAlertView().showError("Amount must be nonzero!", subTitle: "")
             return
         }
-        if srcAccount == nil || destAccount == nil
+        if srcAccount == nil
         {
             print("You have to choose account for this action!")
+            SCLAlertView().showError("You have to choose source account!", subTitle: "")
+            return
+        }
+        if destAccount == nil
+        {
+            print("You have to choose account for this action!")
+            SCLAlertView().showError("You have to choose destination account!", subTitle: "")
             return
         }
 
@@ -115,12 +125,19 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
                 if temp == 0 || fee.text == ""
                 {
                     //undo transaction
-                record?.transferFee?.expense?.undoTransaction()
-                realm.delete((record?.transferFee?.expense)!)
-                self.realm.delete((record?.transferFee)!)
-                record?.transferFee = nil
-                transferFee = nil
-                print("Delete a transfer fee record!")
+                    record?.transferFee?.expense?.undoTransaction()
+                    if record?.transferFee?.isUploaded == true
+                    {
+                        record?.transferFee?.isDeleted = true
+                    }
+                    else
+                    {
+                    realm.delete((record?.transferFee?.expense)!)
+                    self.realm.delete((record?.transferFee)!)
+                    print("Delete a transfer fee record!")
+                    }
+                    record?.transferFee = nil
+                    transferFee = nil
                 }
                 //change amount of transfer fee
                 else if temp != record?.transferFee?.expense?.amount
@@ -139,11 +156,15 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
                     let temp2 = polyRecord()
                     temp2.expense = tempTransferFee
                     temp2.type = 0
+                    
                     realm.add(temp2)
                     userInfor?.records.append(temp2)
                     transferFee = temp2
                 }
             }
+//            src?.transfer?.undoTransaction()
+//            src?.transfer?.getData(_amount: temp, _type: 4, _descript: descript.text ?? "", _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: "", _date: dateTime.date, _destAccount: destAccount!, _transferFee: transferFee)
+            
             let tempStr = locationTF.text ?? ""
             if tempStr.isEmpty == false && userInfor?.locations.contains(tempStr) == false
             {
@@ -152,10 +173,11 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
             record?.undoTransaction()
             //get data and do transaction
             record?.getData(_amount: (amount.text! as NSString).floatValue, _type: 4, _descript: descript.text ?? "", _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: "", _date: dateTime.date, _destAccount: destAccount!, _transferFee: transferFee)
+            src?.isChanged = true
 
         }
         print("Update a transfer")
-       
+        SCLAlertView().showSuccess("Transaction updated!", subTitle: src?.getDescript() ?? "")
         historyDelegate?.editedRecord()
         //pop after save
             self.navigationController?.popViewController(animated: false)
@@ -163,22 +185,55 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
     }
     
     @IBAction func clickDelete(_ sender: Any) {
-        try! realm.write{
-        
-            if record?.transferFee != nil
+        let appearance = SCLAlertView.SCLAppearance(
+            showCloseButton: false
+        )
+        let msg = SCLAlertView(appearance: appearance)
+        msg.addButton("Yes", action: { [self] in
+            try! realm.write{
+            if src?.isUploaded == true
             {
-                record?.transferFee?.expense?.undoTransaction()
-                realm.delete((record?.transferFee?.expense)!)
-                realm.delete((record?.transferFee)!)
+                if record?.transferFee != nil
+                {
+                    record?.transferFee?.expense?.undoTransaction()
+                    if record?.transferFee?.isUploaded == true
+                    {
+                        record?.transferFee?.isDeleted = true
+                    }
+                    else
+                    {
+                        realm.delete((record?.transferFee?.expense)!)
+                        realm.delete((record?.transferFee)!)
+                    }
+                    record?.transferFee = nil
+                }
+                src?.transfer?.undoTransaction()
+                src?.isDeleted = true
+                print("Mark a transfer as deleted.")
             }
-            src?.transfer?.undoTransaction()
-        realm.delete((src?.transfer)!)
-        realm.delete(src!)
+            else
+            {
+                if record?.transferFee != nil
+                {
+                    record?.transferFee?.expense?.undoTransaction()
+                    realm.delete((record?.transferFee?.expense)!)
+                    realm.delete((record?.transferFee)!)
+                }
+                src?.transfer?.undoTransaction()
+                realm.delete((src?.transfer)!)
+                realm.delete(src!)
+                print("Deleted a transfer.")
+            }
         }
         
-        print("Deleted a transfer")
+        SCLAlertView().showSuccess("Transaction deleted!", subTitle: "")
         historyDelegate?.editedRecord()
         self.navigationController?.popViewController(animated: false)
+        })
+        msg.addButton("No", action: {
+            msg.dismiss(animated: false, completion: nil)
+        })
+        msg.showWarning("Attention!", subTitle: "Deleted data cannot be recovered. Do you want to continue?")
     }
 
     // MARK: - Table view data source

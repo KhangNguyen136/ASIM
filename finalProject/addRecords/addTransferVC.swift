@@ -9,6 +9,7 @@ import UIKit
 import DropDown
 import RealmSwift
 import SearchTextField
+import SCLAlertView
 
 class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinationAccountDelegate {
     func didSelectDestAccount(temp: polyAccount, name: String) {
@@ -124,11 +125,18 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
         if (amount.text! as NSString).floatValue == 0
         {
             print("You have to enter amount!")
+            SCLAlertView().showError("Amount must be nonzero!", subTitle: "")
             return
         }
-        if srcAccount == nil || destAccount == nil
+        if srcAccount == nil
         {
             print("You have to choose account for this action!")
+            SCLAlertView().showError("You have to choose source account!", subTitle: "")
+            return
+        }
+        if destAccount == nil
+        {
+            SCLAlertView().showError("You have to choose destination account!", subTitle: "")
             return
         }
         //create
@@ -146,7 +154,8 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
             temp2 = polyRecord()
             temp2!.expense = tempTransferFee
             temp2!.type = 0
-                
+//            temp2!.isChanged = true
+
             realm.add(temp2!)
             userInfor?.records.append(temp2!)
         }
@@ -156,7 +165,8 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
         let temp1 = polyRecord()
             temp1.transfer = temp
             temp1.type = 4
-        
+//            temp1.isChanged = true
+
             realm.add(temp1)
             userInfor?.records.append(temp1)
             
@@ -166,6 +176,7 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
             userInfor?.locations.append(tempStr)
             }
         }
+        SCLAlertView().showSuccess("Transaction added!", subTitle: descript.text ?? "")
         
         //reset view
         guard var viewcontrollers = self.navigationController?.viewControllers else { return }

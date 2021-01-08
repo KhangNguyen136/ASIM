@@ -7,7 +7,7 @@
 
 import UIKit
 import RealmSwift
-
+import SCLAlertView
 class chooseLendOrBorrowVC: UIViewController {
     var delegate: selectLendOrBorrowDelegate? = nil
     var type = 0
@@ -33,7 +33,7 @@ class chooseLendOrBorrowVC: UIViewController {
             {
             for i in temp
                 {
-                if i.type == 2 && i.lend?.isCollected == false
+                if i.type == 2 && i.lend?.isCollected == false && i.isDeleted == false
                     {
                     dataSource.append(i)
                     }
@@ -44,15 +44,24 @@ class chooseLendOrBorrowVC: UIViewController {
             {
             for i in temp
             {
-                if i.type == 3 && i.borrow?.isRepayed == false
+                if i.type == 3 && i.borrow?.isRepayed == false && i.isDeleted == false
                 {
                     dataSource.append(i)
                 }
             }
                 self.navigationItem.title = "Select a borrow"
+            }
         }
+        if dataSource.isEmpty == true
+        {
+            if type == 1{
+                SCLAlertView().showWarning("No lend recorded!", subTitle: "")
+            }
+            else
+            {
+                SCLAlertView().showWarning("No borrow recorded!", subTitle: "")
+            }
         }
-        print("no item")
         }
     @IBAction func filterHistory(_ sender: Any) {
         let dest = self.storyboard?.instantiateViewController(identifier: "filterHistoryVC") as! filterHistoryVC
@@ -90,9 +99,6 @@ extension UINavigationController {
     pushViewController(viewController, animated: animated)
     CATransaction.commit()
   }
-
-
-
 func popViewController(
         animated: Bool,
         completion: @escaping () -> Void)

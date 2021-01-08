@@ -125,8 +125,10 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
             let tempPolyAcc = polyAccount()
                 tempPolyAcc.type = 1
                 tempPolyAcc.cashAcc = acc
-            try! realm.write {
+           try! realm.write {
                 realm.add(tempPolyAcc)
+                let userInfor = realm.objects(User.self)[0]
+                userInfor.accounts.append(tempPolyAcc)
                 print(realm.configuration.fileURL)
                 }
             }
@@ -161,6 +163,8 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
                 tempPolyAcc.bankingAcc = acc
             try! realm.write {
                 realm.add(tempPolyAcc)
+                let userInfor = realm.objects(User.self)[0]
+                userInfor.accounts.append(tempPolyAcc)
                 }}
             else{
                 let updAccount = realm.objects(BankingAccount.self).filter("name == '\(nameEdit)'").first

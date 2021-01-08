@@ -10,6 +10,7 @@ import DropDown
 import RealmSwift
 import SearchTextField
 import DatePicker
+import SCLAlertView
 
 class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAccountDelegate {
 
@@ -163,7 +164,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         dropDown.anchorView = sender // UIView or UIBarButtonItem
 
         // The list of items to display. Can be changed dynamically
-        dropDown.dataSource = ["Expense", "Income", "Lend","Borrow","Transaction","Adjustment"]
+        dropDown.dataSource = categoryValues().typeRecord
 
         /*** IMPORTANT PART FOR CUSTOM CELLS ***/
         dropDown.cellNib = UINib(nibName: "typeRecord", bundle: nil)
@@ -258,24 +259,33 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         if _amount == 0 || amount.text == ""
         {
             print("You have to enter amount!")
+            SCLAlertView().showError("Amount must be nonzero!", subTitle: "")
             return
         }
         
         if category == -1
         {
             print("You have to choose category of record!")
+            SCLAlertView().showError("You have to choose category!", subTitle: "")
             return
         }
         
         if personTF.text?.isEmpty == true
         {
             print("You have to choose person")
+            var tempStr = "borrower"
+            if type == 3
+            {
+                tempStr = "lender"
+            }
+            SCLAlertView().showError("You have to enter \(tempStr)'s name!", subTitle: "")
             return
         }
         
         if srcAccount == nil
         {
             print("You have to choose account for this action!")
+            SCLAlertView().showError("You have to choose source account!", subTitle: "")
             return
         }
         try! realm.write{
@@ -286,7 +296,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
             let temp1 = polyRecord()
                 temp1.lend = temp
                 temp1.type = 2
-            
+//                temp1.isChanged = true
                 realm.add(temp1)
                 userInfor?.records.append(temp1)
                 }
@@ -298,7 +308,8 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
             let temp1 = polyRecord()
                 temp1.borrow = temp
                 temp1.type = 3
-            
+//                temp1.isChanged = true
+
                 realm.add(temp1)
                 userInfor?.records.append(temp1)
         }
@@ -314,6 +325,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
             }
         }
         print(realm.configuration.fileURL!)
+        SCLAlertView().showSuccess("Transaction added!", subTitle: descript.text ?? "")
         //reset vc
         guard var viewcontrollers = self.navigationController?.viewControllers else { return }
         if(viewcontrollers.count == 1)
@@ -405,3 +417,4 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
     */
 
 }
+

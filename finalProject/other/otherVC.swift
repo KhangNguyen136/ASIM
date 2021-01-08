@@ -6,13 +6,26 @@
 //
 
 import UIKit
+import RealmSwift
 
 class otherVC: UIViewController {
 
     @IBOutlet weak var listTv: UITableView!
-    let titleRow = ["Setting","Your data","Share app","Rate app","Your feedback","Help and information"]
-    let imgName = ["gearshape.fill","doc.text.fill","point.fill.topleft.down.curvedto.point.fill.bottomright.up","star.leadinghalf.fill","envelope.badge.fill","info.circle.fill"]
+    let realm = try! Realm()
+    var userInfor: User!
+    var titleRow = ["Personal information","Setting","Your data","Account link","Change password","Share app","Rate app","Your feedback","Help and information"]
+    let imgName = ["person.fill","gearshape.fill","doc.text.fill","","","point.fill.topleft.down.curvedto.point.fill.bottomright.up","star.leadinghalf.fill","envelope.badge.fill","info.circle.fill"]
+    func loadData()
+    {
+        userInfor = realm.objects(User.self)[0]
+        if userInfor.password != ""
+        {
+            titleRow[4] = "Set password"
+        }
+        print(realm.configuration.fileURL)
+    }
     override func viewDidLoad() {
+        loadData()
         listTv.register(otherCell.self, forCellReuseIdentifier: "otherCell")
         
         super.viewDidLoad()
@@ -48,12 +61,27 @@ class otherCell: UITableViewCell {
         // Initialization code
     }
     @IBAction func click(_ sender: Any) {
-        if row == 1
-        {
+        switch row {
+        case 0:
+            let dest = self.superview!.parentViewController!.storyboard?.instantiateViewController(identifier: "personInforVC") as! personInforVC
+            self.superview!.parentViewController!.navigationController?.pushViewController(dest, animated: false)
+        case 1:
+            let dest = self.superview!.parentViewController!.storyboard?.instantiateViewController(identifier: "settingVC") as! settingVC
+            self.superview!.parentViewController!.navigationController?.pushViewController(dest, animated: false)
+        case 2:
             let dest = self.superview!.parentViewController!.storyboard?.instantiateViewController(identifier: "yourDataVC") as! yourDataVC
             self.superview!.parentViewController!.navigationController?.pushViewController(dest, animated: false)
+        case 3:
+            let dest = self.superview!.parentViewController!.storyboard?.instantiateViewController(identifier: "accountLinkVC") as! accountLinkVC
+            self.superview!.parentViewController!.navigationController?.pushViewController(dest, animated: false)
+        case 4:
+            let dest = self.superview!.parentViewController!.storyboard?.instantiateViewController(identifier: "passwordVC") as! passwordVC
+            self.superview!.parentViewController!.navigationController?.pushViewController(dest, animated: false)
+        default:
+            print(content.currentTitle!)
+
         }
-        print(content.currentTitle!)
+
     }
     func getData(imgName: String, title: String, _row: Int)  {
         img.image = UIImage(systemName: imgName)

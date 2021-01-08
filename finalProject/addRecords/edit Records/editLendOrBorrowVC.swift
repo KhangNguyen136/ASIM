@@ -9,6 +9,8 @@ import UIKit
 import RealmSwift
 import SearchTextField
 import DatePicker
+import SCLAlertView
+import FirebaseDatabase
 
 class editLendOrBorrowVC: UITableViewController,selectAccountDelegate {
     
@@ -31,6 +33,8 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate {
     
     @IBOutlet weak var doneValue: UISwitch!
     @IBOutlet weak var doneTitle: UILabel!
+    
+    var userInfor: User? = nil
     
     func didSelectAccount(temp: polyAccount, name: String) {
         srcAccount = temp
@@ -162,23 +166,32 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate {
         if Float(amount.text ?? "0") == 0 || amount.text == ""
         {
             print("You have to enter amount!")
+            SCLAlertView().showError("Amount must be nonzero!", subTitle: "")
             return
         }
         
         if srcAccount == nil
         {
             print("You have to choose account for this action!")
+            SCLAlertView().showError("You have to choose source account!", subTitle: "")
+
+            return
+        }
+        if personTF.text == ""
+        {
+            var tempStr = "borrower"
+            if type == 3
+            {
+                tempStr = "lender"
+            }
+            print("You have to enter name of \(tempStr)!")
+            SCLAlertView().showError("You have to enter \(tempStr)'s name!", subTitle: "")
             return
         }
         //update record
         try! realm.write{
         if type == 2
         {
-            if personTF.text == ""
-            {
-                print("You have to enter name of borrower!")
-                return
-            }
             let temp = record?.lend
                 //undo transaction
                 temp?.undoTransaction()
@@ -191,28 +204,25 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate {
          }
         else{
             let temp = record?.borrow
-            if personTF.text == ""
-            {
-                print("You have to enter name of lender!")
-                return
-            }
                 temp?.undoTransaction()
                 
                 temp?.updateBorrow(_amount: (amount.text! as NSString).floatValue, _type: 3, _descript: descript.text ?? "", _srcAccount: srcAccount!, _person: personTF.text!, _location: locationTF.text ?? "", _srcImg: "", _date: dateTime.date, _repaymentDate:reDate)
                 temp?.doTransaction()
             print("Updated an borrow!")
             }
-            let userInfor = realm.objects(User.self)[0]
+            record?.isChanged = true
+            userInfor = realm.objects(User.self)[0]
             var tempStr = locationTF.text ?? ""
-            if tempStr.isEmpty == false && userInfor.locations.contains(tempStr) == false
+            if tempStr.isEmpty == false && userInfor!.locations.contains(tempStr) == false
             {
-                userInfor.locations.append(tempStr)
+                userInfor!.locations.append(tempStr)
             }
             tempStr = personTF.text ?? ""
-            if tempStr.isEmpty == false && userInfor.persons.contains(tempStr) == false
+            if tempStr.isEmpty == false && userInfor!.persons.contains(tempStr) == false
             {
-                userInfor.persons.append(tempStr)
+                userInfor!.persons.append(tempStr)
             }
+            SCLAlertView().showSuccess("Transaction updated!", subTitle: record?.getDescript() ?? "")
         historyDelegate?.editedRecord()
         }
         print(realm.configuration.fileURL!)
@@ -220,22 +230,55 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate {
             self.navigationController?.popViewController(animated: true)
     }
     @IBAction func clickDelete(_ sender: Any) {
-        try! realm.write{
-            if record?.type == 2
+        let appearance = SCLAlertView.SCLAppearance(
+            showCloseButton: false
+        )
+        let msg = SCLAlertView(appearance: appearance)
+        msg.addButton("Yes", action: { [self] in
+            try! realm.write{
+            if record?.isUploaded == true
             {
-                record?.lend?.undoTransaction()
-                realm.delete((record?.lend)!)
+                record?.isDeleted = true
+                if record?.type == 2
+                {
+                    record?.lend?.undoTransaction()
+                    print("Mark a lend as deleted!")
+                }
+                else
+                {
+                    record?.borrow?.undoTransaction()
+                    print("Mark a borrow as deleted!")
+                }
             }
             else
             {
-                record?.borrow?.undoTransaction()
-                realm.delete((record?.borrow)!)
+                if record?.type == 2
+                {
+                    record?.lend?.undoTransaction()
+                    realm.delete((record?.lend)!)
+                    print("Delete a lend!")
+
+                }
+                else
+                {
+                    record?.borrow?.undoTransaction()
+                    realm.delete((record?.borrow)!)
+                    print("Delete a borrow!")
+
+                }
+                realm.delete(record!)
             }
-        realm.delete(record!)
+        //delete data in database
         }
-        print("Deleted a lend or borrow")
-        historyDelegate?.editedRecord()
-        self.navigationController?.popViewController(animated: true)
+            print("Deleted a lend or borrow")
+            SCLAlertView().showSuccess("Transaction deleted!", subTitle: "")
+            historyDelegate?.editedRecord()
+            self.navigationController?.popViewController(animated: true)
+        })
+        msg.addButton("No", action: {
+            msg.dismiss(animated: false, completion: nil)
+        })
+        msg.showWarning("Attention!", subTitle: "Deleted data cannot be recovered. Do you want to continue?")
     }
 
     // MARK: - Table view data source

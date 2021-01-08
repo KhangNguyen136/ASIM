@@ -89,6 +89,7 @@ PODS:
     - nanopb/encode (= 2.30906.0)
   - nanopb/decode (2.30906.0)
   - nanopb/encode (2.30906.0)
+  - ProgressHUD (13.4)
   - PromisesObjC (1.2.11)
   - Realm (10.1.2):
     - Realm/Headers (= 10.1.2)
@@ -107,6 +108,7 @@ DEPENDENCIES:
   - Firebase/Database
   - Firebase/Storage
   - ImagePicker
+  - ProgressHUD
   - RealmSwift
   - SCLAlertView
   - SearchTextField
@@ -132,6 +134,7 @@ SPEC REPOS:
     - ImagePicker
     - leveldb-library
     - nanopb
+    - ProgressHUD
     - PromisesObjC
     - Realm
     - RealmSwift
@@ -158,12 +161,13 @@ SPEC CHECKSUMS:
   ImagePicker: 1d950bbb2422548ed58791b4ec7f42fe42920511
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
+  ProgressHUD: 137a7fc677487c5581668f4490563124fb35c232
   PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
   Realm: 031fdd4be7094d01b43af1a5e49766ab644bb800
   RealmSwift: 43cf2e114baa9d17d34eb81e7d0def31f21cd444
   SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
   SearchTextField: 40dc3cc57def5a211f263cac263622c163bbc25a
 
-PODFILE CHECKSUM: 52b00224bc0109fcd0aad3fe3638e68d00752bc8
+PODFILE CHECKSUM: 01c09dbcf982d935779f3b07a41e75a33e0dfdb9
 
 COCOAPODS: 1.10.0

@@ -153,6 +153,10 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
         //load data before append to history
         for i in tempRecords
         {
+            if i.isDeleted == true
+            {
+                continue
+            }
             switch i.type {
             case 0:
                 let temp = i.expense

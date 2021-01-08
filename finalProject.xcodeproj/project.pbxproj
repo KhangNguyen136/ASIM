@@ -31,6 +31,11 @@
 		DEFDCC1D258F822600A0FDDB /* AddSavingAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFDCC16258F822500A0FDDB /* AddSavingAccount.swift */; };
 		DEFDCC1E258F822600A0FDDB /* AccumulateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFDCC17258F822500A0FDDB /* AccumulateAccountView.swift */; };
 		F149F10D257EBAE700FBB2AB /* editRecord.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F149F10C257EBAE700FBB2AB /* editRecord.storyboard */; };
+		F14C377A25A0E7B900450D25 /* signUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14C377925A0E7B900450D25 /* signUpVC.swift */; };
+		F14E951325A035160078EE00 /* accountLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14E951225A035160078EE00 /* accountLinkVC.swift */; };
+		F14E951B25A039040078EE00 /* passwordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14E951A25A039040078EE00 /* passwordVC.swift */; };
+		F14E952025A04E2C0078EE00 /* notificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14E951F25A04E2C0078EE00 /* notificationVC.swift */; };
+		F14EB7D6259FCCCA00FCFDEF /* settingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14EB7D5259FCCCA00FCFDEF /* settingVC.swift */; };
 		F1538C4C257DE79200531002 /* historyVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C2F257DE79200531002 /* historyVc.swift */; };
 		F1538C4D257DE79200531002 /* filterHistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C30257DE79200531002 /* filterHistoryVC.swift */; };
 		F1538C4E257DE79200531002 /* historyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1538C31257DE79200531002 /* historyCell.swift */; };
@@ -120,6 +125,11 @@
 		DEFDCC16258F822500A0FDDB /* AddSavingAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSavingAccount.swift; sourceTree = "<group>"; };
 		DEFDCC17258F822500A0FDDB /* AccumulateAccountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccumulateAccountView.swift; sourceTree = "<group>"; };
 		F149F10C257EBAE700FBB2AB /* editRecord.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = editRecord.storyboard; sourceTree = "<group>"; };
+		F14C377925A0E7B900450D25 /* signUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = signUpVC.swift; sourceTree = "<group>"; };
+		F14E951225A035160078EE00 /* accountLinkVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = accountLinkVC.swift; sourceTree = "<group>"; };
+		F14E951A25A039040078EE00 /* passwordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = passwordVC.swift; sourceTree = "<group>"; };
+		F14E951F25A04E2C0078EE00 /* notificationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = notificationVC.swift; sourceTree = "<group>"; };
+		F14EB7D5259FCCCA00FCFDEF /* settingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settingVC.swift; sourceTree = "<group>"; };
 		F1538C2F257DE79200531002 /* historyVc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = historyVc.swift; sourceTree = "<group>"; };
 		F1538C30257DE79200531002 /* filterHistoryVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = filterHistoryVC.swift; sourceTree = "<group>"; };
 		F1538C31257DE79200531002 /* historyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = historyCell.swift; sourceTree = "<group>"; };
@@ -260,6 +270,10 @@
 				F1538C37257DE79200531002 /* otherVC.swift */,
 				F160D6F12597122B00ACB5AD /* personInforVC.swift */,
 				F160D6FB2597298900ACB5AD /* YourDataVC.swift */,
+				F14EB7D5259FCCCA00FCFDEF /* settingVC.swift */,
+				F14E951225A035160078EE00 /* accountLinkVC.swift */,
+				F14E951A25A039040078EE00 /* passwordVC.swift */,
+				F14E951F25A04E2C0078EE00 /* notificationVC.swift */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -301,8 +315,8 @@
 				F1D851FE25985F41001C6440 /* addAdjustmentVC.swift */,
 				F1538C46257DE79200531002 /* selectCategoryVC.swift */,
 				F1538C42257DE79200531002 /* categoryCell.swift */,
-				F15758292582C2C200FB0D13 /* lendOrBorrowCell.swift */,
 				F157582E2582C2DD00FB0D13 /* chooseLendOrBorrowVC.swift */,
+				F15758292582C2C200FB0D13 /* lendOrBorrowCell.swift */,
 				F1538C43257DE79200531002 /* selectAccountVC.swift */,
 				F1538C48257DE79200531002 /* accountCell.swift */,
 				F1538C45257DE79200531002 /* typeRecord.xib */,
@@ -352,6 +366,7 @@
 				F1547C39256B18B9001CD0AB /* SceneDelegate.swift */,
 				F16655A82570168A007B8D80 /* Data.swift */,
 				F17015C22585EAD4008DE4E9 /* loginVC.swift */,
+				F14C377925A0E7B900450D25 /* signUpVC.swift */,
 			);
 			path = finalProject;
 			sourceTree = "<group>";
@@ -642,9 +657,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				DEFDCC19258F822600A0FDDB /* AddAccumulateView.swift in Sources */,
+				F14E951325A035160078EE00 /* accountLinkVC.swift in Sources */,
 				DEFDCC1E258F822600A0FDDB /* AccumulateAccountView.swift in Sources */,
+				F14EB7D6259FCCCA00FCFDEF /* settingVC.swift in Sources */,
 				DEAC0A6B2590C89A0000F378 /* PickAccountCell.swift in Sources */,
+				F14E951B25A039040078EE00 /* passwordVC.swift in Sources */,
 				F157582A2582C2C200FB0D13 /* lendOrBorrowCell.swift in Sources */,
+				F14E952025A04E2C0078EE00 /* notificationVC.swift in Sources */,
 				DEFDCC1D258F822600A0FDDB /* AddSavingAccount.swift in Sources */,
 				F1538C4E257DE79200531002 /* historyCell.swift in Sources */,
 				DEFDCC10258F81EB00A0FDDB /* AddAcountViewCell.swift in Sources */,
@@ -685,6 +704,7 @@
 				F1564746259465A700365C23 /* imagePicker.swift in Sources */,
 				F1538C5B257DE79200531002 /* selectAccountVC.swift in Sources */,
 				F15748822597FE4100DBF2F9 /* addLendOrBorrowVC.swift in Sources */,
+				F14C377A25A0E7B900450D25 /* signUpVC.swift in Sources */,
 				F1D851FA25985D6C001C6440 /* addTransferVC.swift in Sources */,
 				DEFDCC0F258F81EB00A0FDDB /* accountVC.swift in Sources */,
 				F17015C32585EAD4008DE4E9 /* loginVC.swift in Sources */,
@@ -890,13 +910,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C967VQ8QVQ;
 				INFOPLIST_FILE = finalProject/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ASIM;
+				PRODUCT_BUNDLE_IDENTIFIER = ASIM136;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -910,13 +931,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C967VQ8QVQ;
 				INFOPLIST_FILE = finalProject/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ASIM;
+				PRODUCT_BUNDLE_IDENTIFIER = ASIM136;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

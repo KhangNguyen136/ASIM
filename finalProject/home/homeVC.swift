@@ -58,6 +58,10 @@ class homeVC: UIViewController {
             }
             for i in userInfor!.records
             {
+                if i.isDeleted == true
+                {
+                    continue
+                }
                 switch i.type {
                 case 0:
                     _expense += i.expense!.amount
@@ -77,6 +81,11 @@ class homeVC: UIViewController {
             income.text = String(_income) + "$"
             expense.text = String(_expense) + "$"
         }
+    }
+    @IBAction func toNotify(_ sender: Any) {
+        let sb = UIStoryboard(name: "editRecord", bundle: nil)
+        let dest = sb.instantiateViewController(identifier: "notificationVC") as! notificationVC
+        self.navigationController?.pushViewController(dest, animated: false)
     }
     override func viewWillAppear(_ animated: Bool) {
         loadData()

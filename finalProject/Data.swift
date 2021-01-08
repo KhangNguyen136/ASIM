@@ -25,16 +25,30 @@ struct categoryValues {
     ]
     let income = [["Bonus","Interest","Salary","Savings interesst","Collecting debts","Other"]]
     let other = [["Lend","Borrow","Repayment","Collecting debts"]]
-    let typeRecord = ["Expense", "Income", "Lend","Borrow","Transaction","Adjustment"]
+    let typeRecord = ["Expense", "Income", "Lend","Borrow","Transfer","Adjustment"]
     
 }
 class User: Object{
     @objc dynamic var username: String = ""
     @objc dynamic var password: String = ""
+    
     @objc dynamic var email: String = ""
     @objc dynamic var fbLink: String = ""
+    
     @objc dynamic var numberPhone: String = ""
+    @objc dynamic var displayName: String = ""
     @objc dynamic var birthDay: Date = Date()
+    @objc dynamic var address: String = ""
+    @objc dynamic var isMale: Bool = false
+    @objc dynamic var job: String = ""
+    
+    @objc dynamic var isVietnamese: Bool = false
+    @objc dynamic var defaultScreen = 0
+    @objc dynamic var dateFormat = "dd/MM/yyyy"
+    @objc dynamic var isVietnamDong = false
+    @objc dynamic var isHideAmount = false
+//    @objc dynamic var isChanged: Bool = true
+
     
     var records = List<polyRecord>()
     var accounts = List<polyAccount>()
@@ -43,11 +57,33 @@ class User: Object{
     var locations = List<String>()
     var events = List<String>()
     
+    func getRecordByID(id: String) -> polyRecord?
+    {
+        for i in records
+        {
+            if i.id == id
+            {
+                return i
+            }
+        }
+        return nil
+    }
+    func getAccountByID(id: String) -> polyAccount?
+    {
+        for i in accounts
+        {
+            if i.id == id
+            {
+                return i
+            }
+        }
+        return nil
+    }
+    
 }
 
 class Record : Object {
     
-    @objc dynamic var id: Int = 0
     @objc dynamic var amount: Float = 0
     @objc dynamic var type: Int = 0
     @objc dynamic var descript: String = ""
@@ -72,11 +108,13 @@ class Record : Object {
 }
 
 class Expense: Record{
+    
     @objc dynamic var category: Int = -1
     @objc dynamic var detailCategory: Int = -1
     @objc dynamic var payee: String = ""
     @objc dynamic var event: String = ""
     @objc dynamic var borrowRecord: polyRecord? = nil
+
 
     func getData(_amount: Float,_type: Int,_descript: String,_srcAccount: polyAccount,_person: String,_location: String,_event: String,_srcImg: String,_date: Date, _category: Int, _detailCategory: Int,_borrowRecord: polyRecord?)
     {
@@ -88,23 +126,38 @@ class Expense: Record{
         detailCategory = _detailCategory
         borrowRecord = _borrowRecord
         doTransaction()
+
     }
-    
+    func updateData(_amount: Float,_type: Int,_descript: String,_srcAccount: polyAccount,_person: String,_location: String,_event: String,_srcImg: String,_date: Date, _category: Int, _detailCategory: Int,_borrowRecord: polyRecord?)
+    {
+        super.getData(_amount: _amount, _type: _type, _descript: _descript, _srcAccount: _srcAccount, _location: _location, _srcImg: _srcImg, _date: _date)
+        event = _event
+        payee = _person
+        category = _category
+        detailCategory = _detailCategory
+        borrowRecord = _borrowRecord
+        doTransaction()
+    }
     func doTransaction() -> Void {
         print("Do transaction of expense with \(amount), category: \(categoryValues().expense[category][detailCategory])")
         srcAccount?.expense(_amount: amount)
+        srcAccount?.isChanged = true
         //repay if there's an borrow record
         if borrowRecord != nil
         {
             borrowRecord?.borrow?.repay(_amount: amount)
+            borrowRecord?.isChanged = true
         }
     }
     func undoTransaction() -> Void {
         print("Undo transaction of expense with \(amount), category: \(categoryValues().expense[category][detailCategory])")
         srcAccount?.income(_amount: amount)
+        srcAccount?.isChanged = true
+        
         if borrowRecord != nil
         {
             borrowRecord?.borrow?.undoRepay(_amount: amount)
+            borrowRecord?.isChanged = true
         }
     }
 }
@@ -128,18 +181,23 @@ class Income: Record{
     func doTransaction() -> Void {
         print("Do transaction of income with \(amount), category: \(categoryValues().income[0][category])")
         srcAccount?.income(_amount: amount)
+        srcAccount?.isChanged = true
         // collect debt if there is an lend record
         if lendRecord != nil
             {
             lendRecord?.lend?.collect(_amount: amount)
+            lendRecord?.isChanged = true
             }
     }
     func undoTransaction() -> Void {
         print("Undo transaction of income with \(amount), category: \(categoryValues().income[0][category])")
         srcAccount?.expense(_amount: amount)
+        srcAccount?.isChanged = true
+        
         if lendRecord != nil
             {
             lendRecord?.lend?.undoCollect(_amount: amount)
+            lendRecord?.isChanged = true
             }
     }
 }
@@ -224,10 +282,12 @@ class Borrow: Record{
     func doTransaction() -> Void {
         print("Do transaction of borrow with \(amount)")
         srcAccount?.income(_amount: amount)
+        srcAccount?.isChanged = true
     }
     func undoTransaction() -> Void {
         print("Undo transaction of borrow with \(amount)")
         srcAccount?.expense(_amount: amount)
+        srcAccount?.isChanged = true
     }
 }
 
@@ -316,10 +376,12 @@ class Lend: Record{
     func doTransaction() -> Void {
         print("Do transaction of lend with...")
         srcAccount?.expense(_amount: amount)
+        srcAccount?.isChanged = true
     }
     func undoTransaction() -> Void {
         print("Undo transaction of lend with...")
         srcAccount?.income(_amount: amount)
+        srcAccount?.isChanged = true
     }
 }
 
@@ -339,17 +401,21 @@ class Transfer: Record{
     }
     func editTransFee(_fee: Float)  {
         transferFee?.expense?.amount = _fee
+        transferFee?.isChanged = true
     }
     func doTransaction() -> Void {
         print("Do transaction of transfer with...")
         srcAccount?.expense(_amount: amount)
+        srcAccount?.isChanged = true
         destinationAccount?.income(_amount: amount)
-
+        destinationAccount?.isChanged = true
     }
     func undoTransaction() -> Void {
         print("Undo transaction of transfer with...")
         srcAccount?.income(_amount: amount)
+        srcAccount?.isChanged = true
         destinationAccount?.expense(_amount: amount)
+        destinationAccount?.isChanged = true
     }
 }
 
@@ -380,19 +446,23 @@ class Adjustment: Record{
             if subType == 0
             {
                 tempRecord?.borrow?.repay(_amount: different)
+                tempRecord?.isChanged = true
             }
             else
             {
                 tempRecord?.lend?.collect(_amount: different)
+                tempRecord?.isChanged = true
             }
         }
         if subType == 0
         {
             srcAccount?.expense(_amount: different)
+            srcAccount?.isChanged = true
         }
         else
         {
             srcAccount?.income(_amount: different)
+            srcAccount?.isChanged = true
         }
     }
     func undoTransaction() -> Void {
@@ -402,25 +472,30 @@ class Adjustment: Record{
             if subType == 0
             {
                 tempRecord?.borrow?.undoRepay(_amount: different)
+                tempRecord?.isChanged = true
             }
             else
             {
                 tempRecord?.lend?.undoCollect(_amount: different)
+                tempRecord?.isChanged = true
             }
         }
         if subType == 0
         {
             srcAccount?.income(_amount: different)
+            srcAccount?.isChanged = true
         }
         else
         {
             srcAccount?.expense(_amount: different)
+            srcAccount?.isChanged = true
         }
     }
     
 }
 
 class polyRecord: Object{
+    @objc dynamic var id: String = ""
     @objc dynamic var expense: Expense? = nil
     @objc dynamic var income: Income? = nil
     @objc dynamic var borrow: Borrow? = nil
@@ -429,6 +504,10 @@ class polyRecord: Object{
     @objc dynamic var adjustment: Adjustment? = nil
     @objc dynamic var type : Int = -1
     @objc dynamic var isUploaded : Bool = false
+    @objc dynamic var isChanged : Bool = true
+    @objc dynamic var isDeleted : Bool = false
+
+
     func getDescript() -> String {
         switch type {
         case 0:
@@ -516,21 +595,22 @@ class Account: Object{
     {
         balance -= amount
     }
-    
 }
 class BankingAccount:Account {
-    
      @objc dynamic var bankName: String = ""
      @objc dynamic var bankImg: String = ""
-
 }
-
 class polyAccount: Object{
+    
+    @objc dynamic var id: String = ""
     @objc dynamic var cashAcc: Account? = nil
     @objc dynamic var bankingAcc: BankingAccount? = nil
     @objc dynamic var type : Int = -1
     @objc dynamic var isUploaded : Bool = false
+    @objc dynamic var isChanged : Bool = true
+    @objc dynamic var isDeleted : Bool = false
 
+    
     func getname() -> String{
         if type == 1{
             return cashAcc!.name
@@ -578,7 +658,7 @@ class Accumulate: Object{
     @objc dynamic var currency: String = ""
     @objc dynamic var startdate: Date = Date()
     @objc dynamic var enddate: Date = Date()
-
+    
 }
 class savingAccount: Object{
     @objc dynamic var name: String = ""
@@ -607,5 +687,4 @@ class savingAccount: Object{
            let realm = try! Realm()
            return (realm.objects(savingAccount.self).max(ofProperty: "id") as Int? ?? 0) + 1
     }
-
 }

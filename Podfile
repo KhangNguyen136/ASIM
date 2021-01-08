@@ -13,12 +13,15 @@ target 'finalProject' do
 	pod 'DatePicker', '~> 1.3.0'
 	pod 'AlertsAndPickers'
 	pod 'ImagePicker'
+	pod 'ProgressHUD'
+	pod 'ReachabilitySwift'
 
 	# add the Firebase pod for Google Analytics
 	pod 'Firebase/Analytics'
 	pod 'Firebase/Auth'
 	pod 'Firebase/Database'
 	pod 'Firebase/Storage'
+	
 	
 	# add pods for any other desired Firebase products
 	# https://firebase.google.com/docs/ios/setup#available-pods
