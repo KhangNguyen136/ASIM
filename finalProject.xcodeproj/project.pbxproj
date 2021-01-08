@@ -54,6 +54,9 @@
 		F1547C4F256B18BB001CD0AB /* finalProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1547C4E256B18BB001CD0AB /* finalProjectTests.swift */; };
 		F1547C5A256B18BB001CD0AB /* finalProjectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1547C59256B18BB001CD0AB /* finalProjectUITests.swift */; };
 		F1564746259465A700365C23 /* imagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1564745259465A700365C23 /* imagePicker.swift */; };
+		F156B53925A839FE0022DCF2 /* DetailSavingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F156B53625A839FE0022DCF2 /* DetailSavingCell.swift */; };
+		F156B53A25A839FE0022DCF2 /* DetailAccumulate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F156B53725A839FE0022DCF2 /* DetailAccumulate.swift */; };
+		F156B53B25A839FE0022DCF2 /* DetailSavingAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = F156B53825A839FE0022DCF2 /* DetailSavingAccount.swift */; };
 		F157487D2597E7A400DBF2F9 /* addExpenseOrIncomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F157487C2597E7A400DBF2F9 /* addExpenseOrIncomeVC.swift */; };
 		F15748822597FE4100DBF2F9 /* addLendOrBorrowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15748812597FE4100DBF2F9 /* addLendOrBorrowVC.swift */; };
 		F157582A2582C2C200FB0D13 /* lendOrBorrowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15758292582C2C200FB0D13 /* lendOrBorrowCell.swift */; };
@@ -154,6 +157,9 @@
 		F1547C59256B18BB001CD0AB /* finalProjectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = finalProjectUITests.swift; sourceTree = "<group>"; };
 		F1547C5B256B18BB001CD0AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F1564745259465A700365C23 /* imagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imagePicker.swift; sourceTree = "<group>"; };
+		F156B53625A839FE0022DCF2 /* DetailSavingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailSavingCell.swift; sourceTree = "<group>"; };
+		F156B53725A839FE0022DCF2 /* DetailAccumulate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailAccumulate.swift; sourceTree = "<group>"; };
+		F156B53825A839FE0022DCF2 /* DetailSavingAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailSavingAccount.swift; sourceTree = "<group>"; };
 		F157487C2597E7A400DBF2F9 /* addExpenseOrIncomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addExpenseOrIncomeVC.swift; sourceTree = "<group>"; };
 		F15748812597FE4100DBF2F9 /* addLendOrBorrowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addLendOrBorrowVC.swift; sourceTree = "<group>"; };
 		F15758292582C2C200FB0D13 /* lendOrBorrowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lendOrBorrowCell.swift; sourceTree = "<group>"; };
@@ -281,6 +287,9 @@
 		F1538C38257DE79200531002 /* account */ = {
 			isa = PBXGroup;
 			children = (
+				F156B53725A839FE0022DCF2 /* DetailAccumulate.swift */,
+				F156B53825A839FE0022DCF2 /* DetailSavingAccount.swift */,
+				F156B53625A839FE0022DCF2 /* DetailSavingCell.swift */,
 				DEFDCC06258F81EB00A0FDDB /* accountVC.swift */,
 				DEFDCC01258F81EA00A0FDDB /* AddAccountView.swift */,
 				DEFDCC17258F822500A0FDDB /* AccumulateAccountView.swift */,
@@ -676,6 +685,7 @@
 				F1538C4D257DE79200531002 /* filterHistoryVC.swift in Sources */,
 				F1D08FA32598852F00382264 /* editLendOrBorrowVC.swift in Sources */,
 				DEFDCC1B258F822600A0FDDB /* SavingAccountView.swift in Sources */,
+				F156B53B25A839FE0022DCF2 /* DetailSavingAccount.swift in Sources */,
 				F1538C4F257DE79200531002 /* homeVC.swift in Sources */,
 				DE84DA1A2592303800E7D4D0 /* AllSavingAccountCell.swift in Sources */,
 				F16655A92570168A007B8D80 /* Data.swift in Sources */,
@@ -690,6 +700,8 @@
 				F1538C61257DE79200531002 /* typeRecord.swift in Sources */,
 				DEFDCC08258F81EB00A0FDDB /* AllNormalAccountCell.swift in Sources */,
 				F15EFB7425927F5F0071F94F /* filterHistoryCell.swift in Sources */,
+				F156B53A25A839FE0022DCF2 /* DetailAccumulate.swift in Sources */,
+				F156B53925A839FE0022DCF2 /* DetailSavingCell.swift in Sources */,
 				F1538C50257DE79200531002 /* reportVC.swift in Sources */,
 				F160D6FC2597298900ACB5AD /* YourDataVC.swift in Sources */,
 				DEFDCC09258F81EB00A0FDDB /* BankingCell.swift in Sources */,

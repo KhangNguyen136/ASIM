@@ -113,15 +113,10 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
             locationTF.text = temp?.location
             eventTF.text = temp?.event
             srcAccount = temp?.srcAccount
+            chooseAccountBtn.setTitle(srcAccount?.getname(), for: .normal)
+
             dateTime.date = temp!.date
-            if srcAccount?.type == 1
-            {
-                chooseAccountBtn.setTitle(srcAccount?.cashAcc?.name, for: .normal)
-            }
-            else
-            {
-                chooseAccountBtn.setTitle(srcAccount?.bankingAcc?.name, for: .normal)
-            }
+
             //get borrow record from expense if it has
             tempRecord = temp?.borrowRecord
             
@@ -138,15 +133,9 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
             locationTF.text = temp?.location
             eventTF.text = temp?.event
             srcAccount = temp?.srcAccount
+            chooseAccountBtn.setTitle(srcAccount?.getname(), for: .normal)
+
             dateTime.date = temp!.date
-            if srcAccount?.type == 1
-            {
-                chooseAccountBtn.setTitle(srcAccount?.cashAcc?.name, for: .normal)
-            }
-            else
-            {
-                chooseAccountBtn.setTitle(srcAccount?.bankingAcc?.name, for: .normal)
-            }
             //get lend record if it has
             tempRecord = temp?.lendRecord
         }

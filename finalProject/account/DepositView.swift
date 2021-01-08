@@ -18,7 +18,8 @@ class DepositView: UIViewController {
     @IBOutlet weak var lblrootName: UILabel!
     @IBOutlet weak var txtDescription: UITextField!
     var rootAccName: String = ""
-    var obj:displayAccout? = nil
+    var rootID: Int = 0
+    var obj:polyAccount? = nil
     @IBOutlet weak var lblBalance: UITextField!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,30 +42,23 @@ class DepositView: UIViewController {
 
     @IBAction func saveDeposit(_ sender: Any) {
         let realm = try! Realm()
-        let accumulate = realm.objects(Accumulate.self).filter("goal == '\(rootAccName)'").first
+        let accumulate = realm.objects(Accumulate.self).filter("id == \(self.rootID)").first
        // var accumulateBal:Float = 0.0
         var accountBal:Float = 0.0
         let balance: Float = Float(lblBalance.text!) as! Float
         //let accountBal
         var accumulateBal:Float = accumulate!.addbalance + balance
         //print(accumulateBal)
-        if obj?.type == AccountType.cash{
+        if obj?.type == 0{
            // print(obj!.name)
-            let cashAccount = realm.objects(Account.self).filter("name == '\(obj!.name)'").first
-            
-           
-            accountBal = cashAccount!.balance - balance
             try! realm.write {
-                cashAccount!.balance = accountBal
+                obj?.cashAcc?.expense(amount: balance)
                 accumulate!.addbalance = accumulateBal
             }
         }
-        else if obj?.type == AccountType.banking{
-        let bankingAccount = realm.objects(BankingAccount.self).filter("name == '\(obj!.name)'").first
-                   
-        accountBal = bankingAccount!.balance - balance
-       try! realm.write {
-           bankingAccount!.balance = accountBal
+        else {
+           try! realm.write {
+            obj?.bankingAcc?.expense(amount: balance)
            accumulate!.addbalance = accumulateBal
        }
             
@@ -73,12 +67,17 @@ class DepositView: UIViewController {
                       
     }
     @objc func updateAccount (notification: Notification){
-        obj = notification.object as! displayAccout
-        imgAccount.image = obj?.image
-        lblNameAccount.text = obj?.name
-    
-        self.view.layoutIfNeeded()
-    }
+        obj = notification.object as! polyAccount
+        if obj?.type == 0{
+            imgAccount.image = UIImage(named: "accountType")
+            lblNameAccount.text = obj?.cashAcc?.name
+        }
+        else{
+            imgAccount.image = UIImage(named: (obj?.bankingAcc!.name)!)
+            lblNameAccount.text = obj?.bankingAcc?.name
+        }
+        
+        }
     @objc func chooseAccount(sender: UITapGestureRecognizer) {
            let scr=self.storyboard?.instantiateViewController(withIdentifier: "PickAccountView") as! PickAccountView
                

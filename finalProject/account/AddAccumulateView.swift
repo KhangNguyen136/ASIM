@@ -13,7 +13,7 @@ protocol delegateUpdate {
 }
 class AddAccumulateView: UIViewController, UITextFieldDelegate {
     var delegate: delegateUpdate?
-    var editGoal: String = ""
+    var editID: Int = 0
     var editMode = false
     @IBOutlet weak var txtbalance: UITextField!
     
@@ -70,7 +70,7 @@ class AddAccumulateView: UIViewController, UITextFieldDelegate {
     }
     func loadEditView(){
         let realm = try! Realm()
-        let obj = realm.objects(Accumulate.self).filter("goal == '\(editGoal)'").first as! Accumulate
+        let obj = realm.objects(Accumulate.self).filter("id == \(editID)").first as! Accumulate
         lblgoal.text = obj.goal
         lblCurrency.text = obj.currency
         let dateFormatter = DateFormatter()
@@ -94,17 +94,28 @@ class AddAccumulateView: UIViewController, UITextFieldDelegate {
     }
     @IBAction func saveEditedAccumulate(_ sender: Any) {
         let realm = try! Realm()
-        let obj = realm.objects(Accumulate.self).filter("goal == '\(editGoal)'").first as! Accumulate
+        let obj = realm.objects(Accumulate.self).filter("id == \(editID)").first as! Accumulate
         //Edit accumulate
          let acc = Accumulate()
          let dateFormatter = DateFormatter()
          dateFormatter.dateFormat = "MM/dd/yyyy"
-         acc.addbalance = 0.0
+        if txtbalance.text! == ""{
+            Notice().showAlert(content: "Please input amount")
+            return
+        }
          acc.balance = Float(txtbalance.text!)!
          acc.currency = lblCurrency.text!
          let strEndDate = (lblendTime.text!).components(separatedBy: " ")[0]
          acc.startdate = dateFormatter.date(from: lblStartDate.text!)!
+        if strEndDate == ""{
+            Notice().showAlert(content: "Please input For how long ")
+            return
+        }
          acc.enddate = dateFormatter.date(from: strEndDate)!
+        if lblgoal.text! == ""{
+            Notice().showAlert(content: "Please input goal")
+            return
+        }
          acc.goal = lblgoal.text!
          if includeSw.isOn == true{
              acc.includeReport = false
@@ -116,7 +127,6 @@ class AddAccumulateView: UIViewController, UITextFieldDelegate {
         try! realm.write {
             obj.goal = acc.goal
             obj.balance = acc.balance
-            obj.addbalance = acc.addbalance
             obj.currency = acc.currency
             obj.startdate = acc.startdate
             obj.enddate = acc.enddate
@@ -151,12 +161,13 @@ class AddAccumulateView: UIViewController, UITextFieldDelegate {
     @objc func handleTap(sender: UITapGestureRecognizer) {
         let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView
             scr.currencyMode = true
-            self.present(scr, animated: true, completion: nil)
+        self.navigationController?.pushViewController(scr, animated: true)
     }
     @objc func chooseTime(sender: UITapGestureRecognizer) {
         let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView
             scr.timeMode = true
-            self.present(scr, animated: true, completion: nil)
+            //self.present(scr, animated: true, completion: nil)
+        self.navigationController?.pushViewController(scr, animated: true)
     }
     @objc func chooseDate(sender: UITapGestureRecognizer) {
        let alert = UIAlertController(title: "Choose Date", message: "", preferredStyle: .alert)
@@ -198,7 +209,7 @@ class AddAccumulateView: UIViewController, UITextFieldDelegate {
         let alertView = SCLAlertView(appearance: appearance)
         alertView.addButton("OK") {
             let realm = try! Realm()
-            let obj = realm.objects(Accumulate.self).filter("goal == '\(self.lblgoal.text!)'")
+            let obj = realm.objects(Accumulate.self).filter("id == \(self.editID)")
             try! realm.write {
                         realm.delete(obj)
                     }
@@ -213,14 +224,28 @@ class AddAccumulateView: UIViewController, UITextFieldDelegate {
     @IBAction func saveData(_ sender: Any) {
         let realm = try! Realm()
         let acc = Accumulate()
+        acc.id = acc.incrementID()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
         acc.addbalance = 0.0
+        if txtbalance.text! == "0"{
+           Notice().showAlert(content: "Please input amount")
+           return
+       }
         acc.balance = Float(txtbalance.text!)!
         acc.currency = lblCurrency.text!
+        if lblendTime.text! == "For how long?"{
+           Notice().showAlert(content: "Please input For how long ")
+           return
+       }
         let strEndDate = (lblendTime.text!).components(separatedBy: " ")[0]
         acc.startdate = dateFormatter.date(from: lblStartDate.text!)!
+       
         acc.enddate = dateFormatter.date(from: strEndDate)!
+        if lblgoal.text! == "What is the goal?"{
+           Notice().showAlert(content: "Please input goal")
+           return
+       }
         acc.goal = lblgoal.text!
         if includeSw.isOn == true{
             acc.includeReport = false

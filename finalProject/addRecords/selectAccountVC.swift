@@ -23,13 +23,23 @@ class selectAccountVC: UIViewController {
         let temp = realm.objects(polyAccount.self)
         for i in temp
         {
-            if i.type == 1 && i.cashAcc?.active == true && i.isDeleted == false
+            if i.isDeleted == true
             {
-                dataSource.append(i)
+                continue
             }
-            else if i.bankingAcc?.active == true
-            {
-                dataSource.append(i)
+            switch i.type {
+            case 0:
+                if i.cashAcc?.active == true
+                {
+                    dataSource.append(i)
+                }
+            case 1:
+                if i.bankingAcc?.active == true
+                {
+                    dataSource.append(i)
+                }
+            default:
+                continue
             }
         }
         if dataSource.isEmpty
@@ -64,11 +74,11 @@ extension selectAccountVC : UITableViewDelegate,UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let temp = dataSource[indexPath.row]
         var nameStr = ""
-        if temp.type == 1
+        if temp.type == 0
         {
             nameStr = temp.cashAcc!.name
         }
-        else
+        else if temp.type == 1
         {
             nameStr = temp.bankingAcc!.name
         }

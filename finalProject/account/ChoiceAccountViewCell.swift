@@ -13,6 +13,7 @@ class ChoiceAccountViewCell: UITableViewCell {
     @IBOutlet weak var txtText: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
+        
         // Initialization code
     }
 

@@ -16,6 +16,9 @@ class AddSavingAccount: UIViewController {
     @IBOutlet var mainview: UIView!
     @IBOutlet weak var bankView: UIView!
     @IBOutlet weak var lblTerm: UILabel!
+    @IBOutlet weak var lblDestAccName: UILabel!
+    @IBOutlet weak var imgDestAcc: UIImageView!
+    @IBOutlet weak var destAccountView: UIView!
     @IBOutlet weak var termView: UIView!
     @IBOutlet weak var interestPaidView: UIView!
     @IBOutlet weak var txtFreeInterest: UITextField!
@@ -38,9 +41,13 @@ class AddSavingAccount: UIViewController {
     var share: Int = 0
     var interestPaid = ["Maturity","Up-front","Monthly"]
     var termEnded = ["Rollover principal and interest", "Rollover principal", "Close account"]
-    var obj: displayAccout? = nil
+    @IBOutlet weak var destAccHeight: NSLayoutConstraint!
+    var objSource: polyAccount? = nil
+    var objDest: polyAccount? = nil
     override func viewDidLoad() {
         super.viewDidLoad()
+        destAccountView.isHidden = true
+        destAccHeight.constant = 0
         self.view.backgroundColor = UIColor(red: 71/255, green: 181/255, blue: 190/255, alpha: 1)
         mainview.backgroundColor = UIColor(red: 71/255, green: 181/255, blue: 190/255, alpha: 1)
         self.navigationController?.navigationBar.barTintColor = UIColor(red: 0/255, green: 123/255, blue: 164/255, alpha: 1)
@@ -74,18 +81,54 @@ class AddSavingAccount: UIViewController {
          NotificationCenter.default.addObserver(self, selector: #selector(updateAccount), name: .accNotification, object: nil)
         let pickAccount = UITapGestureRecognizer(target: self, action: #selector(chooseAccount(sender:)))
         accountView.addGestureRecognizer(pickAccount)
+        //Pick Des Account
+        let pickDestAccount = UITapGestureRecognizer(target: self, action: #selector(chooseDestAccount(sender:)))
+        destAccountView.addGestureRecognizer(pickDestAccount)
     }
     @objc func updateAccount (notification: Notification){
-        obj = notification.object as! displayAccout
-        imgAccount.image = obj?.image
-        lblNameAccount.text = obj?.name
+        let dest = notification.userInfo!["dest"] as! Bool
+        print(dest)
+        if dest == false{
+        objSource = notification.object as! polyAccount
+            if objSource!.type == 0{
+                let obj = objSource?.cashAcc
+                imgAccount.image = UIImage(named: "accountType")
+                lblNameAccount.text = obj?.name
+            }
+            else{
+                let obj = objSource?.bankingAcc
+                imgAccount.image = UIImage(named: obj!.name)
+                lblNameAccount.text = obj?.name
+            }
+        
+        }
+        else{
+            objDest = notification.object as! polyAccount
+                       if objDest!.type == 0{
+                           let obj = objDest?.cashAcc
+                           imgDestAcc.image = UIImage(named: "accountType")
+                           lblDestAccName.text = obj?.name
+                       }
+                       else{
+                           let obj = objDest?.bankingAcc
+                           imgDestAcc.image = UIImage(named: obj!.name)
+                           lblDestAccName.text = obj?.name
+                       }
+        }
         }
     @objc func chooseAccount(sender: UITapGestureRecognizer) {
            let scr=self.storyboard?.instantiateViewController(withIdentifier: "PickAccountView") as! PickAccountView
-               
+        scr.dest = false
         self.navigationController?.pushViewController(scr, animated: true )
        // self.present(scr, animated: true, completion: nil)
        }
+    @objc func chooseDestAccount(sender: UITapGestureRecognizer) {
+              let scr=self.storyboard?.instantiateViewController(withIdentifier: "PickAccountView") as! PickAccountView
+                  
+        scr.dest = true
+        self.navigationController?.pushViewController(scr, animated: true )
+          // self.present(scr, animated: true, completion: nil)
+          }
     @objc func chooseInterestPaid(sender: UITapGestureRecognizer) {
         share = 0
         let alert = UIAlertController(title: "Interest Paid Choices", message: "\n\n\n\n\n\n", preferredStyle: .alert)
@@ -146,22 +189,35 @@ class AddSavingAccount: UIViewController {
     @objc func chooseCurrency(sender: UITapGestureRecognizer) {
     let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView
         scr.currencyMode = true
-        self.present(scr, animated: true, completion: nil)
+       // self.present(scr, animated: true, completion: nil)
+        self.navigationController?.pushViewController(scr, animated: true)
         
     }
     @objc func chooseTerm(sender: UITapGestureRecognizer) {
     let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView
         scr.termmMode = true
-        self.present(scr, animated: true, completion: nil)
+        //self.present(scr, animated: true, completion: nil)
+        self.navigationController?.pushViewController(scr, animated: true)
         
     }
     @objc func chooseBank(sender: UITapGestureRecognizer) {
         let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView
         scr.bankingMode = true
-        //self.navigationController?.pushViewController(scr, animated: true)
-        self.present(scr, animated: true, completion: nil)
+        self.navigationController?.pushViewController(scr, animated: true)
+       // self.present(scr, animated: true, completion: nil)
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        if lblTerm.text != "Term"{
+            let term = lblTerm.text!.components(separatedBy: " ")[1]
+            if term != "months"{
+                interestPaid = ["Maturity","Up-front"]
+        
+            }
+            else {
+                interestPaid = ["Maturity","Up-front","Monthly"]
+            }
+        }
+    }
     @objc func chooseDate(sender: UITapGestureRecognizer) {
        let alert = UIAlertController(title: "Choose Date", message: "", preferredStyle: .alert)
         let height:NSLayoutConstraint = NSLayoutConstraint(item: alert.view, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 300)
@@ -177,10 +233,12 @@ class AddSavingAccount: UIViewController {
        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (UIAlertAction) in
            let dateFormatter: DateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MM/dd/yyyy"
-
         let selectedDate: String = dateFormatter.string(from: datePicker.date)
-                    
-        self.lblStartDate.text =  "\(selectedDate)"
+        let today: String =  dateFormatter.string(from: Date())
+        if selectedDate == today{
+            self.lblStartDate.text =  "Today"
+        }
+        else{self.lblStartDate.text =  "\(selectedDate)"}
        
         }))
         self.present(alert,animated: true, completion: nil )
@@ -190,13 +248,31 @@ class AddSavingAccount: UIViewController {
         let realm = try! Realm()
         let acc = savingAccount()
         acc.id = acc.incrementID()
-        acc.name = lblNameAccount.text!
-        acc.ammount = Float( lblBalance.text!) as! Float
+        if txtName.text! == ""{
+            Notice().showAlert(content: "Please input Account name")
+            return;
+        }
+        acc.name = txtName.text!
+        if lblBalance.text! == "0"{
+            Notice().showAlert(content: "Please input amount")
+            return;
+          }
+        acc.ammount = Float(lblBalance.text!) as! Float
+       
+        if lblNameBank.text! == "Bank"{
+           Notice().showAlert(content: "Please choose Bank")
+            return;
+       }
         acc.currency = lblCurrency.text!
         acc.bank = lblNameBank.text!.components(separatedBy: " ")[2]
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
-        acc.startdate = dateFormatter.date(from: lblStartDate.text!)!
+        if lblStartDate.text == "Today"{
+             acc.startdate = Date()
+        }
+        else{
+            acc.startdate = dateFormatter.date(from: lblStartDate.text!)!
+        }
         acc.interestRate = Float(txtInterestRate.text!) as! Float
         acc.freeInterestRate = Float(txtFreeInterest.text!) as! Float
         if lblInterestPaid.text == "Maturity"{
@@ -217,13 +293,16 @@ class AddSavingAccount: UIViewController {
         else {
             acc.termEnded = 0
         }
-        acc.srcAccountName = obj!.name
-        if obj?.type == AccountType.cash{
-            acc.srcAccountType = "CashAccount"
+        if lblTerm.text! == "Term"{
+          Notice().showAlert(content: "Please choose Term")
+           return;
         }
-        else{
-            acc.srcAccountType = "BankingAccount"
-        }
+        acc.term = lblTerm.text!
+        if objSource == nil{
+                  Notice().showAlert(content: "Please choose Source Account")
+                   return;
+              }
+        acc.srcAccount = objSource
         acc.numDays = Int(txtDays.text!) as! Int
         acc.descrip = txtDescription.text!
         if swincludeRecord.isOn == true{
@@ -233,11 +312,67 @@ class AddSavingAccount: UIViewController {
        else {
            acc.includeRecord = true
        }
-      try! realm.write {
-           realm.add(acc)
-           }
-       
-      //dismiss(animated: true, completion: nil)
+        if acc.interestPaid == 1 || acc.interestPaid == 2{
+            if objDest == nil{
+                Notice().showAlert(content: "Please choose Dest Account")
+                 return;
+            }
+            acc.destAccount = objDest
+        }
+        
+        if acc.srcAccount?.type == 0{
+            let srcAcc = acc.srcAccount?.cashAcc
+            try! realm.write {
+                //Tru vao sourceAcc
+                srcAcc!.expense(amount: acc.ammount)
+            }
+            
+        }
+        else if acc.srcAccount?.type == 1{
+        let srcAcc = acc.srcAccount?.bankingAcc
+        let transfer = Transfer()
+            transfer.id = acc.id
+        
+        try! realm.write {
+            //Tru vao sourceAcc
+            srcAcc!.expense(amount: acc.ammount)
+        }
+        }
+
+        if acc.interestPaid == 0 || acc.interestPaid == 2{
+                
+                var dateComponent = DateComponents()
+                let term = acc.term
+                switch term{
+                case "1 week", "2 weeks", "3 weeks":
+                    let addDays = Int(term.components(separatedBy: " ")[0]) as! Int
+                    dateComponent.day = addDays*7
+                case "1 month", "3 months", "6 months", "12 months":
+                    let addMonths = Int( term.components(separatedBy: " ")[0]) as! Int
+                    dateComponent.month = addMonths
+                default:
+                    dateComponent.day = 0
+            }
+                acc.nextTermDate = Calendar.current.date(byAdding: dateComponent, to: acc.startdate)!
+            
+            
+        }
+        else{
+            acc.nextTermDate = acc.startdate
+
+        }
+        acc.add()
+        let polyAcc = realm.objects(polyAccount.self).filter("type == 2")
+        for sav in polyAcc{
+            if sav.savingAcc!.id == acc.id{
+                let transfer = Transfer()
+                transfer.id = sav.id
+                try! realm.write{
+                    transfer.getData(_amount: acc.ammount, _type: 4, _descript: "", _srcAccount: acc.srcAccount!, _location: "", _srcImg: "", _date: sav.savingAcc!.startdate, _destAccount: sav, _transferFee:nil)
+                }
+                transfer.add()
+            }
+        }
        self.navigationController?.popViewController(animated: true)
        }
     }
@@ -249,7 +384,18 @@ extension AddSavingAccount: UIPickerViewDelegate, UIPickerViewDataSource{
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if share == 0{
-            return interestPaid.count}
+            if lblTerm.text != "Term"{
+                let term = lblTerm.text!.components(separatedBy: " ")[1]
+                if term != "months"{
+                    interestPaid = ["Maturity","Up-front"]
+                }
+                else {
+                    interestPaid = ["Maturity","Up-front","Monthly"]
+                }
+            }
+            return interestPaid.count
+            
+        }
         return termEnded.count
     }
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
@@ -257,7 +403,19 @@ extension AddSavingAccount: UIPickerViewDelegate, UIPickerViewDataSource{
         return termEnded[row]
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if share == 0 {lblInterestPaid.text = interestPaid[row]}
+        if share == 0 {lblInterestPaid.text = interestPaid[row]
+            if lblInterestPaid.text == "Up-front" || lblInterestPaid.text == "Monthly" {
+                destAccountView.isHidden = false
+                destAccHeight.constant = 60
+            }
+            else {
+                destAccountView.isHidden = true
+                destAccHeight.constant = 0
+                imgDestAcc.image = UIImage(named:"bank")
+                lblDestAccName.text = "Interest paid to"
+                
+            }
+        }
         lblTermEnded.text = termEnded[row]
     }
     

@@ -66,6 +66,7 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
         
         srcAccount = record?.srcAccount
         chooseSourceAccountBtn.setTitle(srcAccount?.getname(), for: .normal)
+        
         destAccount = record?.destinationAccount
         chooseDestAccountBtn.setTitle(destAccount?.getname(), for: .normal)
         userInfor = realm.objects(User.self)[0]

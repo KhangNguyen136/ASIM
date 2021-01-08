@@ -14,6 +14,7 @@ class BankingCell: UITableViewCell {
     @IBOutlet weak var lblInfo: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
+       // imgIcon.layer.cornerRadius = imgIcon.layer.frame.height / 2.0
         // Initialization code
     }
 

@@ -8,27 +8,19 @@
 import UIKit
 import RealmSwift
 import SCLAlertView
-enum AccountType{
-    case cash, banking
-}
-class displayAccout{
-    var name: String = ""
-    var balance: Float = 0
-    var image: UIImage = UIImage()
-    var type: AccountType = .cash
-    init(name: String, balance: Float, img: UIImage, type: AccountType) {
-        self.name = name
-        self.balance = balance
-        self.image = img
-        self.type = type
-    }
-}
+
 class NormalAccount: UIViewController, updateDataDelegate {
     func updateTable() {
         loadData()
         var balance: Float = 0.0
         for obj in activeAccount{
-            balance += obj.balance
+            if obj.type == 0{
+                balance += obj.cashAcc!.balance
+            }
+            else{
+                balance += obj.bankingAcc!.balance
+            }
+            
         }
         lblBalance.text = String(balance)
         lblCurrency.text = ".đ"
@@ -40,27 +32,28 @@ class NormalAccount: UIViewController, updateDataDelegate {
     @IBOutlet weak var lblBalance: UILabel!
     @IBOutlet weak var lblCurrency: UILabel!
     var iconImg = ["active","block"]
-    var titleLbl = ["Active account", "Blocked account"]
+    var titleLbl = ["Active account", "Closed account"]
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var addBtn: UIBarButtonItem!
-    var activeAccount: [displayAccout] = []
-    var blockedAccount: [displayAccout] = []
-    @IBOutlet weak var lblTitle: UILabel!
-    @IBOutlet weak var navigationBar: UINavigationItem!
-    var backgroundImage: UIImageView!
+    var activeAccount: [polyAccount] = []
+    var blockedAccount: [polyAccount] = []
        override func viewDidLoad() {
            super.viewDidLoad()
-        self.view.backgroundColor = UIColor(red: 71/255, green: 181/255, blue: 190/255, alpha: 1)
+       self.view.backgroundColor = UIColor(red: 71/255, green: 181/255, blue: 190/255, alpha: 1)
         self.navigationController?.navigationBar.barTintColor = UIColor(red: 0/255, green: 123/255, blue: 164/255, alpha: 1)
-       // tableView.isEditing = true
-        let back = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(exitTapped))
-               navigationBar.rightBarButtonItem = addBtn
-               navigationBar.title = "Account"
-               navigationBar.leftBarButtonItem = back
+               // Do any additional setup after loading the view.
+        self.navigationItem.title = "Account"
+        self.navigationController?.navigationBar.titleTextAttributes = [
+                   .foregroundColor: UIColor.white,
+                   .font: UIFont(name: "MarkerFelt-Thin", size: 20)!]
         loadData()
         var balance: Float = 0.0
         for obj in activeAccount{
-            balance += obj.balance
+            if obj.type == 0{
+                 balance += obj.cashAcc!.balance
+             }
+             else{
+                 balance += obj.bankingAcc!.balance
+             }
         }
         lblBalance.text = "\(balance)"
         lblCurrency.text = ".đ"
@@ -70,32 +63,31 @@ class NormalAccount: UIViewController, updateDataDelegate {
     // Load active and blocked account
     func loadData(){
         let realm = try! Realm()
-        let cashAccount = realm.objects(Account.self)
-        let bankingAccount = realm.objects(BankingAccount.self)
+        let account = realm.objects(polyAccount.self)
         activeAccount = []
         blockedAccount = []
-        for obj in cashAccount{
+        for obj in account{
+            
+            if obj.type == 0{
+                if obj.cashAcc?.active == true{
+                    activeAccount.append(obj)
+                }
+                else{
+                    blockedAccount.append(obj)
+                }
+            }
+            else if obj.type == 1{
+                
+                if obj.bankingAcc?.active == true{
+                    activeAccount.append(obj)
+                }
+                else{
+                    blockedAccount.append(obj)
+                }
+            }
+        }
 
-            let name = obj.name
-            let balance = obj.balance
-            if obj.active == true{
-                activeAccount.append(displayAccout(name: name, balance: balance,img: UIImage(named: "Cash")!, type: AccountType.cash))
-            }
-            else{
-                blockedAccount.append(displayAccout(name: name, balance: balance, img: UIImage(named: "Cash")!, type: AccountType.cash))
-            }
-        }
-        for obj in bankingAccount{
-            let name = obj.name
-            let balance = obj.balance
-            let image = UIImage(named: obj.bankImg)!
-            if obj.active == true{
-                activeAccount.append(displayAccout(name: name, balance: balance, img: image, type: AccountType.banking))
-            }
-            else{
-                blockedAccount.append(displayAccout(name: name, balance: balance, img: image, type: AccountType.banking))
-            }
-        }
+        
     }
    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "AddAccountSegue" {
@@ -103,31 +95,17 @@ class NormalAccount: UIViewController, updateDataDelegate {
         secondVC.delegate = self
     }
     }
- /*   override func viewDidLayoutSubviews() {
-           super.viewDidLayoutSubviews()
-           self.backgroundImage.frame = self.view.bounds
-           // let add = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
-       }
-   @objc func addTapped(){
-        let scr=self.storyboard?.instantiateViewController(withIdentifier: "AddAccountView") as! AddAccountView
-                   self.present(scr, animated: true, completion: nil)
-    }*/
+
     @objc func exitTapped(){
           dismiss(animated: true, completion: nil)
        }
 }
 extension NormalAccount: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        
         return 2
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0{
-            return "Being used"
-        }
-        else {
-            return "Blocked"
-        }
+        return titleLbl[section]
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
@@ -141,15 +119,33 @@ extension NormalAccount: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
          let cell = tableView.dequeueReusableCell(withIdentifier: "AllNormalAccountCell", for: indexPath) as! AllNormalAccountCell
+        
         if indexPath.section == 0{
-            cell.lblName.text = activeAccount[indexPath.row].name
-            cell.lblMoney.text = "\(activeAccount[indexPath.row].balance)"
-            cell.imgIcon.image = activeAccount[indexPath.row].image
+            let obj = activeAccount[indexPath.row]
+            if obj.type == 0{
+                cell.lblName.text = obj.cashAcc?.name
+                cell.lblMoney.text = "\(obj.cashAcc?.balance as! Float)"
+                cell.imgIcon.image = UIImage(named:"accountType")
+            }
+            else if obj.type == 1{
+                cell.lblName.text = obj.bankingAcc?.name
+                cell.lblMoney.text = "\(obj.bankingAcc?.balance as! Float)"
+                cell.imgIcon.image = UIImage(named: obj.bankingAcc!.name)
+            }
+           
         }
         else if indexPath.section == 1{
-            cell.lblName.text = blockedAccount[indexPath.row].name
-            cell.lblMoney.text = "\(blockedAccount[indexPath.row].balance)"
-             cell.imgIcon.image = blockedAccount[indexPath.row].image
+            let obj1 = blockedAccount[indexPath.row]
+            if obj1.type == 0{
+               cell.lblName.text = obj1.cashAcc?.name
+                cell.lblMoney.text = "\(obj1.cashAcc?.balance as! Float)"
+               cell.imgIcon.image = UIImage(named:"accountType")
+           }
+            else if obj1.type == 1{
+               cell.lblName.text = obj1.bankingAcc?.name
+                cell.lblMoney.text = "\(obj1.bankingAcc?.balance as! Float)"
+                cell.imgIcon.image = UIImage(named: obj1.bankingAcc!.name)
+           }
         }
         cell.backgroundView = UIImageView(image: UIImage(named: "row"))
         cell.layer.borderWidth = 5
@@ -159,10 +155,8 @@ extension NormalAccount: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60
-    }
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+
+   /* func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         view.backgroundColor = UIColor(red: 65/255, green: 146/255, blue: 96/255, alpha: 0.5)
         let image = UIImageView(image: UIImage(named: iconImg[section]))
@@ -173,7 +167,7 @@ extension NormalAccount: UITableViewDelegate, UITableViewDataSource {
         label.frame = CGRect(x: 70, y: 5, width: 150, height: 50)
         view.addSubview(label)
         return view
-    }
+    }*/
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 5
     }
@@ -200,42 +194,44 @@ extension NormalAccount: UITableViewDelegate, UITableViewDataSource {
             let alertView = SCLAlertView(appearance: appearance)
             alertView.addButton("OK") {
                 let realm = try! Realm()
+                var obj: polyAccount
+   
                 if indexPath.section == 0{
-                    let type = self.activeAccount[indexPath.row].type
-                    if type == AccountType.cash{
-                        let obj = realm.objects(Account.self).filter("name == '\(self.activeAccount[indexPath.row].name)'")
-                        try! realm.write {
-                            realm.delete(obj)
-                        }
-                    }
-                    else if type == AccountType.banking{
-                        let obj = realm.objects(BankingAccount.self).filter("name == '\(self.activeAccount[indexPath.row].name)'")
-                        try! realm.write {
-                            realm.delete(obj)
-                        }
-                    }
-                    
+                  let account = Array(realm.objects(polyAccount.self).filter("type == 2"))
+                  for acc in account{
+                      let sav = acc.savingAcc
+                      if sav!.state == false{
+                          if sav?.srcAccount?.type == 0{
+                              if sav?.srcAccount?.cashAcc?.id == self.activeAccount[indexPath.row].cashAcc?.id{
+                                  acc.del()
+                              }
+                          }
+                          else{
+                              if sav?.srcAccount?.bankingAcc?.id == self.activeAccount[indexPath.row].bankingAcc?.id{
+                                  acc.del()
+                              }
+                          }
+                      }
+                  }
+                    obj = self.activeAccount[indexPath.row]
+                    obj.del()
                 }
                 else if indexPath.section == 1{
-                    let type = self.blockedAccount[indexPath.row].type
-                    if type == AccountType.cash{
-                        let obj = realm.objects(Account.self).filter("name == '\(self.blockedAccount[indexPath.row].name)'")
-                        try! realm.write {
-                            realm.delete(obj)
-                        }
-                    }
-                    else if type == AccountType.banking{
-                        let obj = realm.objects(BankingAccount.self).filter("name == '\(self.blockedAccount[indexPath.row].name)'")
-                        try! realm.write {
-                            realm.delete(obj)
-                        }
-                    }
+                   obj = self.blockedAccount[indexPath.row]
+                    obj.del()
                 }
+
+                
                 self.loadData()
                 var balance: Float = 0.0
                 for obj in self.activeAccount{
-                           balance += obj.balance
-                       }
+                    if obj.type == 0{
+                        balance += obj.cashAcc!.balance
+                    }
+                    else{
+                        balance += obj.bankingAcc!.balance
+                    }
+                }
                 self.lblBalance.text = "\(balance)"
                 tableView.reloadData()
 
@@ -253,46 +249,46 @@ extension NormalAccount: UITableViewDelegate, UITableViewDataSource {
             (action, view, nil) in
             let realm = try! Realm()
             if indexPath.section == 0{
-                let type = self.activeAccount[indexPath.row].type
-                if type == AccountType.cash{
-                    let obj = realm.objects(Account.self).filter("name == '\(self.activeAccount[indexPath.row].name)'").first
-                    try! realm.write {
-                        obj!.active = !obj!.active
+                let obj = self.activeAccount[indexPath.row]
+                if obj.type == 0{
+                    try! realm.write{
+                        obj.cashAcc?.active = !obj.cashAcc!.active
                     }
+                    
                 }
-                else if type == AccountType.banking{
-                    let obj = realm.objects(BankingAccount.self).filter("name == '\(self.activeAccount[indexPath.row].name)'").first
-
-                    try! realm.write {
-                        obj!.active = !obj!.active
+                else{
+                    try! realm.write{
+                        obj.bankingAcc?.active = !obj.bankingAcc!.active
                     }
                 }
                 
             }
             else if indexPath.section == 1{
-                let type = self.blockedAccount[indexPath.row].type
-                if type == AccountType.cash{
-                    let obj = realm.objects(Account.self).filter("name == '\(self.blockedAccount[indexPath.row].name)'").first
-                    
-                    try! realm.write {
-                        obj!.active = !obj!.active
+                let obj = self.blockedAccount[indexPath.row]
+                if obj.type == 0{
+                    try! realm.write{
+                        obj.cashAcc?.active = !obj.cashAcc!.active
                     }
+                    
                 }
-                else if type == AccountType.banking{
-                    let obj = realm.objects(BankingAccount.self).filter("name == '\(self.blockedAccount[indexPath.row].name)'").first
-                    try! realm.write {
-                        obj!.active = !obj!.active
+                else{
+                    try! realm.write{
+                        obj.bankingAcc?.active = !obj.bankingAcc!.active
                     }
                 }
             }
             self.loadData()
             var balance: Float = 0.0
             for obj in self.activeAccount{
-                       balance += obj.balance
-                   }
-            self.lblBalance.text = "\(balance)"
-            tableView.reloadData()
-        }
+               if obj.type == 0{
+                   balance += obj.cashAcc!.balance
+               }
+               else{
+                   balance += obj.bankingAcc!.balance
+               }                   }
+                self.lblBalance.text = "\(balance)"
+                tableView.reloadData()
+            }
         if indexPath.section == 0{
             stop.image = UIImage(named: "stop")
         }
@@ -305,71 +301,18 @@ extension NormalAccount: UITableViewDelegate, UITableViewDataSource {
         let edit = UIContextualAction(style: .normal, title: "Edit"){
             (action, view, nil) in
             let scr=self.storyboard?.instantiateViewController(withIdentifier: "AddAccountView") as! AddAccountView
-            let realm = try! Realm()
-             if indexPath.section == 0{
-                 let type = self.activeAccount[indexPath.row].type
-                 if type == AccountType.cash{
-                    let obj = realm.objects(Account.self).filter("name == '\(self.activeAccount[indexPath.row].name)'").first
-                    scr.nameAccount = obj!.name
-                    scr.descAccount = obj!.descrip
-                    scr.currency = obj!.currency
-                    scr.account = "Cash"
-                    scr.editMode = true
-                    scr.nameEdit = obj!.name
-                    scr.active = true
-                    scr.balance = "\(obj!.balance)"
-            
-                 }
-                 else if type == AccountType.banking{
-                    let obj = realm.objects(BankingAccount.self).filter("name == '\(self.activeAccount[indexPath.row].name)'").first
-                    scr.nameAccount = obj!.name
-                    scr.descAccount = obj!.descrip
-                    scr.currency = obj!.currency
-                    scr.account = "Banking Account"
-                    scr.bankName = obj!.bankName
-                    scr.editMode = true
-                    scr.nameEdit = obj!.name
-                    scr.active = true
-                    scr.balance = "\(obj!.balance)"
-                 }
-                 
-             }
-             else if indexPath.section == 1{
-                 let type = self.blockedAccount[indexPath.row].type
-                 if type == AccountType.cash{
-                    let obj = realm.objects(Account.self).filter("name == '\(self.blockedAccount[indexPath.row].name)'").first
-                    scr.nameAccount = obj!.name
-                    scr.descAccount = obj!.descrip
-                    scr.currency = obj!.currency
-                    scr.account = "Cash"
-                    scr.editMode = true
-                    scr.nameEdit = obj!.name
-                    scr.active = false
-                    scr.balance = "\(obj!.balance)"
-                 }
-                 else if type == AccountType.banking{
-                    let obj = realm.objects(BankingAccount.self).filter("name == '\(self.blockedAccount[indexPath.row].name)'").first
-                    scr.nameAccount = obj!.name
-                    scr.descAccount = obj!.descrip
-                    scr.currency = obj!.currency
-                    scr.account = "Banking Account"
-                    scr.bankName = obj!.bankName
-                    scr.editMode = true
-                    scr.nameEdit = obj!.name
-                    scr.active = false
-                    scr.balance = "\(obj!.balance)"
-                 }
-             }
+            if indexPath.section == 0{
+                scr.editAcc = self.activeAccount[indexPath.row]
+            }
+            else{
+                scr.editAcc = self.blockedAccount[indexPath.row]
+            }
+            scr.editMode = true
                   //self.present(scr, animated: true, completion: nil)
             self.navigationController!.pushViewController(scr, animated: true)
         }
         edit.image = UIImage(named:"edit");
-            
-           
-        
-        
         stop.backgroundColor = UIColor.white
-       
         let config = UISwipeActionsConfiguration(actions: [delete,stop,edit])
 
         return config

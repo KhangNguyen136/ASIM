@@ -13,6 +13,7 @@ protocol updateDataDelegate {
 }
 class AddAccountView: UIViewController, UITextFieldDelegate {
     var editMode = false
+    var editAcc: polyAccount = polyAccount()
     var delegate: updateDataDelegate?
     var nameAccount: String = "Account name"
     var descAccount: String = "Description"
@@ -21,7 +22,6 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
     var bankName = "Bank Name"
     var imgName = "bank"
     //Edit mode
-    var nameEdit: String = ""
     var active = true
     var balance: String = "0"
 
@@ -32,9 +32,24 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
     var backgroundImage: UIImageView!
     override func viewDidLoad() {
         
-           super.viewDidLoad()
-            if editMode == true {
-                lblTitle.text = "Edit Account"
+        super.viewDidLoad()
+        if editMode == true {
+            if editAcc.type == 0{
+                account = "Cash"
+                balance = "\(editAcc.cashAcc?.balance as! Float)"
+                nameAccount = editAcc.cashAcc!.name
+                active = editAcc.cashAcc!.active
+                
+            }
+            else{
+                account = "Banking Account"
+                bankName = editAcc.bankingAcc!.bankName
+                balance = "\(editAcc.bankingAcc?.balance as! Float)"
+                nameAccount = editAcc.bankingAcc!.name
+                active = editAcc.bankingAcc!.active
+            }
+            
+            
         }
         txtMoney.text = balance
         txtMoney.delegate = self
@@ -111,8 +126,15 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
         let cellName: NameAccountViewCell = self.tableView.cellForRow(at: indexName) as! NameAccountViewCell
         let cellDes: NameAccountViewCell = self.tableView.cellForRow(at: indexDes) as! NameAccountViewCell
         let name = cellName.txtNameAcocunt.text!
+        if name == ""{
+            Notice().showAlert(content: "Please input Name Account")
+            return
+        }
         let des = cellDes.txtNameAcocunt.text!
-        print(des)
+        if txtMoney.text! == "0"{
+            Notice().showAlert(content: "Please input balance")
+            return
+        }
         if account == "Cash"{
             let acc = Account()
             acc.balance = Float(txtMoney.text!)!
@@ -122,29 +144,46 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
             acc.includeReport = false
             let realm = try! Realm()
             if editMode == false{
-            let tempPolyAcc = polyAccount()
-                tempPolyAcc.type = 1
-                tempPolyAcc.cashAcc = acc
-           try! realm.write {
-                realm.add(tempPolyAcc)
-                let userInfor = realm.objects(User.self)[0]
-                userInfor.accounts.append(tempPolyAcc)
-                print(realm.configuration.fileURL)
-                }
+                acc.add()
             }
             else{
-            let updAccount = realm.objects(Account.self).filter("name == '\(nameEdit)'").first
-            try! realm.write {
-               // updAccount!.name = acc.name
-                updAccount!.active = self.active
-                updAccount!.balance = acc.balance
-                updAccount!.currency = acc.currency
-                updAccount!.descrip = acc.descrip
+                if editAcc.type == 0{
+
+                try! realm.write {
+                    editAcc.cashAcc?.name = acc.name
+                    editAcc.cashAcc?.active = self.active
+                    editAcc.cashAcc?.balance = acc.balance
+                    editAcc.cashAcc?.currency = acc.currency
+                    editAcc.cashAcc?.descrip = acc.descrip
+                
+                    editAcc.isChanged = true
+                    }
                 }
-            }
+                else{
+                    editAcc.del()
+                    let index = IndexPath(row: 4, section: 0)
+                    let cellbankName: AddAcountViewCell = self.tableView.cellForRow(at: index) as! AddAcountViewCell
+                    let bankName = cellbankName.lblType.text!
+                    let acc = BankingAccount()
+                    acc.balance = Float(txtMoney.text!)!
+                    acc.currency = self.currency
+                    acc.name = name
+                    acc.descrip = des
+                    acc.includeReport = false
+                    acc.bankName = bankName
+                    acc.add()
+                }
+                    //let updAccount = 
+                }
+                
+                
+                }
             
-        }
         else if account == "Banking Account"{
+            if bankName == "Bank Name"{
+                Notice().showAlert(content: "Please select bank")
+                return
+            }
             let index = IndexPath(row: 4, section: 0)
             let cellbankName: AddAcountViewCell = self.tableView.cellForRow(at: index) as! AddAcountViewCell
             let bankName = cellbankName.lblType.text!
@@ -155,29 +194,36 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
             acc.descrip = des
             acc.includeReport = false
             acc.bankName = bankName
-            acc.bankImg = imgName
             let realm = try! Realm()
             if editMode == false{
-            let tempPolyAcc = polyAccount()
-                tempPolyAcc.type = 2
-                tempPolyAcc.bankingAcc = acc
-            try! realm.write {
-                realm.add(tempPolyAcc)
-                let userInfor = realm.objects(User.self)[0]
-                userInfor.accounts.append(tempPolyAcc)
-                }}
+                acc.add()
+                
+            }
             else{
-                let updAccount = realm.objects(BankingAccount.self).filter("name == '\(nameEdit)'").first
-                try! realm.write {
-           //     updAccount!.name = acc.name
-                updAccount!.active = self.active
-                updAccount!.balance = acc.balance
-                updAccount!.currency = acc.currency
-                updAccount!.descrip = acc.descrip
-                updAccount!.bankName = acc.bankName
-                updAccount!.bankImg = acc.bankImg
+                if editAcc.type == 1{
+                    try! realm.write {
+                        editAcc.bankingAcc?.name = acc.name
+                        editAcc.bankingAcc?.active = self.active
+                        editAcc.bankingAcc?.balance = acc.balance
+                        editAcc.bankingAcc?.currency = acc.currency
+                        editAcc.bankingAcc?.descrip = acc.descrip
+                        editAcc.bankingAcc?.bankName = acc.bankName
+                        
+                        editAcc.isChanged = true
+                    }
                 }
+                else{
+                    editAcc.del()
+                    let acc = Account()
+                    acc.balance = Float(txtMoney.text!)!
+                    acc.currency = self.currency
+                    acc.name = name
+                    acc.descrip = des
+                    acc.includeReport = false
+                    acc.add()
                 }
+            }
+
             }
 
         else {
@@ -252,17 +298,20 @@ extension AddAccountView: UITableViewDelegate, UITableViewDataSource{
         if indexPath.row == 1{
             let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView
             scr.accountMode = true
-                   self.present(scr, animated: true, completion: nil)
+                  // self.present(scr, animated: true, completion: nil)
+            self.navigationController?.pushViewController(scr, animated: true)
         }
         else if indexPath.row == 2{
             let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView
             scr.currencyMode = true
-                   self.present(scr, animated: true, completion: nil)
+            //self.present(scr, animated: true, completion: nil)
+            self.navigationController?.pushViewController(scr, animated: true)
         }
          else if indexPath.row == 4{
                    let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView
                    scr.bankingMode = true
-                          self.present(scr, animated: true, completion: nil)
+                    //self.present(scr, animated: true, completion: nil)
+            self.navigationController?.pushViewController(scr, animated: true)
                }
        
     }

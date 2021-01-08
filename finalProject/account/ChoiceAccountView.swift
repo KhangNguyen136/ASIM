@@ -8,7 +8,6 @@
 import UIKit
 
 class ChoiceAccountView: UIViewController {
-    @IBOutlet weak var lblTitle: UILabel!
     var currencyMode:Bool = false
     var accountMode:Bool = false
     var bankingMode:Bool = false
@@ -21,28 +20,32 @@ class ChoiceAccountView: UIViewController {
     let bankImg = ["bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank"]
     let howLong = ["1 month", "3 months", "6 months","1 year","2 years","5 years", "10 years", "other"]
     let term = ["1 week","2 weeks", "3 weeks","1 month", "3 months", "6 months","12 months"]
-    var backgroundImage: UIImageView!
-
-    @IBAction func backBtn(_ sender: Any) {
-        dismiss(animated: true, completion: nil )
-    }
+    //var backgroundImage: UIImageView!
     override func viewDidLoad() {
         
            super.viewDidLoad()
-           self.backgroundImage = UIImageView(image: UIImage(named: "background-1"))
-           self.backgroundImage.contentMode = .scaleAspectFill
-        self.view.insertSubview(self.backgroundImage, at: 0)
-        if bankingMode == true {
-            lblTitle.text = "Choose Bank"
+        self.view.backgroundColor = UIColor(red: 71/255, green: 181/255, blue: 190/255, alpha: 1)
+    self.navigationController?.navigationBar.barTintColor = UIColor(red: 0/255, green: 123/255, blue: 164/255, alpha: 1)
+    self.navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor.white,
+            .font: UIFont(name: "MarkerFelt-Thin", size: 20)!]
+          // self.backgroundImage = UIImageView(image: UIImage(named: "background-1"))
+         //  self.backgroundImage.contentMode = .scaleAspectFill
+        //self.view.insertSubview(self.backgroundImage, at: 0)
+       if bankingMode == true {
+         self.navigationItem.title = "Choose Bank"
         }
         else if currencyMode == true {
-            lblTitle.text = "Choose Currency"
+             self.navigationItem.title = "Choose Currency"
         }
         else if accountMode == true {
-            lblTitle.text = "Choose Account"
+             self.navigationItem.title = "Choose Account"
         }
         else if timeMode == true {
-            lblTitle.text = "For how long"
+             self.navigationItem.title = "For how long"
+        }
+        else if termmMode == true{
+             self.navigationItem.title = "Choose term"
         }
     }
         
@@ -110,23 +113,28 @@ extension ChoiceAccountView: UITableViewDataSource, UITableViewDelegate {
             else {
                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "currNotification"), object: nil, userInfo: ["currency": "VND"])
             }
-            dismiss(animated: true, completion: nil)
+            //dismiss(animated: true, completion: nil)
+            self.navigationController?.popViewController(animated: true)
         }
         else if bankingMode == true{
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bankNotification"), object: nil, userInfo: ["nameBank": "Ngân hàng \(abbrName[indexPath.row])","imgBank":"\(bankImg[indexPath.row])"])
-            dismiss(animated: true, completion: nil)
+            //dismiss(animated: true, completion: nil)
+            self.navigationController?.popViewController(animated: true)
         }
         else if accountMode == true{
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "accountNotification"), object: nil, userInfo: ["accountType": accountLabel[indexPath.row]])
-            dismiss(animated: true, completion: nil)
+            //dismiss(animated: true, completion: nil)
+            self.navigationController?.popViewController(animated: true)
         }
         else if timeMode == true{
             if indexPath.row != 7{ NotificationCenter.default.post(name: NSNotification.Name(rawValue: "timeNotification"), object: nil, userInfo: ["time": howLong[indexPath.row]])}
-            dismiss(animated: true, completion: nil)
+           // dismiss(animated: true, completion: nil)
+            self.navigationController?.popViewController(animated: true)
         }
         else if termmMode == true{
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "termNotification"), object: nil, userInfo: ["term": term[indexPath.row]])
-            dismiss(animated: true, completion: nil)
+            //dismiss(animated: true, completion: nil)
+            self.navigationController?.popViewController(animated: true)
         }
             
         

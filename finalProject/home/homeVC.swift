@@ -47,11 +47,11 @@ class homeVC: UIViewController {
             userInfor = temp[0]
             for i in userInfor!.accounts
             {
-                if i.type == 1
+                if i.type == 0
                 {
                     _balance += i.cashAcc!.balance
                 }
-                else
+                else if i.type == 1
                 {
                     _balance += i.bankingAcc!.balance
                 }

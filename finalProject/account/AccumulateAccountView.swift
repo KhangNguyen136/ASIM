@@ -39,7 +39,7 @@ class AccumulateAccountView: UIViewController, delegateUpdate {
                allAccumulate = Array(accumulate)
         var total: Float = 0.0
         for bal in accumulate{
-            total += bal.balance
+            total += bal.addbalance
         }
         lbltotal.text = "\(total)"
     }
@@ -54,6 +54,12 @@ extension AccumulateAccountView: UITableViewDelegate, UITableViewDataSource{
        let cell = tableView.dequeueReusableCell(withIdentifier: "AddAccumulateCell", for: indexPath) as! AddAccumulateCell
         let purBalance = allAccumulate[indexPath.row].balance
         let addBalance = allAccumulate[indexPath.row].addbalance
+        if addBalance >= purBalance{
+            cell.showComplete(condition: true)
+        }
+        else {
+            cell.showComplete(condition: false)
+        }
         let remain = purBalance - addBalance
         cell.lblnowBalance.text = "\(addBalance)"
         cell.lblremain.text = "\(remain)"
@@ -74,6 +80,7 @@ extension AccumulateAccountView: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }
+
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
             let delete = UIContextualAction(style: .destructive, title: "Delete"){
                 (action, view, nil) in
@@ -83,7 +90,7 @@ extension AccumulateAccountView: UITableViewDelegate, UITableViewDataSource{
                 let alertView = SCLAlertView(appearance: appearance)
                 alertView.addButton("OK") {
                     let realm = try! Realm()
-                    let obj = realm.objects(Accumulate.self).filter("goal == '\(self.allAccumulate[indexPath.row].goal)'")
+                    let obj = realm.objects(Accumulate.self).filter("id == '\(self.allAccumulate[indexPath.row].id)'")
                     try! realm.write {
                                 realm.delete(obj)
                             }
@@ -97,7 +104,8 @@ extension AccumulateAccountView: UITableViewDelegate, UITableViewDataSource{
                 alertView.showError("Warning", subTitle: "If you delete this Acocunt, all Record in this Accumulate will also be removed and cannot be restored ")
                 
             }
-            delete.image = UIImage(named: "delete")
+            delete.image = UIGraphicsImageRenderer(size: CGSize(width: 30, height: 30)).image { _ in
+                UIImage(named: "delete")?.draw(in: CGRect(x: 0, y: 0, width: 30, height: 30))}
             delete.backgroundColor = UIColor.white
         //Deposit choice
         let deposit = UIContextualAction(style: .normal, title: "Deposit"){
@@ -105,23 +113,32 @@ extension AccumulateAccountView: UITableViewDelegate, UITableViewDataSource{
                  let scr=self.storyboard?.instantiateViewController(withIdentifier: "DepositView") as! DepositView
                               
             scr.rootAccName = self.allAccumulate[indexPath.row].goal
+            scr.rootID = self.allAccumulate[indexPath.row].id
             self.navigationController?.pushViewController(scr, animated: true )
                 
             }
-            deposit.image = UIImage(named: "deposit")
+            deposit.image = UIGraphicsImageRenderer(size: CGSize(width: 30, height: 30)).image { _ in
+            UIImage(named: "deposit")?.draw(in: CGRect(x: 0, y: 0, width: 30, height: 30))}
             deposit.backgroundColor = UIColor.white
         let edit = UIContextualAction(style: .normal, title: "Edit"){
                        (action, view, nil) in
              let scr=self.storyboard?.instantiateViewController(withIdentifier: "AddAccumulateView") as! AddAccumulateView
             scr.editMode = true
-            scr.editGoal = self.allAccumulate[indexPath.row].goal
+            scr.editID = self.allAccumulate[indexPath.row].id
             self.navigationController?.pushViewController(scr, animated: true)
                        
             }
-                   edit.image = UIImage(named: "edit")
+        edit.image = UIGraphicsImageRenderer(size: CGSize(width: 30, height: 30)).image { _ in
+        UIImage(named: "edit")?.draw(in: CGRect(x: 0, y: 0, width: 30, height: 30))}
                    edit.backgroundColor = UIColor.white
             let config = UISwipeActionsConfiguration(actions: [delete, deposit, edit])
             return config
         }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let scr=self.storyboard?.instantiateViewController(withIdentifier: "DetailAccumulate") as! DetailAccumulate
+        scr.viewName = allAccumulate[indexPath.row].goal
+        scr.accumulate = allAccumulate[indexPath.row]
+        self.navigationController?.pushViewController(scr, animated: true)
+    }
     
 }

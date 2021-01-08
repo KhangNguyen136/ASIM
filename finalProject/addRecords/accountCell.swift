@@ -16,7 +16,7 @@ class accountCell: UITableViewCell {
     @IBOutlet weak var balance: UILabel!
     
     func getData(acc: polyAccount)  {
-        if acc.type == 1
+        if acc.type == 0
         {
             let temp = acc.cashAcc
             img.image = UIImage(named: "wallet")

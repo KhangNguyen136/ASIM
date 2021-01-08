@@ -84,15 +84,17 @@ class yourDataVC: UITableViewController {
         {
             if i.isDeleted == true
             {
-                accountRef.child(i.id).removeValue()
+                accountRef.child(String(i.id)).removeValue()
                 try! realm.write
                     {
-                    if i.type == 1{
-                        realm.delete(i.cashAcc!)
-                    }
-                    else
+                    switch i.type
                     {
+                    case 0:
+                        realm.delete(i.cashAcc!)
+                    case 1:
                         realm.delete(i.bankingAcc!)
+                    default:
+                        realm.delete(i.savingAcc!)
                     }
                     realm.delete(i)
                 }
@@ -101,39 +103,40 @@ class yourDataVC: UITableViewController {
             if i.isChanged == false{
                 continue
             }
-            let tempRef: DatabaseReference
-            if i.id == ""
+
+            let tempRef = accountRef.child(String(i.id))
+            
+            switch i.type
             {
-               tempRef = accountRef.childByAutoId()
-            try! realm.write
-                {
-                    i.id = tempRef.key!
-                }
-            }
-            else
-            {
-                tempRef = accountRef.child(i.id)
-            }
-            if i.type == 1
-            {
+            case 0:
                 let tempAcc = i.cashAcc
-                tempRef.child("type").setValue(1)
+                tempRef.child("type").setValue(0)
+                tempRef.child("id").setValue(tempAcc?.id)
                 tempRef.child("name").setValue(tempAcc?.name)
                 tempRef.child("balance").setValue(tempAcc?.balance)
                 tempRef.child("currency").setValue(tempAcc?.currency)
                 tempRef.child("active").setValue(tempAcc?.active)
                 tempRef.child("descrip").setValue(tempAcc?.descrip)
-            }
-            else
-            {
+            case 1:
                 let tempAcc = i.bankingAcc
-                tempRef.child("type").setValue(2)
+                tempRef.child("type").setValue(1)
+                tempRef.child("id").setValue(tempAcc?.id)
                 tempRef.child("name").setValue(tempAcc?.name)
                 tempRef.child("balance").setValue(tempAcc?.balance)
                 tempRef.child("currency").setValue(tempAcc?.currency)
                 tempRef.child("active").setValue(tempAcc?.active)
                 tempRef.child("descrip").setValue(tempAcc?.descrip)
                 tempRef.child("bankName").setValue(tempAcc?.bankName)
+            default:
+                let tempAcc = i.savingAcc
+                tempRef.child("type").setValue(2)
+                tempRef.child("id").setValue(tempAcc?.id)
+                tempRef.child("name").setValue(tempAcc?.name)
+                tempRef.child("ammount").setValue(tempAcc?.ammount)
+                tempRef.child("srcAccount").setValue(tempAcc?.srcAccount?.id)
+                tempRef.child("destAccount").setValue(tempAcc?.destAccount?.id)
+
+
             }
             try! realm.write
                 {
@@ -222,6 +225,7 @@ class yourDataVC: UITableViewController {
                 tempRef.child("type").setValue(tempRecord?.type)
                 tempRef.child("amount").setValue(tempRecord?.amount)
 
+                tempRef.child("id").setValue(tempRecord?.id)
                 tempRef.child("srcAccount").setValue(tempRecord?.srcAccount?.id)
                 tempRef.child("category").setValue(tempRecord?.category)
                 tempRef.child("payer").setValue(tempRecord?.payer)
@@ -383,23 +387,26 @@ class yourDataVC: UITableViewController {
                 {
                     let temp = i.value as! [String: Any]
                     let tempPolyAcc = polyAccount()
-                    tempPolyAcc.id = i.key
+                    tempPolyAcc.id = Int(i.key)!
                     tempPolyAcc.isUploaded = true
                     tempPolyAcc.type = temp["type"] as! Int
-                    if tempPolyAcc.type == 2
+                    if tempPolyAcc.type == 1
                     {
                         tempPolyAcc.bankingAcc = BankingAccount()
+                        tempPolyAcc.bankingAcc?.id = temp["id"] as! Int
                         tempPolyAcc.bankingAcc?.name = temp["name"] as! String
                         tempPolyAcc.bankingAcc?.currency = temp["currency"] as! String
                         tempPolyAcc.bankingAcc?.balance = temp["balance"] as! Float
                         tempPolyAcc.bankingAcc?.active = temp["active"] as! Bool
                         tempPolyAcc.bankingAcc?.descrip = temp["descrip"] as! String
                         tempPolyAcc.bankingAcc?.bankName = temp["bankName"] as! String
+                        
                         result.append(tempPolyAcc)
                     }
-                    else
+                    if tempPolyAcc.type == 0
                     {
                         tempPolyAcc.cashAcc = Account()
+                        tempPolyAcc.cashAcc?.id = temp["id"] as! Int
                         tempPolyAcc.cashAcc?.name = temp["name"] as! String
                         tempPolyAcc.cashAcc?.currency = temp["currency"] as! String
                         tempPolyAcc.cashAcc?.balance = temp["balance"] as! Float
@@ -442,7 +449,7 @@ class yourDataVC: UITableViewController {
                         tempExpense.type = tempRecord.type
                         tempExpense.amount = temp["amount"] as! Float
 //                        find account by id
-                        let srcAccountID = temp["srcAccount"] as! String
+                        let srcAccountID = temp["srcAccount"] as! Int
                         tempExpense.srcAccount = userInfor?.getAccountByID(id: srcAccountID)
                         tempExpense.category = temp["category"] as! Int
                         tempExpense.detailCategory = temp["detailCategory"] as! Int
@@ -473,7 +480,8 @@ class yourDataVC: UITableViewController {
                         tempIncome.type = tempRecord.type
                         tempIncome.amount = temp["amount"] as! Float
                         //find account by id
-                        let srcAccountID = temp["srcAccount"] as! String
+                        let srcAccountID = temp["srcAccount"] as! Int
+                        tempIncome.id = temp["id"] as! Int
                         tempIncome.srcAccount = userInfor?.getAccountByID(id: srcAccountID)
                         tempIncome.category = temp["category"] as! Int
                         tempIncome.payer = temp["payer"] as! String
@@ -501,7 +509,7 @@ class yourDataVC: UITableViewController {
                         tempLend.type = 2
                         tempLend.amount = temp["amount"] as! Float
                         //find account by id
-                        let srcAccountID = temp["srcAccount"] as! String
+                        let srcAccountID = temp["srcAccount"] as! Int
                         tempLend.srcAccount = userInfor?.getAccountByID(id: srcAccountID)
                         tempLend.remain = temp["remain"] as! Float
                         tempLend.over = temp["over"] as! Float
@@ -530,7 +538,7 @@ class yourDataVC: UITableViewController {
                         tempBorrow.type = 3
                         tempBorrow.amount = temp["amount"] as! Float
                         //find account by id
-                        let srcAccountID = temp["srcAccount"] as! String
+                        let srcAccountID = temp["srcAccount"] as! Int
                         tempBorrow.srcAccount = userInfor?.getAccountByID(id: srcAccountID)
                         
                         tempBorrow.remain = temp["remain"] as! Float
@@ -561,10 +569,10 @@ class yourDataVC: UITableViewController {
                         tempTransfer.type = 4
                         tempTransfer.amount = temp["amount"] as! Float
                         //find srcAccount by id
-                        let srcAccountID = temp["srcAccount"] as! String
+                        let srcAccountID = temp["srcAccount"] as! Int
                         tempTransfer.srcAccount = userInfor?.getAccountByID(id: srcAccountID)
                         //find destAccount by id
-                        let destAccountID = temp["srcAccount"] as! String
+                        let destAccountID = temp["destinationAccount"] as! Int
                         tempTransfer.destinationAccount = userInfor?.getAccountByID(id: destAccountID)
                         tempTransfer.location = temp["location"] as! String
                         tempTransfer.descript = temp["descript"] as! String
@@ -593,7 +601,7 @@ class yourDataVC: UITableViewController {
                         tempAdjustment.category = temp["category"] as! Int
                         tempAdjustment.detailCategory = temp["detailCategory"] as! Int
                         //find srcAccount by id
-                        let srcAccountID = temp["srcAccount"] as! String
+                        let srcAccountID = temp["srcAccount"] as! Int
                         tempAdjustment.srcAccount = userInfor?.getAccountByID(id: srcAccountID)
                         
                         tempAdjustment.location = temp["location"] as! String
