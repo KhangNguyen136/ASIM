@@ -1,9 +1,24 @@
 PODS:
   - AlertsAndPickers (2.0.2)
+  - AppAuth (1.4.0):
+    - AppAuth/Core (= 1.4.0)
+    - AppAuth/ExternalUserAgent (= 1.4.0)
+  - AppAuth/Core (1.4.0)
+  - AppAuth/ExternalUserAgent (1.4.0)
   - DatePicker (1.3.1):
     - Extended
   - DropDown (2.3.13)
   - Extended (1.0.5)
+  - FBSDKCoreKit (7.1.1):
+    - FBSDKCoreKit/Basics (= 7.1.1)
+    - FBSDKCoreKit/Core (= 7.1.1)
+  - FBSDKCoreKit/Basics (7.1.1)
+  - FBSDKCoreKit/Core (7.1.1):
+    - FBSDKCoreKit/Basics
+  - FBSDKLoginKit (7.1.1):
+    - FBSDKLoginKit/Login (= 7.1.1)
+  - FBSDKLoginKit/Login (7.1.1):
+    - FBSDKCoreKit (~> 7.1.1)
   - Firebase/Analytics (7.3.0):
     - Firebase/Core
   - Firebase/Auth (7.3.0):
@@ -54,6 +69,17 @@ PODS:
   - FirebaseStorage (7.3.0):
     - FirebaseCore (~> 7.0)
     - GTMSessionFetcher/Core (~> 1.4)
+  - FirebaseUI/Auth (9.0.0):
+    - Firebase/Auth
+    - GoogleUtilities/UserDefaults
+  - FirebaseUI/Facebook (9.0.0):
+    - FBSDKLoginKit (~> 7.0)
+    - FirebaseUI/Auth
+  - FirebaseUI/Google (9.0.0):
+    - FirebaseUI/Auth
+    - GoogleSignIn (~> 5.0)
+  - FirebaseUI/Phone (9.0.0):
+    - FirebaseUI/Auth
   - GoogleAppMeasurement (7.3.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
     - GoogleUtilities/MethodSwizzler (~> 7.0)
@@ -62,6 +88,10 @@ PODS:
     - nanopb (~> 2.30906.0)
   - GoogleDataTransport (8.1.0):
     - nanopb (~> 2.30906.0)
+  - GoogleSignIn (5.0.2):
+    - AppAuth (~> 1.2)
+    - GTMAppAuth (~> 1.0)
+    - GTMSessionFetcher/Core (~> 1.1)
   - GoogleUtilities/AppDelegateSwizzler (7.1.1):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -81,7 +111,14 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.1.1):
     - GoogleUtilities/Logger
+  - GTMAppAuth (1.1.0):
+    - AppAuth/Core (~> 1.4)
+    - GTMSessionFetcher (~> 1.4)
+  - GTMSessionFetcher (1.5.0):
+    - GTMSessionFetcher/Full (= 1.5.0)
   - GTMSessionFetcher/Core (1.5.0)
+  - GTMSessionFetcher/Full (1.5.0):
+    - GTMSessionFetcher/Core (= 1.5.0)
   - ImagePicker (3.2.0)
   - leveldb-library (1.22)
   - nanopb (2.30906.0):
@@ -91,6 +128,7 @@ PODS:
   - nanopb/encode (2.30906.0)
   - ProgressHUD (13.4)
   - PromisesObjC (1.2.11)
+  - ReachabilitySwift (5.0.0)
   - Realm (10.1.2):
     - Realm/Headers (= 10.1.2)
   - Realm/Headers (10.1.2)
@@ -107,8 +145,12 @@ DEPENDENCIES:
   - Firebase/Auth
   - Firebase/Database
   - Firebase/Storage
+  - FirebaseUI/Facebook
+  - FirebaseUI/Google
+  - FirebaseUI/Phone
   - ImagePicker
   - ProgressHUD
+  - ReachabilitySwift
   - RealmSwift
   - SCLAlertView
   - SearchTextField
@@ -116,9 +158,12 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AlertsAndPickers
+    - AppAuth
     - DatePicker
     - DropDown
     - Extended
+    - FBSDKCoreKit
+    - FBSDKLoginKit
     - Firebase
     - FirebaseAnalytics
     - FirebaseAuth
@@ -127,15 +172,19 @@ SPEC REPOS:
     - FirebaseDatabase
     - FirebaseInstallations
     - FirebaseStorage
+    - FirebaseUI
     - GoogleAppMeasurement
     - GoogleDataTransport
+    - GoogleSignIn
     - GoogleUtilities
+    - GTMAppAuth
     - GTMSessionFetcher
     - ImagePicker
     - leveldb-library
     - nanopb
     - ProgressHUD
     - PromisesObjC
+    - ReachabilitySwift
     - Realm
     - RealmSwift
     - SCLAlertView
@@ -143,9 +192,12 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   AlertsAndPickers: 2a9cabfadaa2f4d52066bd842a7a1b1b2327a248
+  AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   DatePicker: 05ddbd2b57d00ce6f44c1f0611ced32f948d33a6
   DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
   Extended: c463225e0c29b2823847866c1b106827772ac678
+  FBSDKCoreKit: b46507dc8b8cefed31d644e74d7cc30e2a715ef8
+  FBSDKLoginKit: 1a61d79e2b25e2fc0d03dccab1e34b38bbdf2546
   Firebase: 26223c695fe322633274198cb19dca8cb7e54416
   FirebaseAnalytics: 2580c2d62535ae7b644143d48941fcc239ea897a
   FirebaseAuth: c224a0cf1afa0949bd5c7bfcf154b4f5ce8ddef2
@@ -154,20 +206,24 @@ SPEC CHECKSUMS:
   FirebaseDatabase: 22199cb121a527ae59df646d61426fbb12f5627a
   FirebaseInstallations: 971df89b48ae5ee4cc2bf6935f3857a525d28550
   FirebaseStorage: 5002b1895bfe74a5ce92ad54f966e6162d0da2e5
+  FirebaseUI: f0677a1cc235f6da602cbd5c9b5fbbd24544a6b3
   GoogleAppMeasurement: 8d3c0aeede16ab7764144b5a4ca8e1d4323841b7
   GoogleDataTransport: 116c84c4bdeb76be2a7a46de51244368f9794eab
+  GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
   GoogleUtilities: 3dc4ff0d5e4840e2fa8eef0889620e8c33d4218c
+  GTMAppAuth: 197a8dabfea5d665224aa00d17f164fc2248dab9
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
   ImagePicker: 1d950bbb2422548ed58791b4ec7f42fe42920511
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   ProgressHUD: 137a7fc677487c5581668f4490563124fb35c232
   PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   Realm: 031fdd4be7094d01b43af1a5e49766ab644bb800
   RealmSwift: 43cf2e114baa9d17d34eb81e7d0def31f21cd444
   SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
   SearchTextField: 40dc3cc57def5a211f263cac263622c163bbc25a
 
-PODFILE CHECKSUM: 01c09dbcf982d935779f3b07a41e75a33e0dfdb9
+PODFILE CHECKSUM: 6fca440fe683eeca71e610798c56c9ce3a1c5d29
 
 COCOAPODS: 1.10.0

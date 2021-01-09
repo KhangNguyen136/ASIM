@@ -6,17 +6,47 @@
 //
 
 import UIKit
+import Firebase
+import RealmSwift
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+        
+        if let windowScene = scene as? UIWindowScene {
+
+            let tempWindow = UIWindow(windowScene: windowScene)
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if Auth.auth().currentUser != nil
+                {
+                let tempUser = Auth.auth().currentUser
+                print(tempUser)
+                print(tempUser?.uid)
+                print(tempUser?.email)
+                print(tempUser?.displayName)
+                print("Singed in.")
+                let realm = try! Realm()
+//                let userInfor = realm.objects(User.self)[0]
+                    let tabBarController = storyboard.instantiateViewController(identifier: "mainTabBar") as! UITabBarController
+//                tabBarController.selectedIndex = userInfor.defaultScreen
+                tempWindow.rootViewController = tabBarController
+                }
+                else
+                {
+                    print("Not singed in.")
+                    let initialViewController = storyboard.instantiateViewController(withIdentifier: "loginVC")
+                    let navigationController = UINavigationController(rootViewController: initialViewController)
+                    tempWindow.rootViewController = navigationController
+                }
+
+            self.window = tempWindow
+            tempWindow.makeKeyAndVisible()
+
+            }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

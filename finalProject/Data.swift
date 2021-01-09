@@ -31,8 +31,8 @@ struct categoryValues {
 }
 class User: Object{
     @objc dynamic var username: String = ""
-    @objc dynamic var password: String = ""
     
+    @objc dynamic var password: String = ""
     @objc dynamic var email: String = ""
     @objc dynamic var fbLink: String = ""
     
@@ -48,7 +48,12 @@ class User: Object{
     @objc dynamic var dateFormat = "dd/MM/yyyy"
     @objc dynamic var isVietnamDong = false
     @objc dynamic var isHideAmount = false
-//    @objc dynamic var isChanged: Bool = true
+    
+    @objc dynamic var isChangedRecords: Bool = true
+    @objc dynamic var isChangedAccounts: Bool = true
+    @objc dynamic var isChangedPersons: Bool = true
+    @objc dynamic var isChangedLocations: Bool = true
+    @objc dynamic var isChangedEvents: Bool = true
 
     
     var records = List<polyRecord>()

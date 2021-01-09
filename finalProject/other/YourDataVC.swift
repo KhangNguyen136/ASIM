@@ -61,19 +61,7 @@ class yourDataVC: UITableViewController {
     }
     @IBAction func clickSyncData(_ sender: Any) {
         print("Sync data")
-
-        checkConnection{ [self] connectionStt in
-            if connectionStt == false
-            {
-                SCLAlertView().showError("No connection", subTitle: "Check your internet connection and try again!")
-                return
-            }
-            else
-            {
-                syncData()
-            }
-        }
-        
+        syncData()
     }
     func syncData(){
         ProgressHUD.show("Sync your data...")
@@ -103,9 +91,7 @@ class yourDataVC: UITableViewController {
             if i.isChanged == false{
                 continue
             }
-
             let tempRef = accountRef.child(String(i.id))
-            
             switch i.type
             {
             case 0:
@@ -135,8 +121,6 @@ class yourDataVC: UITableViewController {
                 tempRef.child("ammount").setValue(tempAcc?.ammount)
                 tempRef.child("srcAccount").setValue(tempAcc?.srcAccount?.id)
                 tempRef.child("destAccount").setValue(tempAcc?.destAccount?.id)
-
-
             }
             try! realm.write
                 {
@@ -376,9 +360,14 @@ class yourDataVC: UITableViewController {
         print("Sync successfully!")
         return
     }
-    
+    func doNothing()
+    {
+        print("Do nothing function!")
+        return
+    }
     func reloadAccounts(completionHandler: @escaping accountArrayClosure)
     {
+        print("Begin reload accont...")
         var result: [polyAccount] = []
         let accountsRef = ref.child("users").child(userInfor!.username).child("accounts")
         accountsRef.observe(.value, with: { (snapshot) in
@@ -414,15 +403,18 @@ class yourDataVC: UITableViewController {
                         tempPolyAcc.cashAcc?.descrip = temp["descrip"] as! String
                         result.append(tempPolyAcc)
                     }
+                    print("Reload an account.")
                 }
-                DispatchQueue.main.async() {
-                    if result.isEmpty {
-                        completionHandler(nil)
-                    }
-                    else
-                    {
+                if result.isEmpty {
+                    print("Reload no account")
+                    completionHandler(nil)
+                    return
+                }
+                else
+                {
+                    print("Reloaded accounts")
                     completionHandler(result)
-                    }
+                    return
                 }
                 }
             })
@@ -430,6 +422,7 @@ class yourDataVC: UITableViewController {
     
     func reloadRecords(completionHandler: @escaping recordArrayClosure)
     {
+        print("Begin reload records")
         var result: [polyRecord] = []
         var parentIndex: [Int] = []
         var childID: [String] = []
@@ -643,11 +636,15 @@ class yourDataVC: UITableViewController {
                 }
                 DispatchQueue.main.async() {
                     if result.isEmpty {
+                        print("Reloaded no record.")
                         completionHandler(nil)
+                        return
                     }
                     else
                     {
-                    completionHandler(result)
+                        print("Reloaded records.")
+                        completionHandler(result)
+                        return
                     }
                 }
                 }
@@ -678,39 +675,69 @@ class yourDataVC: UITableViewController {
         })
     }
     @IBAction func clickReloadData(_ sender: Any) {
-        checkConnection{ [self] connectionStt in
-            if connectionStt == false
-            {
-                SCLAlertView().showError("No connection", subTitle: "Check your internet connection and try again!")
-                return
-            }
-            else
-            {
-                let appearance = SCLAlertView.SCLAppearance(
-                    showCloseButton: false
-                )
-                let msg = SCLAlertView(appearance: appearance)
-                msg.addButton("No", action: {
-                    return
-                })
-                msg.addButton("Yes", action: { [self] in
-                    reloadDataFromFirebase()
-                })
-                msg.showWarning("Reload data will delete all current data.", subTitle: "Your data will be replaced by data you had been sync last time. Do you want to continue?")
-            }
-        }
+        let appearance = SCLAlertView.SCLAppearance(
+            showCloseButton: false
+        )
+        let msg = SCLAlertView(appearance: appearance)
+        msg.addButton("No", action: {
+            print("Cancel reload data.")
+            return
+        })
+        msg.addButton("Yes", action: { [self] in
+            print("Reload data begin...")
+            reloadDataFromFirebase()
+            print("Reload data end.")
+        })
+        msg.showWarning("Reload data will delete all current data.", subTitle: "Your data will be replaced by data you had been sync last time. Do you want to continue?")
+        
     }
-    
+    func deleteLocalData(){
+        print("Begin delete local data...")
+        try! realm.write {
+//            let tempUsername = userInfor!.username
+//            realm.deleteAll()
+//            userInfor = User()
+//            userInfor?.username = tempUsername
+//            realm.add(userInfor!)
+            for i in userInfor!.accounts
+            {
+                switch i.type {
+                case 0:
+                    realm.delete(i.cashAcc!)
+                case 1:
+                    realm.delete(i.bankingAcc!)
+                default:
+                    realm.delete(i.savingAcc!)
+                }
+                realm.delete(i)
+            }
+            for i in userInfor!.records
+            {
+                switch i.type {
+                case 0:
+                    realm.delete(i.expense!)
+                case 1:
+                    realm.delete(i.income!)
+                case 2:
+                    realm.delete(i.lend!)
+                case 3:
+                    realm.delete(i.borrow!)
+                case 4:
+                    realm.delete(i.transfer!)
+                default:
+                    realm.delete(i.adjustment!)
+                }
+                realm.delete(i)
+            }
+            userInfor!.persons.removeAll()
+            userInfor!.locations.removeAll()
+            userInfor!.events.removeAll()
+        }
+        print("Deleted local data.")
+    }
     func reloadDataFromFirebase(){
         ProgressHUD.show("Reloading your data from database online...")
-        try! realm.write {
-            let tempUsername = userInfor!.username
-            realm.deleteAll()
-            userInfor = User()
-            userInfor?.username = tempUsername
-            realm.add(userInfor!)
-        }
-        
+        deleteLocalData()
         reloadAccounts{ [self]accountArrayClosure in
             if let accounts = accountArrayClosure
             {
@@ -726,60 +753,81 @@ class yourDataVC: UITableViewController {
                         userInfor?.records.append(objectsIn: records)
                         }
                         ProgressHUD.dismiss()
+                        reloadView()
                         SCLAlertView().showSuccess("Data reloaded successfully!", subTitle: "")
                     }
                     else
                     {
                     ProgressHUD.dismiss()
-                    SCLAlertView().showSuccess("Data reloaded successfully!", subTitle: "")
+                    reloadView()
+                    SCLAlertView().showSuccess("Data reloaded successfully with no record!", subTitle: "")
                     }
                 }
             }
             else
             {
                 ProgressHUD.dismiss()
-                SCLAlertView().showSuccess("Data reloaded successfully!", subTitle: "")
+                reloadView()
+                SCLAlertView().showSuccess("Data reloaded successfully with no account!", subTitle: "")
             }
         }
+        print("End reload data from firebase.")
 
     }
     @IBAction func clickResetData(_ sender: Any) {
-        checkConnection{ [self] connectionStt in
-            if connectionStt == false
-            {
-                SCLAlertView().showError("No connection", subTitle: "Check your internet connection and try again!")
-                return
-            }
-            else
-            {
+        print("Reset data begin...")
+//        checkConnection{ [self] connectionStt in
+//            if connectionStt == false
+//            {
+//                SCLAlertView().showError("No connection", subTitle: "Check your internet connection and try again!")
+//                return
+//            }
+//            else
+//            {
                 let appearance = SCLAlertView.SCLAppearance(
                     showCloseButton: false
                 )
                 let msg = SCLAlertView(appearance: appearance)
                 msg.addButton("No", action: {
+                    print("Reset data cancel.")
                     return
                 })
                 msg.addButton("Yes", action: { [self] in
+                    print("Reset data begin")
                     resetAllData()
+                    print("Reset data end.")
+                    return
                 })
                 msg.showWarning("Your all data will be deleted!", subTitle: "Your data in this device and on database online. Do you want to continue?")
-            }
-        }
+//            }
+//        }
     }
     func resetAllData()  {
         ProgressHUD.show()
-        try! realm.write {
-            let tempUsername = userInfor!.username
-            realm.deleteAll()
-            userInfor = User()
-            userInfor?.username = tempUsername
-            realm.add(userInfor!)
-        }
+        deleteLocalData()
         //delete data ỉn firebase
-        let tempRef = ref.child("users").child(userInfor!.username)
+        var tempRef = ref.child("users").child(userInfor!.username).child("accounts")
         tempRef.removeValue()
-        SCLAlertView().showSuccess("All data had been deleted!", subTitle: "")
+        tempRef = ref.child("users").child(userInfor!.username).child("records")
+        tempRef.removeValue()
+        tempRef = ref.child("users").child(userInfor!.username).child("persons")
+        tempRef.removeValue()
+        tempRef = ref.child("users").child(userInfor!.username).child("locations")
+        tempRef.removeValue()
+        tempRef = ref.child("users").child(userInfor!.username).child("event")
+        tempRef.removeValue()
+        
+        reloadView()
         ProgressHUD.dismiss()
+        SCLAlertView().showSuccess("All data had been deleted!", subTitle: "")
+    }
+    func reloadView()
+    {
+        let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
+        let tabBarController = mainStoryBoard.instantiateViewController(identifier: "mainTabBar") as! UITabBarController
+        tabBarController.selectedIndex = userInfor!.defaultScreen
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.window?.rootViewController = tabBarController
     }
     override func viewDidLoad() {
         getUser()

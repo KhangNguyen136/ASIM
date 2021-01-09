@@ -19,6 +19,10 @@ target 'finalProject' do
 	# add the Firebase pod for Google Analytics
 	pod 'Firebase/Analytics'
 	pod 'Firebase/Auth'
+	pod 'FirebaseUI/Google'
+	pod 'FirebaseUI/Facebook'
+	pod 'FirebaseUI/Phone'
+
 	pod 'Firebase/Database'
 	pod 'Firebase/Storage'
 	

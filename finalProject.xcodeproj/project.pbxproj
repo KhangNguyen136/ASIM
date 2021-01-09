@@ -30,6 +30,7 @@
 		DEFDCC1C258F822600A0FDDB /* CustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFDCC15258F822500A0FDDB /* CustomView.swift */; };
 		DEFDCC1D258F822600A0FDDB /* AddSavingAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFDCC16258F822500A0FDDB /* AddSavingAccount.swift */; };
 		DEFDCC1E258F822600A0FDDB /* AccumulateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFDCC17258F822500A0FDDB /* AccumulateAccountView.swift */; };
+		F12EE6E325A8E43F00575456 /* loginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12EE6E225A8E43F00575456 /* loginVC.swift */; };
 		F149F10D257EBAE700FBB2AB /* editRecord.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F149F10C257EBAE700FBB2AB /* editRecord.storyboard */; };
 		F14C377A25A0E7B900450D25 /* signUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14C377925A0E7B900450D25 /* signUpVC.swift */; };
 		F14E951325A035160078EE00 /* accountLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14E951225A035160078EE00 /* accountLinkVC.swift */; };
@@ -64,8 +65,8 @@
 		F15EFB7425927F5F0071F94F /* filterHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15EFB7325927F5F0071F94F /* filterHistoryCell.swift */; };
 		F160D6F22597122B00ACB5AD /* personInforVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F160D6F12597122B00ACB5AD /* personInforVC.swift */; };
 		F160D6FC2597298900ACB5AD /* YourDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F160D6FB2597298900ACB5AD /* YourDataVC.swift */; };
+		F165515C25AA1F7F00B2E54D /* launchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F165515B25AA1F7F00B2E54D /* launchVC.swift */; };
 		F16655A92570168A007B8D80 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16655A82570168A007B8D80 /* Data.swift */; };
-		F17015C32585EAD4008DE4E9 /* loginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17015C22585EAD4008DE4E9 /* loginVC.swift */; };
 		F1716BBB257F538000BBB419 /* report.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1716BB1257F538000BBB419 /* report.storyboard */; };
 		F1716BBC257F538000BBB419 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1716BB3257F538000BBB419 /* LaunchScreen.storyboard */; };
 		F1716BBD257F538000BBB419 /* other.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1716BB5257F538000BBB419 /* other.storyboard */; };
@@ -127,6 +128,7 @@
 		DEFDCC15258F822500A0FDDB /* CustomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomView.swift; sourceTree = "<group>"; };
 		DEFDCC16258F822500A0FDDB /* AddSavingAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSavingAccount.swift; sourceTree = "<group>"; };
 		DEFDCC17258F822500A0FDDB /* AccumulateAccountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccumulateAccountView.swift; sourceTree = "<group>"; };
+		F12EE6E225A8E43F00575456 /* loginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginVC.swift; sourceTree = "<group>"; };
 		F149F10C257EBAE700FBB2AB /* editRecord.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = editRecord.storyboard; sourceTree = "<group>"; };
 		F14C377925A0E7B900450D25 /* signUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = signUpVC.swift; sourceTree = "<group>"; };
 		F14E951225A035160078EE00 /* accountLinkVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = accountLinkVC.swift; sourceTree = "<group>"; };
@@ -167,8 +169,8 @@
 		F15EFB7325927F5F0071F94F /* filterHistoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = filterHistoryCell.swift; sourceTree = "<group>"; };
 		F160D6F12597122B00ACB5AD /* personInforVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = personInforVC.swift; sourceTree = "<group>"; };
 		F160D6FB2597298900ACB5AD /* YourDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourDataVC.swift; sourceTree = "<group>"; };
+		F165515B25AA1F7F00B2E54D /* launchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = launchVC.swift; sourceTree = "<group>"; };
 		F16655A82570168A007B8D80 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
-		F17015C22585EAD4008DE4E9 /* loginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginVC.swift; sourceTree = "<group>"; };
 		F1716BB2257F538000BBB419 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = report.storyboard; sourceTree = "<group>"; };
 		F1716BB4257F538000BBB419 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F1716BB6257F538000BBB419 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = other.storyboard; sourceTree = "<group>"; };
@@ -374,8 +376,9 @@
 				F1547C37256B18B9001CD0AB /* AppDelegate.swift */,
 				F1547C39256B18B9001CD0AB /* SceneDelegate.swift */,
 				F16655A82570168A007B8D80 /* Data.swift */,
-				F17015C22585EAD4008DE4E9 /* loginVC.swift */,
+				F12EE6E225A8E43F00575456 /* loginVC.swift */,
 				F14C377925A0E7B900450D25 /* signUpVC.swift */,
+				F165515B25AA1F7F00B2E54D /* launchVC.swift */,
 			);
 			path = finalProject;
 			sourceTree = "<group>";
@@ -432,6 +435,7 @@
 				F1547C31256B18B9001CD0AB /* Frameworks */,
 				F1547C32256B18B9001CD0AB /* Resources */,
 				2E4B1E1914595DC4F835095D /* [CP] Embed Pods Frameworks */,
+				100D14ADB9F3372BE3057345 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -470,6 +474,7 @@
 				F1547C52256B18BB001CD0AB /* Frameworks */,
 				F1547C53256B18BB001CD0AB /* Resources */,
 				51F33DDA32639E35E63ED4B3 /* [CP] Embed Pods Frameworks */,
+				8668A2EEA01B2036BC2C7490 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -558,6 +563,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		100D14ADB9F3372BE3057345 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-finalProject/Pods-finalProject-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-finalProject/Pods-finalProject-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-finalProject/Pods-finalProject-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		2E4B1E1914595DC4F835095D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -590,6 +612,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-finalProject-finalProjectUITests/Pods-finalProject-finalProjectUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8668A2EEA01B2036BC2C7490 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-finalProject-finalProjectUITests/Pods-finalProject-finalProjectUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-finalProject-finalProjectUITests/Pods-finalProject-finalProjectUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-finalProject-finalProjectUITests/Pods-finalProject-finalProjectUITests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9AD392BCE077C42F6C47F0BD /* [CP] Check Pods Manifest.lock */ = {
@@ -678,6 +717,7 @@
 				DEFDCC10258F81EB00A0FDDB /* AddAcountViewCell.swift in Sources */,
 				DEFDCC0E258F81EB00A0FDDB /* NormalAccount.swift in Sources */,
 				DEFDCC1C258F822600A0FDDB /* CustomView.swift in Sources */,
+				F12EE6E325A8E43F00575456 /* loginVC.swift in Sources */,
 				F157487D2597E7A400DBF2F9 /* addExpenseOrIncomeVC.swift in Sources */,
 				F1D08FA82598854200382264 /* editTransferVc.swift in Sources */,
 				F1538C60257DE79200531002 /* accountCell.swift in Sources */,
@@ -698,6 +738,7 @@
 				F157582F2582C2DD00FB0D13 /* chooseLendOrBorrowVC.swift in Sources */,
 				F1547C38256B18B9001CD0AB /* AppDelegate.swift in Sources */,
 				F1538C61257DE79200531002 /* typeRecord.swift in Sources */,
+				F165515C25AA1F7F00B2E54D /* launchVC.swift in Sources */,
 				DEFDCC08258F81EB00A0FDDB /* AllNormalAccountCell.swift in Sources */,
 				F15EFB7425927F5F0071F94F /* filterHistoryCell.swift in Sources */,
 				F156B53A25A839FE0022DCF2 /* DetailAccumulate.swift in Sources */,
@@ -719,7 +760,6 @@
 				F14C377A25A0E7B900450D25 /* signUpVC.swift in Sources */,
 				F1D851FA25985D6C001C6440 /* addTransferVC.swift in Sources */,
 				DEFDCC0F258F81EB00A0FDDB /* accountVC.swift in Sources */,
-				F17015C32585EAD4008DE4E9 /* loginVC.swift in Sources */,
 				DEAC0A692590C87A0000F378 /* PickAccountView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

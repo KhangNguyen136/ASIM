@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import SCLAlertView
 
 class homeVC: UIViewController {
     let realm = try! Realm()
@@ -37,10 +38,11 @@ class homeVC: UIViewController {
         let temp = realm.objects(User.self)
         if temp.isEmpty
         {
-            userInfor = User()
-            try! realm.write{
-                realm.add(userInfor!)
-            }
+            SCLAlertView().showError("User error!", subTitle: "")
+//            try! realm.write{
+//            realm.add(User())
+//            }
+            return
         }
         else
         {
