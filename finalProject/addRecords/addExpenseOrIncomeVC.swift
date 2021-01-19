@@ -313,8 +313,13 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
     override func viewDidLoad() {
         loadData()
         chooseTypeRecordBtn.semanticContentAttribute = .forceRightToLeft
-
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
         super.viewDidLoad()
+    }
+    @objc func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
 
     // MARK: - Table view data source

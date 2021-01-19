@@ -46,6 +46,7 @@ class settingVC: UITableViewController {
             isHideAmount.setOn(true, animated: false)
         }
         defaultScreenBtn.setTitle(screen[userInfor.defaultScreen], for: .normal)
+        dateFormatBtn.setTitle(userInfor.dateFormat, for: .normal)
     }
     override func viewDidLoad() {
         loadData()
@@ -149,7 +150,24 @@ class settingVC: UITableViewController {
         
     }
     @IBAction func chooseDateFormat(_ sender: Any) {
-        print("Choose date format")
+        let dropDown = DropDown()
+
+        // The view to which the drop down will appear on
+        dropDown.anchorView = langBtn // UIView or UIBarButtonItem
+
+        // The list of items to display. Can be changed dynamically
+        dropDown.dataSource = ["dd.MM.yy", "MM/dd/yyyy","MMM d, yyyy","EEEE, MMM d, yyyy"]
+
+        /*** IMPORTANT PART FOR CUSTOM CELLS ***/
+
+
+        dropDown.selectionAction = { [self] (index: Int, item: String) in
+            dateFormatBtn.setTitle(item, for: .normal)
+            try! realm.write{
+                userInfor.dateFormat = item
+            }
+        }
+        dropDown.show()
     }
     
     @IBAction func chooseDefaultScreen(_ sender: UIButton) {
@@ -179,33 +197,9 @@ class settingVC: UITableViewController {
         }
         dropDown.selectionAction = { [weak self] (index: Int, item: String) in
             self!.defaultScreenBtn.setTitle(item, for: .normal)
-            switch index {
-            case 0:
-//                self!.defaultScreenBtn.setTitle("Dashboard", for: .normal)
                 try! self!.realm.write{
                     self!.userInfor.defaultScreen = index
                 }
-            case 1:
-//                self!.defaultScreenBtn.setTitle("Account", for: .normal)
-                try! self!.realm.write{
-                    self!.userInfor.defaultScreen = index
-                }
-            case 2:
-//                self!.defaultScreenBtn.setTitle("Add Record", for: .normal)
-                try! self!.realm.write{
-                    self!.userInfor.defaultScreen = index
-                }
-            case 3:
-//                self!.defaultScreenBtn.setTitle("Report", for: .normal)
-                try! self!.realm.write{
-                    self!.userInfor.defaultScreen = index
-                }
-            default:
-//                self!.defaultScreenBtn.setTitle("Other", for: .normal)
-                try! self!.realm.write{
-                    self!.userInfor.defaultScreen = index
-                }
-            }
         }
         dropDown.show()
     }
@@ -220,59 +214,5 @@ class settingVC: UITableViewController {
         // #warning Incomplete implementation, return the number of rows
         return 5
     }
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

@@ -149,7 +149,9 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
         totalExpense = 0
         dataSource = []
         days = []
-        let tempRecords = realm.objects(polyRecord.self)
+        
+        let tempRecords = realm.objects(User.self)[0].records
+        formatter.dateFormat = realm.objects(User.self)[0].dateFormat
         //load data before append to history
         for i in tempRecords
         {
@@ -343,8 +345,14 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
         
         searchBar.showsCancelButton = false
         searchBar.delegate = self
+//        let tap = UITapGestureRecognizer(target: self, action:#selector(UIInputViewController.dismissKeyboard))
+//        view.addGestureRecognizer(tap)
         super.viewDidLoad()
     }
+//    @objc func dismissKeyboard() {
+//        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+//        view.endEditing(true)
+//    }
     @IBAction func filterHistory(_ sender: Any) {
         let dest = self.storyboard?.instantiateViewController(identifier: "filterHistoryVC") as! filterHistoryVC
         dest.delegate = self
@@ -447,6 +455,7 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
     }
 }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Choose a cell")
         var temp: polyRecord
         if searchActive == true
         {
@@ -473,7 +482,6 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
                 dest.record = temp
             dest.historyDelegate = self
             self.navigationController?.pushViewController(dest, animated: false)
-
         case 4:
             let dest = sb.instantiateViewController(identifier: "editTransferVc") as! editTransferVc
             dest.src = temp
@@ -485,7 +493,6 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
             dest.record = temp
             dest.historyDelegate = self
             self.navigationController?.pushViewController(dest, animated: false)
-
         }
     }
 }

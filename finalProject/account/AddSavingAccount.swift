@@ -326,7 +326,6 @@ class AddSavingAccount: UIViewController {
                 //Tru vao sourceAcc
                 srcAcc!.expense(amount: acc.ammount)
             }
-            
         }
         else if acc.srcAccount?.type == 1{
         let srcAcc = acc.srcAccount?.bankingAcc

@@ -118,9 +118,13 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
         selectTypeRecord.semanticContentAttribute = .forceRightToLeft
         selectTypeRecord.clipsToBounds = true
         selectTypeRecord.layer.cornerRadius = selectTypeRecord.frame.width/8
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    }
+    @objc func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     @IBAction func chooseAccount(_ sender: Any) {
         let dest = self.storyboard?.instantiateViewController(identifier: "selectAccountVC") as! selectAccountVC

@@ -10,6 +10,7 @@ import RealmSwift
 import FirebaseAuth
 import SCLAlertView
 import ProgressHUD
+import GoogleSignIn
 
 class signUpVC: UITableViewController {
     @IBOutlet weak var username: UITextField!
@@ -24,6 +25,10 @@ class signUpVC: UITableViewController {
         let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: email)
     }
+    @IBAction func backToSignIn(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     @IBAction func clickSignUp(_ sender: Any) {
         ProgressHUD.show()
         if checkPass() == false
@@ -48,17 +53,32 @@ class signUpVC: UITableViewController {
             else
             {
                 print(authResult!.description)
-                let newUserInfo = Auth.auth().currentUser
-                let realm = try! Realm()
-                let userInfor = User()
-                userInfor.username = newUserInfo!.uid
-                userInfor.displayName = username.text ?? ""
-                try! realm.write{
-                    realm.add(userInfor)
+//                let newUserInfo = Auth.auth().currentUser
+//                let realm = try! Realm()
+//                let userInfor = User()
+//                userInfor.username = newUserInfo!.uid
+//                userInfor.displayName = username.text ?? ""
+//                try! realm.write{
+//                    realm.add(userInfor)
+//                }
+//                toApp()
+                SCLAlertView().showSuccess("Sign up successfully", subTitle: "Sign in to use app.")
+                let firebaseAuth = Auth.auth()
+                do {
+                  try firebaseAuth.signOut()
+                } catch let signOutError as NSError {
+//                    ProgressHUD.dismiss()
+//                    SCLAlertView().showError("Logging out error!.", subTitle: signOutError as! String)
+                    print(signOutError.localizedDescription)
                 }
-                toApp()
+                //reset vc
+//                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//                let vc = storyboard.instantiateViewController(withIdentifier: "signUpVC")
+//                var viewcontrollers = self.navigationController!.viewControllers
+//                viewcontrollers.removeLast()
+//                viewcontrollers.append(vc)
+//                self.navigationController?.setViewControllers(viewcontrollers, animated: false)
                 ProgressHUD.dismiss()
-                SCLAlertView().showSuccess("Sign up successfully!", subTitle: authResult!.description)
                 return
             }
         }
@@ -107,13 +127,13 @@ class signUpVC: UITableViewController {
     override func viewDidLoad() {
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "backgound")!)
 
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    @objc func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
 
     // MARK: - Table view data source
@@ -125,7 +145,7 @@ class signUpVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 8
+        return 7
     }
 
     /*

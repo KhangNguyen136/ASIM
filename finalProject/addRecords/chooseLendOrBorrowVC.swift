@@ -26,7 +26,7 @@ class chooseLendOrBorrowVC: UIViewController {
     }
     func loadData() {
         dataSource = []
-        let temp = realm.objects(polyRecord.self)
+        let temp = realm.objects(User.self)[0].records
         if !temp.isEmpty
         {
             if type == 1

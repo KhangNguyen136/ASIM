@@ -4,13 +4,14 @@
 //
 //  Created by Khang Nguyen on 1/8/21.
 //
-
 import UIKit
-import FirebaseAuth
+import Firebase
+import FirebaseUI
 import RealmSwift
 import SCLAlertView
-import FirebaseUI
 import ProgressHUD
+import AlertsAndPickers
+import GoogleSignIn
 
 class loginVC: UITableViewController {
 
@@ -19,12 +20,16 @@ class loginVC: UITableViewController {
     @IBOutlet weak var loginBtn: UIButton!
     @IBOutlet weak var emailTF: UITextField!
     @IBOutlet weak var passwordTF: UITextField!
+    
+    @IBOutlet weak var signInButton: GIDSignInButton!
+    
     func isValidEmail(_ email: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
 
         let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: email)
     }
+    
     @IBAction func clickLogin(_ sender: Any) {
         ProgressHUD.show()
         if emailTF.text == "" || passwordTF.text == ""
@@ -45,12 +50,13 @@ class loginVC: UITableViewController {
                 let userInfo = Auth.auth().currentUser
                 userInforRealm = User()
                 userInforRealm!.username = userInfo!.uid
+                userInforRealm?.email = userInfo?.email ?? ""
                 try! realm.write{
                     realm.add(userInforRealm!)
                 }
                 toApp()
                 ProgressHUD.dismiss()
-                SCLAlertView().showSuccess("Login successfully!", subTitle: authResult!.description)
+                SCLAlertView().showSuccess("Login successfully", subTitle: "This app will reload your data in server automatically.")
                 return
             }
         })
@@ -64,10 +70,51 @@ class loginVC: UITableViewController {
         appDelegate.window?.rootViewController = tabBarController
     }
     @IBAction func clickForgetPassword(_ sender: Any) {
+        let alert = UIAlertController(title: "Forgot password", message: "Enter your email", preferredStyle: .alert)
+        alert.addTextField{ textField in
+            textField.placeholder = "Enter your email"
+            textField.font = UIFont(name: "system", size: 18)
+        }
+        let okAction = UIAlertAction(title: "Reset password", style: .default, handler: { [self]_ in
+            let emailTF = alert.textFields![0] as UITextField
+            let email = emailTF.text!
+            print(email)
+            if email.isEmpty == false || isValidEmail(email) == true
+            {
+                Auth.auth().sendPasswordReset(withEmail: email) { (error) in
+                    if let error = error as NSError? {
+                    SCLAlertView().showError("Reset password failed", subTitle: error.localizedDescription)
+                  } else
+                  {
+                    SCLAlertView().showSuccess("Reset password email has been successfully sent", subTitle: "Check your mail and reset password!")
+                    alert.dismiss(animated: false, completion: nil)
+                  }
+                }
+            }
+            else
+            {
+                SCLAlertView().showError("You have to enter your email!", subTitle: "")
+    
+            }
+        })
+        alert.addAction(okAction)
+        alert.addAction(title: "Cancel", style: .cancel)
+        alert.show()
     }
     override func viewDidLoad() {
-        super.viewDidLoad()
+        GIDSignIn.sharedInstance()?.presentingViewController = self
+        
+//        GIDSignIn.sharedInstance()?.signIn()
+//        GIDSignIn.sharedInstance().delegate = self
+        
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "backgound")!)
+//        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+//        view.addGestureRecognizer(tap)
+        super.viewDidLoad()
+    }
+    @objc func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
 
     // MARK: - Table view data source
@@ -79,62 +126,8 @@ class loginVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 4
+        return 5
     }
 
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

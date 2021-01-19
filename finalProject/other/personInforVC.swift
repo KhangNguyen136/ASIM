@@ -11,7 +11,7 @@ import RealmSwift
 class personInforVC: UIViewController {
     let realm = try! Realm()
     var userInfor: User!
-    let _title = ["Display name: ","Numberphone: ","","Address: ","Job: "]
+    let _title = ["Display name: ","Numberphone: ","","Address: ","Job: ","Email: "]
     var content:[String] = []
     @IBOutlet weak var avtImg: UIImageView!
     @IBOutlet weak var userName: UILabel!
@@ -32,6 +32,7 @@ class personInforVC: UIViewController {
         content.append("")
         content.append(userInfor.address)
         content.append(userInfor.job)
+        content.append(userInfor.email)
         
         if userInfor.displayName != ""
         {
@@ -68,11 +69,11 @@ class personInforVC: UIViewController {
 
 extension personInforVC: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 6
+        return 7
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 5
+        if indexPath.row == 6
         {
             let cell = listTV.dequeueReusableCell(withIdentifier: "submitInforRow") as! submitInforCell
 //            cell.getData(imgName: imgName[indexPath.row], title: titleRow[indexPath.row])
@@ -87,6 +88,14 @@ extension personInforVC: UITableViewDelegate,UITableViewDataSource{
         }
         let cell = listTV.dequeueReusableCell(withIdentifier: "inforTextFieldRow") as! inforTextFieldCell
         cell.getData(_title: _title[indexPath.row], _content: content[indexPath.row])
+        if indexPath.row == 3
+        {
+            cell.inputNumberPhone()
+        }
+        if indexPath.row == 5
+        {
+            cell.getEmail()
+        }
 //            cell.getData(imgName: imgName[indexPath.row], title: titleRow[indexPath.row])
         return cell
     }
@@ -99,6 +108,14 @@ class inforTextFieldCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+    }
+    func inputNumberPhone()
+    {
+        content.keyboardType = .numberPad
+    }
+    func getEmail()
+    {
+        content.isEnabled = false
     }
     func getData(_title: String, _content: String)  {
         title.text = _title

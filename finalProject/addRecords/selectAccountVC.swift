@@ -20,7 +20,7 @@ class selectAccountVC: UIViewController {
         if delegate1 != nil{
             self.navigationItem.title = "Select destination account"
         }
-        let temp = realm.objects(polyAccount.self)
+        let temp = realm.objects(User.self)[0].accounts
         for i in temp
         {
             if i.isDeleted == true

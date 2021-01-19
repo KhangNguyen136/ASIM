@@ -51,16 +51,13 @@ class otherVC: UIViewController {
 //            {
 //                SCLAlertView().showError("No connection.", subTitle: "Check your internet connection and try again!")
 //            }
-//        }
-
         let firebaseAuth = Auth.auth()
         do {
           try firebaseAuth.signOut()
         } catch let signOutError as NSError {
             print ("Error logging out: %@", signOutError)
             ProgressHUD.dismiss()
-            SCLAlertView().showError("Logging error!.", subTitle: signOutError as! String)
-            return
+            SCLAlertView().showError("Logging out error!.", subTitle: signOutError as! String)
         }
         try! realm.write{
             realm.deleteAll()

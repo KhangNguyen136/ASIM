@@ -116,8 +116,13 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         typeReccord.clipsToBounds = true
         typeReccord.layer.cornerRadius = typeReccord.frame.width/8
         loadData()
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+    }
+    @objc func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     
     func didSelectCategory( section: Int, row: Int) {

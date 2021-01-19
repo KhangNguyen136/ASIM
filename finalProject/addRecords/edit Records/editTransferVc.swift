@@ -79,9 +79,13 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
     
     override func viewDidLoad() {
         loadData()
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    }
+    @objc func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     @IBAction func chooseSourceAccount(_ sender: Any) {
         let sb = UIStoryboard(name: "Main", bundle: nil)
