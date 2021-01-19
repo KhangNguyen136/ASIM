@@ -9,18 +9,36 @@ import UIKit
 import RealmSwift
 import SCLAlertView
 
-class selectAccountVC: UIViewController {
+class selectAccountVC: UIViewController, settingDelegate {
     var delegate: selectAccountDelegate? = nil
     var delegate1: selectDestinationAccountDelegate? = nil
     var dataSource: [polyAccount] = []
     let realm = try! Realm()
     @IBOutlet weak var listTV: UITableView!
-    
+    var setting: settingObserve? = nil
+    var settingObser: settingObserver? = nil
+    var isHideAmount = false
+    var currency = 0
+    func changedHideAmountValue(value: Bool) {
+        isHideAmount = value
+        listTV.reloadData()
+    }
+    func changedCurrency(value: Int) {
+        currency = value
+        listTV.reloadData()
+    }
     func loadData()  {
+        let userInfor = realm.objects(User.self)[0]
+        setting = settingObserve(user: userInfor)
+        settingObser = settingObserver(object: setting!)
+        setting?.delegate = self
+        isHideAmount = userInfor.isHideAmount
+        currency = userInfor.currency
+
         if delegate1 != nil{
             self.navigationItem.title = "Select destination account"
         }
-        let temp = realm.objects(User.self)[0].accounts
+        let temp = userInfor.accounts
         for i in temp
         {
             if i.isDeleted == true
@@ -67,7 +85,7 @@ extension selectAccountVC : UITableViewDelegate,UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell: accountCell = listTV.dequeueReusableCell(withIdentifier: "accountRow", for: indexPath) as! accountCell
-        cell.getData(acc: dataSource[indexPath.row])
+        cell.getData(acc: dataSource[indexPath.row],currency: currency, hideAmount: isHideAmount)
 
     return cell
 }

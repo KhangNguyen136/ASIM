@@ -1,6 +1,6 @@
 
 import UIKit
-
+import RealmSwift
 class historyCell: UITableViewCell {
 
     var record: polyRecord? = nil
@@ -9,7 +9,7 @@ class historyCell: UITableViewCell {
     @IBOutlet weak var amount: UILabel!
     @IBOutlet weak var sourceAccount: UILabel!
     @IBOutlet weak var img: UIImageView!
-    
+    var currency = 0
     @IBOutlet weak var accImg: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -18,8 +18,17 @@ class historyCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-    func getData(_record: polyRecord)  {
+    func loadAmountByCurrency(value: Float) -> Float
+    {
+        if currency == 0
+        {
+            return value
+        }
+        return value * Float(currencyBase().valueBaseDolar[currency])
+    }
+    func getData(_record: polyRecord, _currency: Int)  {
         record = _record
+        currency = _currency
         switch record!.type {
         case 0:
             let temp = record!.expense
@@ -59,7 +68,7 @@ class historyCell: UITableViewCell {
     }
     func loadData(_category: String, describe: String, _amount: Float, _type: Int,srcAccount: String,typeAcc: Int) {
         descri.text = describe
-        amount.text = String(_amount)
+        amount.text = String(loadAmountByCurrency(value: _amount))
         category.text = _category
         sourceAccount.text = srcAccount
         if typeAcc == 2
@@ -81,26 +90,30 @@ class sectionHistoryCell: UITableViewCell {
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var income: UILabel!
     @IBOutlet weak var expense: UILabel!
+    var currency = 0
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-    
-    func getData(_date: String, _income: Float, _expense: Float) {
+    func loadAmountByCurrency(value: Float) -> Float
+    {
+        if currency == 0
+        {
+            return value
+        }
+        return value * Float(currencyBase().valueBaseDolar[currency])
+    }
+    func getData(_date: String, _income: Float, _expense: Float, _currency: Int) {
         date.text = _date
-        income.text = String(_income)
-        expense.text = String(_expense)
+        currency = _currency
+        income.text = String(loadAmountByCurrency(value: _income)) + " " + currencyBase().symbol[currency]
+        expense.text = String(loadAmountByCurrency(value: _expense)) + " " + currencyBase().symbol[currency]
+
     }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
-    }
-    func getData(_date: Date, _income: Float, _expense: Float)  {
-    
-        date.text = DateFormatter().string(from: _date)
-        income.text = String(_income)
-        expense.text = String(_expense)
     }
 
 }

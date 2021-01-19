@@ -11,19 +11,8 @@ import DropDown
 import RealmSwift
 import SCLAlertView
 
-protocol selectCategoryDelegate: class {
-    func didSelectCategory(section: Int, row: Int)
-    func didSelectRepayOrCollectDebt(_type: Int, temp: polyRecord)
-}
-protocol selectAccountDelegate: class {
-    func didSelectAccount(temp: polyAccount, name: String)
-}
 
-protocol selectLendOrBorrowDelegate: class {
-    func didSelectLendOrBorrow(_type: Int, temp: polyRecord)
-}
-
-class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectAccountDelegate {
+class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectAccountDelegate,settingDelegate {
     
     var type = 0
     var category = -1
@@ -32,7 +21,15 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
     let realm = try! Realm()
     var tempRecord : polyRecord? = nil
     var userInfor: User? = nil
-    
+
+    var setting: settingObserve? = nil
+    var settingObser: settingObserver? = nil
+    func changedHideAmountValue(value: Bool) {
+        amount.isSecureTextEntry = value
+    }
+    func changedCurrency(value: Int) {
+        unit.text = currencyBase().symbol[value]
+    }
     var srcAccount: polyAccount? = nil
     
     @IBOutlet weak var amount: UITextField!
@@ -60,7 +57,12 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
     var imagePicker = UIImagePickerController()
 
     let dropDown = DropDown()
-    
+    func setUp()
+    {
+        amount.isSecureTextEntry = userInfor!.isHideAmount
+        settingObser = settingObserver(object: setting!)
+        unit.text = currencyBase().symbol[userInfor!.currency]
+    }
     func loadData() {
         chooseTypeRecordBtn.setTitle(categoryValues().typeRecord[type],for: .normal)
         chooseTypeRecordBtn.clipsToBounds = true
@@ -76,6 +78,9 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
             personTF.placeholder = "Payer"
         }
         userInfor = realm.objects(User.self)[0]
+        setting = settingObserve(user: userInfor!)
+        setting?.delegate = self
+        setUp()
         
         var temp :[String] = []
         temp.append(contentsOf: userInfor!.persons)
@@ -172,7 +177,11 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
             return
         }
         //create
-        let tempAmount = (amount.text! as NSString).floatValue
+        var tempAmount = (amount.text! as NSString).floatValue
+        if userInfor?.currency != 0
+        {
+            tempAmount = tempAmount / Float(currencyBase().valueBaseDolar[userInfor!.currency])
+        }
         try! realm.write{
         if type == 0
         {
@@ -214,7 +223,7 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
             }
         }
         print(realm.configuration.fileURL!)
-        let succesMsg = SCLAlertView().showSuccess("Transaction added!", subTitle: descript.text ?? "")
+        SCLAlertView().showSuccess("Transaction added!", subTitle: descript.text ?? "")
         //reset vc
         guard var viewcontrollers = self.navigationController?.viewControllers else { return }
         if viewcontrollers.count == 1

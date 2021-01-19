@@ -11,7 +11,7 @@ import RealmSwift
 import SearchTextField
 import SCLAlertView
 
-class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinationAccountDelegate {
+class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinationAccountDelegate, settingDelegate {
     func didSelectDestAccount(temp: polyAccount, name: String) {
         chooseDestAccountBtn.setTitle(name , for: .normal)
         destAccount = temp
@@ -33,6 +33,18 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
     @IBOutlet weak var dateTime: UIDatePicker!
     @IBOutlet weak var fee: UITextField!
     
+    @IBOutlet weak var unit1: UILabel!
+    @IBOutlet weak var unit: UILabel!
+    var setting: settingObserve? = nil
+    var settingObser: settingObserver? = nil
+    func changedHideAmountValue(value: Bool) {
+        amount.isSecureTextEntry = value
+    }
+    func changedCurrency(value: Int) {
+        unit.text = currencyBase().symbol[value]
+        unit1.text = currencyBase().symbol[value]
+
+    }
     override func viewDidLoad() {
         userInfor = realm.objects(User.self)[0]
         var tempStr: [String] = []
@@ -44,6 +56,14 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
         selectTypeRecord.semanticContentAttribute = .forceRightToLeft
         selectTypeRecord.clipsToBounds = true
         selectTypeRecord.layer.cornerRadius = selectTypeRecord.frame.width/8
+        
+        setting = settingObserve(user: userInfor!)
+        settingObser = settingObserver(object: setting!)
+        setting?.delegate = self
+        amount.isSecureTextEntry = userInfor!.isHideAmount
+        unit.text = currencyBase().symbol[userInfor!.currency]
+        unit1.text = currencyBase().symbol[userInfor!.currency]
+
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         super.viewDidLoad()
@@ -144,7 +164,7 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
             return
         }
         //create
-        let transFree = (fee.text! as NSString).floatValue
+        var transFree = (fee.text! as NSString).floatValue
         let temp = Transfer()
         var temp2 :polyRecord? = nil
         try! realm.write{
@@ -153,6 +173,10 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
             let tempTransferFee = Expense()
             let tempStr = "Fee of transfer from \(srcAccount?.getname() ?? "srcAccount") to \(destAccount?.getname() ?? "destAccount")"
             //get data and do transaction
+            if userInfor?.currency != 0
+            {
+                transFree = transFree / Float(currencyBase().valueBaseDolar[userInfor!.currency])
+            }
             tempTransferFee.getData(_amount: transFree, _type: 0, _descript: tempStr, _srcAccount: srcAccount!, _person: "", _location: locationTF.text ?? "", _event: "", _srcImg: "srcImage", _date: dateTime.date, _category: categoryValues().expense.count - 1, _detailCategory: 1, _borrowRecord: nil)
             
             temp2 = polyRecord()
@@ -164,7 +188,12 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
             userInfor?.records.append(temp2!)
         }
         // get data and do transaction
-        temp.getData(_amount: (amount.text! as NSString).floatValue, _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: "srcImage",_date: dateTime.date,_destAccount: destAccount!,_transferFee: temp2 )
+            var amountValue = (amount.text! as NSString).floatValue
+            if userInfor?.currency != 0
+            {
+                amountValue = amountValue / Float(currencyBase().valueBaseDolar[userInfor!.currency])
+            }
+        temp.getData(_amount: amountValue , _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: "srcImage",_date: dateTime.date,_destAccount: destAccount!,_transferFee: temp2 )
         
         let temp1 = polyRecord()
             temp1.transfer = temp
@@ -212,60 +241,5 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
         // #warning Incomplete implementation, return the number of rows
         return 9
     }
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

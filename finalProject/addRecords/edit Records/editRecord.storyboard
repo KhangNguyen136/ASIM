@@ -1177,6 +1177,7 @@
                         <outlet property="personTF" destination="LcW-c5-kDM" id="Qjn-Mc-5Dp"/>
                         <outlet property="reDateBtn" destination="SAf-hR-NTX" id="Zuw-3Y-PIR"/>
                         <outlet property="selectTypeRecord" destination="hF9-tH-tCD" id="dq8-Wo-xTg"/>
+                        <outlet property="unit" destination="ezd-0G-fBk" id="Ikh-Cp-4wG"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IKx-XD-kh3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1718,6 +1719,8 @@
                         <outlet property="fee" destination="wyw-5z-xgJ" id="dKS-ra-2nx"/>
                         <outlet property="locationTF" destination="q54-MT-jpm" id="VFm-VT-kJK"/>
                         <outlet property="typeRecord" destination="elY-dP-EAR" id="x6d-7M-7QI"/>
+                        <outlet property="unit" destination="eu4-MD-PCt" id="Zym-SF-cqO"/>
+                        <outlet property="unit1" destination="aEQ-XS-pnz" id="zkU-tq-Mg2"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QXc-p9-izB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1859,21 +1862,29 @@
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 $" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6HZ-5e-f8V">
-                                                            <rect key="frame" x="222" y="10" width="182" height="24"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6HZ-5e-f8V">
+                                                            <rect key="frame" x="222" y="10" width="166" height="24"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="$" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5SO-hA-rkR">
+                                                            <rect key="frame" x="393" y="13.5" width="11" height="20.5"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
+                                                        <constraint firstItem="5SO-hA-rkR" firstAttribute="leading" secondItem="6HZ-5e-f8V" secondAttribute="trailing" constant="5" id="2xW-Wy-Akr"/>
                                                         <constraint firstItem="6HZ-5e-f8V" firstAttribute="leading" secondItem="6VA-b9-bk8" secondAttribute="trailing" constant="20" id="4iA-if-JDx"/>
                                                         <constraint firstAttribute="bottom" secondItem="6HZ-5e-f8V" secondAttribute="bottom" constant="10" id="9HT-s5-UG8"/>
                                                         <constraint firstItem="6HZ-5e-f8V" firstAttribute="top" secondItem="lBf-PT-Z2Z" secondAttribute="top" constant="10" id="LSq-wD-JiG"/>
+                                                        <constraint firstItem="5SO-hA-rkR" firstAttribute="bottom" secondItem="6HZ-5e-f8V" secondAttribute="bottom" id="UDo-mn-3Wz"/>
+                                                        <constraint firstAttribute="trailing" secondItem="5SO-hA-rkR" secondAttribute="trailing" constant="10" id="cVg-XF-LC3"/>
                                                         <constraint firstItem="6VA-b9-bk8" firstAttribute="leading" secondItem="lBf-PT-Z2Z" secondAttribute="leading" constant="10" id="kpP-sS-iYZ"/>
                                                         <constraint firstItem="6VA-b9-bk8" firstAttribute="top" secondItem="lBf-PT-Z2Z" secondAttribute="top" constant="10" id="msE-4L-FeH"/>
-                                                        <constraint firstAttribute="trailing" secondItem="6HZ-5e-f8V" secondAttribute="trailing" constant="10" id="w7B-OM-EKM"/>
                                                         <constraint firstAttribute="bottom" secondItem="6VA-b9-bk8" secondAttribute="bottom" constant="10" id="yYi-Pb-rWY"/>
                                                     </constraints>
                                                 </view>
@@ -1959,21 +1970,29 @@
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 $" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yNR-dx-mc3">
-                                                            <rect key="frame" x="116" y="10" width="288" height="24"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yNR-dx-mc3">
+                                                            <rect key="frame" x="116" y="10" width="272" height="24"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="$" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ez-Yw-Y4K">
+                                                            <rect key="frame" x="393" y="13.5" width="11" height="20.5"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="trailing" secondItem="yNR-dx-mc3" secondAttribute="trailing" constant="10" id="6Q1-gQ-0mR"/>
+                                                        <constraint firstItem="7ez-Yw-Y4K" firstAttribute="bottom" secondItem="yNR-dx-mc3" secondAttribute="bottom" id="8sw-Pg-9XK"/>
                                                         <constraint firstAttribute="bottom" secondItem="FzA-sX-T8p" secondAttribute="bottom" constant="10" id="YhH-8C-QO4"/>
                                                         <constraint firstItem="yNR-dx-mc3" firstAttribute="top" secondItem="Q4P-3m-jQV" secondAttribute="top" constant="10" id="aek-H7-iuM"/>
                                                         <constraint firstItem="FzA-sX-T8p" firstAttribute="leading" secondItem="Q4P-3m-jQV" secondAttribute="leading" constant="10" id="fiR-oh-pcB"/>
                                                         <constraint firstItem="FzA-sX-T8p" firstAttribute="top" secondItem="Q4P-3m-jQV" secondAttribute="top" constant="10" id="hNB-r4-9u1"/>
+                                                        <constraint firstAttribute="trailing" secondItem="7ez-Yw-Y4K" secondAttribute="trailing" constant="10" id="khn-x9-Qdv"/>
                                                         <constraint firstAttribute="bottom" secondItem="yNR-dx-mc3" secondAttribute="bottom" constant="10" id="q6Q-OU-aOC"/>
+                                                        <constraint firstItem="7ez-Yw-Y4K" firstAttribute="leading" secondItem="yNR-dx-mc3" secondAttribute="trailing" constant="5" id="uiu-hu-FiO"/>
                                                         <constraint firstItem="yNR-dx-mc3" firstAttribute="leading" secondItem="FzA-sX-T8p" secondAttribute="trailing" constant="20" id="yaS-UL-PkD"/>
                                                     </constraints>
                                                 </view>
@@ -2323,6 +2342,9 @@
                         <outlet property="personTF" destination="nxb-zJ-Qev" id="Ied-g9-uuu"/>
                         <outlet property="subTypeTitle" destination="FzA-sX-T8p" id="sF0-SP-x3Z"/>
                         <outlet property="typeReccord" destination="aXy-r0-ifK" id="Mj4-lf-kDp"/>
+                        <outlet property="unit" destination="5SO-hA-rkR" id="yqC-ik-XVo"/>
+                        <outlet property="unit1" destination="mtr-4Q-ctQ" id="tWh-0Y-xeT"/>
+                        <outlet property="unit2" destination="7ez-Yw-Y4K" id="FWE-FR-G5O"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xTp-Og-m3r" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

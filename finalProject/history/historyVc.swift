@@ -23,8 +23,16 @@ struct sectionInfor {
     var records: [polyRecord] = []
 }
 
-class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
+class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate,settingDelegate {
+    func changedHideAmountValue(value: Bool) {
+        print("Do nothign")
+    }
     
+    func changedCurrency(value: Int) {
+        loadData()
+    }
+    
+    var userInfor: User? = nil
     func didSelectedFilterByCustom(id: (Int, Int), start: Date, end: Date, title: String) {
         print("Filter by custom from \(startDate?.string() ?? "") to \(endDate?.string() ?? "")")
         startDate = start
@@ -143,15 +151,21 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
 
         }
     }
-
+    func loadAmountByCurrency(value: Float) -> Float
+    {
+        if userInfor?.currency == 0
+        {
+            return value
+        }
+        return value * Float(currencyBase().valueBaseDolar[userInfor!.currency])
+    }
     func loadData() {
         totalIncome = 0
         totalExpense = 0
         dataSource = []
         days = []
-        
-        let tempRecords = realm.objects(User.self)[0].records
-        formatter.dateFormat = realm.objects(User.self)[0].dateFormat
+        let tempRecords = userInfor!.records
+        formatter.dateFormat = userInfor!.dateFormat
         //load data before append to history
         for i in tempRecords
         {
@@ -315,8 +329,8 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
                 }
             }
         }
-        income.text = String(totalIncome)
-        expense.text = String(totalExpense)
+        income.text = String(loadAmountByCurrency(value: totalIncome)) + " " + currencyBase().symbol[userInfor!.currency]
+        expense.text = String(loadAmountByCurrency(value: totalExpense) ) + " " + currencyBase().symbol[userInfor!.currency]
         listTv.reloadData()
     }
     func insertHistorySection(tempSection: sectionInfor, _tempDate: String)  {
@@ -337,10 +351,17 @@ class historyVC: UIViewController,editRecordDelegate,chooseFilterTypeDelegate {
         days.append(_tempDate)
         dataSource.append(tempSection)
     }
+    var setting: settingObserve? = nil
+    var settingObser: settingObserver? = nil
     override func viewDidLoad(){
         formatter.dateStyle = .medium
         filterBtn.semanticContentAttribute = .forceRightToLeft
         listTv.register(historyCell.self, forCellReuseIdentifier: "historyCell")
+        userInfor = realm.objects(User.self)[0]
+
+        setting = settingObserve(user: userInfor!)
+        settingObser = settingObserver(object: setting!)
+        setting?.delegate = self
         loadData()
         
         searchBar.showsCancelButton = false
@@ -435,21 +456,21 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
     {
         let cell: historyCell = listTv.dequeueReusableCell(withIdentifier: "historyRow", for: indexPath) as! historyCell
         
-        cell.getData(_record: filtered[indexPath.row])
+        cell.getData(_record: filtered[indexPath.row],_currency: userInfor!.currency)
         
         return cell
     }
     if indexPath.row == 0
     {
         let cell: sectionHistoryCell = listTv.dequeueReusableCell(withIdentifier: "sectionHistoryRow", for: indexPath) as! sectionHistoryCell
-        cell.getData(_date: days[indexPath.section], _income: dataSource[indexPath.section].totalIncome, _expense: dataSource[indexPath.section].totalExpense)
+        cell.getData(_date: days[indexPath.section], _income: dataSource[indexPath.section].totalIncome, _expense: dataSource[indexPath.section].totalExpense,_currency: userInfor!.currency)
         return cell
     }
     else
     {
         let cell: historyCell = listTv.dequeueReusableCell(withIdentifier: "historyRow", for: indexPath) as! historyCell
         
-        cell.getData(_record: dataSource[indexPath.section].records[indexPath.row-1])
+        cell.getData(_record: dataSource[indexPath.section].records[indexPath.row-1],_currency: userInfor!.currency)
         
         return cell
     }

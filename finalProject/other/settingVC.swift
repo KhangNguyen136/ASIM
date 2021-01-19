@@ -37,10 +37,8 @@ class settingVC: UITableViewController {
         {
             langBtn.setTitle("Vietnamese", for: .normal)
         }
-        if userInfor.isVietnamDong == true
-        {
-            currencyBtn.setTitle("VND", for: .normal)
-        }
+        currencyBtn.setTitle(currencyBase().symbol[userInfor.currency], for: .normal)
+
         if userInfor.isHideAmount == true
         {
             isHideAmount.setOn(true, animated: false)
@@ -110,7 +108,7 @@ class settingVC: UITableViewController {
         dropDown.anchorView = currencyBtn // UIView or UIBarButtonItem
 
         // The list of items to display. Can be changed dynamically
-        dropDown.dataSource = ["United States Dollar (USD)", "Vietnamese Dong"]
+        dropDown.dataSource = currencyBase().nameEnglish
 
         /*** IMPORTANT PART FOR CUSTOM CELLS ***/
         dropDown.cellNib = UINib(nibName: "typeRecord", bundle: nil)
@@ -118,33 +116,15 @@ class settingVC: UITableViewController {
         dropDown.customCellConfiguration = { (index: Index, item: String, cell: DropDownCell) -> Void in
            guard let cell = cell as? typeRecord else { return }
 
-           // Setup your custom UI components
-            if index == 1
-            {
-           cell.logo.image = UIImage(named: "Vietnamese Dong")
-            }
-            else
-            {
-                cell.logo.image = UIImage(named: "United States Dollar")
-            }
+           cell.logo.image = UIImage(named: "currency\(index)")
+
         }
         dropDown.selectionAction = { [weak self] (index: Int, item: String) in
             sender.setTitle(item, for: .normal)
-            if index == 0
-            {
-                self!.currencyBtn.setTitle("$", for: .normal)
                 try! self!.realm.write{
-                    self!.userInfor.isVietnamDong = false
+                    self!.userInfor.currency = index
                 }
-            }
-            else
-            {
-                self!.currencyBtn.setTitle("VND", for: .normal)
-
-                try! self!.realm.write{
-                    self!.userInfor.isVietnamDong = true
-                }
-            }
+            
         }
         dropDown.show()
         

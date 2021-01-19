@@ -11,7 +11,7 @@ import RealmSwift
 import SearchTextField
 import SCLAlertView
 
-class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategoryDelegate {
+class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategoryDelegate, settingDelegate {
     
     let realm = try! Realm()
     var userInfor: User? = nil
@@ -37,6 +37,9 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
     @IBOutlet weak var different: UILabel!
     @IBOutlet weak var subTypeTitle: UILabel!
     
+    @IBOutlet weak var unit: UILabel!
+    @IBOutlet weak var unit1: UILabel!
+    @IBOutlet weak var unit2: UILabel!
     @IBOutlet weak var personTF: SearchTextField!
     
     func didSelectRepayOrCollectDebt(_type: Int, temp: polyRecord) {
@@ -97,17 +100,55 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
         srcAccount = temp
         chooseAccountBtn.setTitle(name, for: .normal)
         _currentBalance = (srcAccount?.getBalance())!
-        currentBalance.text = String(_currentBalance) + "$"
+        if currency != 0
+        {
+            _currentBalance = _currentBalance * Float(currencyBase().valueBaseDolar[currency])
+        }
+        currentBalance.text = String(_currentBalance)
         changedAcctualBalance(UIButton())
     }
+    
+    var currency = 0
+    var setting: settingObserve? = nil
+    var settingObser: settingObserver? = nil
+    func changedHideAmountValue(value: Bool) {
+        acctualBalance.isSecureTextEntry = value
+    }
+    func changedCurrency(value: Int) {
+        if value == currency{
+            return
+        }
+        currency = value
+        unit.text = currencyBase().symbol[value]
+        unit1.text = currencyBase().symbol[value]
+        unit2.text = currencyBase().symbol[value]
 
+        if srcAccount != nil
+        {
+        didSelectAccount(temp: srcAccount!, name: srcAccount!.getname())
+        }
+        
+    }
     override func viewDidLoad() {
         userInfor = realm.objects(User.self)[0]
+        
+        setting = settingObserve(user: userInfor!)
+        settingObser = settingObserver(object: setting!)
+        setting?.delegate = self
+        acctualBalance.isSecureTextEntry = userInfor!.isHideAmount
+        unit.text = currencyBase().symbol[userInfor!.currency]
+        unit1.text = currencyBase().symbol[userInfor!.currency]
+        unit2.text = currencyBase().symbol[userInfor!.currency]
+        
+        currency = userInfor!.currency
+        
         var tempStr : [String] = []
         tempStr.append(contentsOf: userInfor!.locations)
         locationTF.filterStrings(tempStr)
         locationTF.theme.font = UIFont.systemFont(ofSize: 15)
         locationTF.maxNumberOfResults = 5
+        
+
         
         tempStr = []
         tempStr.append(contentsOf: userInfor!.persons)
@@ -198,7 +239,7 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
         if _currentBalance == _acttualBalance
         {
         _different = 0
-        different.text = "0 $"
+            different.text = "0"
             subTypeTitle.text = "Difference"
             different.textColor = UIColor.black
         subtype = -1
@@ -257,13 +298,17 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
         }
         //create
         let temp = Adjustment()
+        if currency != 0
+        {
+            _acttualBalance = _acttualBalance / Float(currencyBase().valueBaseDolar[currency])
+            _different = _different / Float(currencyBase().valueBaseDolar[currency])
+        }
         try! realm.write{
             temp.getData(_amount: _acttualBalance, _type: type, _descript: descript.text ?? "", _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: "srcImage",_date: dateTime.date,_subType: subtype, _different: _different,_category: category,_detailCategory: detailCategory,_tempRecord: tempRecord,_person: personTF.text ?? "")
         let temp1 = polyRecord()
             temp1.adjustment = temp
             temp1.type = 5
 //            temp1.isChanged = true
-        
         realm.add(temp1)
         userInfor?.records.append(temp1)
         var tempStr = locationTF.text ?? ""

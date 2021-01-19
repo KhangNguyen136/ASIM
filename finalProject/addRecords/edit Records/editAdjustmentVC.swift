@@ -11,7 +11,7 @@ import SearchTextField
 import SCLAlertView
 import FirebaseDatabase
 
-class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategoryDelegate {
+class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategoryDelegate, settingDelegate {
     func didSelectRepayOrCollectDebt(_type: Int, temp: polyRecord) {
         tempRecord = temp
         if(_type == 0)
@@ -64,8 +64,44 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
     @IBOutlet weak var locationTF: SearchTextField!
     @IBOutlet weak var personTF: SearchTextField!
 
-    
+    @IBOutlet weak var unit: UILabel!
+    @IBOutlet weak var unit1: UILabel!
+    @IBOutlet weak var unit2: UILabel!
+    var setting: settingObserve? = nil
+    var settingObser: settingObserver? = nil
+    func changedHideAmountValue(value: Bool) {
+        acctualBalance.isSecureTextEntry = value
+    }
+    func changedCurrency(value: Int) {
+        unit.text = currencyBase().symbol[value]
+        unit1.text = currencyBase().symbol[value]
+        unit2.text = currencyBase().symbol[value]
+        acctualBalance.text = String(loadAmount(value: ((acctualBalance.text ?? "") as NSString).floatValue))
+        if srcAccount != nil
+        {
+        didSelectAccount(temp: srcAccount!, name: srcAccount!.getname())
+        }
+        
+    }
+    func loadAmount(value: Float) -> Float
+    {
+        if userInfor?.currency == 0
+        {
+            return value
+        }
+        return value * Float(currencyBase().valueBaseDolar[userInfor!.currency])
+    }
     func loadData()  {
+        userInfor = realm.objects(User.self)[0]
+
+        setting = settingObserve(user: userInfor!)
+        settingObser = settingObserver(object: setting!)
+        setting?.delegate = self
+        acctualBalance.isSecureTextEntry = userInfor!.isHideAmount
+        unit.text = currencyBase().symbol[userInfor!.currency]
+        unit1.text = currencyBase().symbol[userInfor!.currency]
+        unit2.text = currencyBase().symbol[userInfor!.currency]
+
         if record == nil
         {
             return
@@ -80,10 +116,11 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         detailCategory = temp!.detailCategory
         tempRecord = temp?.tempRecord
         
-        _acttualBalance = (record?.adjustment!.amount)!
+        _acttualBalance = loadAmount(value: (record?.adjustment!.amount)!)
         acctualBalance.text = String(_acttualBalance)
         
-        _different = temp!.different
+        _different = loadAmount(value: temp!.different)
+        different.text = String(_different)
         
         if temp?.subType == 0
         {
@@ -95,18 +132,17 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
             different.textColor = UIColor.green
             subTypeTitle.text = "Income"
         }
-        
+//        loadRootSrcAccount()
         didSelectAccount(temp: temp!.srcAccount!, name: temp!.srcAccount!.getname())
         
-        let userInfor = realm.objects(User.self)[0]
         var tempStr : [String] = []
-        tempStr.append(contentsOf: userInfor.locations)
+        tempStr.append(contentsOf: userInfor!.locations)
         locationTF.filterStrings(tempStr)
         locationTF.theme.font = UIFont.systemFont(ofSize: 15)
         locationTF.maxNumberOfResults = 5
         
         tempStr = []
-        tempStr.append(contentsOf: userInfor.persons)
+        tempStr.append(contentsOf: userInfor!.persons)
         personTF.filterStrings(tempStr)
         personTF.theme.font = UIFont.systemFont(ofSize: 15)
         personTF.maxNumberOfResults = 5
@@ -147,13 +183,13 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         let temp = record?.adjustment
         if temp?.subType == 0
         {
-            _currentBalance = temp!.amount + temp!.different
-            currentBalance.text = String(_currentBalance) + "$"
+            _currentBalance = loadAmount(value: temp!.amount + temp!.different)
+            currentBalance.text = String(_currentBalance)
         }
         else
         {
-            _currentBalance = temp!.amount - temp!.different
-            currentBalance.text = String(_currentBalance) + "$"
+            _currentBalance = loadAmount(value: temp!.amount - temp!.different)
+            currentBalance.text = String(_currentBalance)
         }
     }
     func didSelectAccount(temp: polyAccount, name: String) {
@@ -163,12 +199,13 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         if temp.getname() == record!.adjustment!.srcAccount!.getname()
         {
             loadRootSrcAccount()
-            
+            print("Load root acc")
         }
         else
         {
-        _currentBalance = (srcAccount?.getBalance())!
-        currentBalance.text = String(_currentBalance) + "$"
+            print("Load other acc")
+        _currentBalance = loadAmount(value: (srcAccount?.getBalance())!)
+        currentBalance.text = String( _currentBalance)
         }
         changedAcctualBalance(UIButton())
     }
@@ -189,10 +226,12 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
     
     @IBAction func changedAcctualBalance(_ sender: Any) {
         _acttualBalance = (acctualBalance.text! as NSString).floatValue
+        print(_acttualBalance)
+        print(_currentBalance)
         if _currentBalance == _acttualBalance
         {
         _different = 0
-        different.text = "0 $"
+        different.text = "0"
         subTypeTitle.text = "Difference"
         different.textColor = UIColor.black
         subtype = -1
@@ -248,7 +287,11 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         }
         try! realm.write{
             record?.adjustment?.undoTransaction()
-            
+            if userInfor?.currency != 0
+            {
+                _acttualBalance = _acttualBalance / Float(currencyBase().valueBaseDolar[userInfor!.currency])
+                _different = _different / Float(currencyBase().valueBaseDolar[userInfor!.currency])
+            }
             record?.adjustment?.getData(_amount: _acttualBalance, _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: "srcImage",_date: dateTime.date,_subType: subtype, _different: _different,_category: category,_detailCategory: detailCategory,_tempRecord: tempRecord,_person: personTF.text ?? "")
             record?.isChanged = true
             userInfor = realm.objects(User.self)[0]

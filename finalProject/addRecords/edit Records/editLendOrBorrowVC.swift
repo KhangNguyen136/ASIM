@@ -12,14 +12,16 @@ import DatePicker
 import SCLAlertView
 import FirebaseDatabase
 
-class editLendOrBorrowVC: UITableViewController,selectAccountDelegate {
+class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDelegate {
     
     var historyDelegate: editRecordDelegate? = nil
     var record: polyRecord? = nil
     var type = -1
     let realm = try! Realm()
+    var userInfor: User? = nil
     var srcAccount: polyAccount? = nil
     
+    @IBOutlet weak var unit: UILabel!
     @IBOutlet weak var amount: UITextField!
     @IBOutlet weak var personTF: SearchTextField!
     @IBOutlet weak var locationTF: SearchTextField!
@@ -33,9 +35,7 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate {
     
     @IBOutlet weak var doneValue: UISwitch!
     @IBOutlet weak var doneTitle: UILabel!
-    
-    var userInfor: User? = nil
-    
+        
     func didSelectAccount(temp: polyAccount, name: String) {
         srcAccount = temp
         chooseAccountBtn.setTitle(name, for: .normal)
@@ -101,7 +101,7 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate {
         if type == 2
         {
             let temp = record?.lend
-            amount.text = String(temp!.amount)
+            amount.text = String(loadAmount(value: temp!.amount))
             descript.text = temp?.descript
             dateTime.date = temp!.date
             personTF.text = temp?.borrower
@@ -117,7 +117,7 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate {
         else
         {
             let temp = record?.borrow
-            amount.text = String(temp!.amount)
+            amount.text = String(loadAmount(value: temp!.amount))
             descript.text = temp?.descript
             dateTime.date = temp!.date
             personTF.text = temp?.lender
@@ -131,22 +131,48 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate {
                 reDateBtn.setTitle(reDate?.string(), for: .normal)
             }
         }
-        let userInfor = realm.objects(User.self)[0]
+        userInfor = realm.objects(User.self)[0]
+        
+        setting = settingObserve(user: userInfor!)
+        settingObser = settingObserver(object: setting!)
+        setting?.delegate = self
+        amount.isSecureTextEntry = userInfor!.isHideAmount
+        unit.text = currencyBase().symbol[userInfor!.currency]
+        
         var tempStr: [String] = []
-        tempStr.append(contentsOf: userInfor.persons)
+        tempStr.append(contentsOf: userInfor!.persons)
         personTF.filterStrings(tempStr)
         personTF.theme.font = UIFont.systemFont(ofSize: 15)
         personTF.maxNumberOfResults = 5
         tempStr = []
-        tempStr.append(contentsOf: userInfor.locations)
+        tempStr.append(contentsOf: userInfor!.locations)
         locationTF.filterStrings(tempStr)
         locationTF.theme.font = UIFont.systemFont(ofSize: 15)
         locationTF.maxNumberOfResults = 5
+        
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         
         loadData()
         super.viewWillAppear(true)
+    }
+    var setting: settingObserve? = nil
+    var settingObser: settingObserver? = nil
+    func changedHideAmountValue(value: Bool) {
+        amount.isSecureTextEntry = value
+    }
+    func changedCurrency(value: Int) {
+        unit.text = currencyBase().symbol[value]
+        amount.text = String(loadAmount(value: ((amount.text ?? "") as NSString).floatValue))
+    }
+    func loadAmount(value: Float) -> Float
+    {
+        if userInfor?.currency == 0
+        {
+            return value
+        }
+        return value * Float(currencyBase().valueBaseDolar[userInfor!.currency])
     }
 
     @IBAction func chooseAccount(_ sender: Any) {
@@ -167,7 +193,8 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate {
     }
 
     @IBAction func clickSave(_ sender: Any) {
-        if Float(amount.text ?? "0") == 0 || amount.text == ""
+        var _amount = Float(amount.text!)
+        if amount.text == "" || _amount == 0
         {
             print("You have to enter amount!")
             SCLAlertView().showError("Amount must be nonzero!", subTitle: "")
@@ -193,6 +220,9 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate {
             return
         }
         //update record
+        if userInfor!.currency != 0 {
+            _amount = _amount! / Float(currencyBase().valueBaseDolar[userInfor!.currency])
+        }
         try! realm.write{
         if type == 2
         {
@@ -200,7 +230,7 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate {
                 //undo transaction
                 temp?.undoTransaction()
 
-            temp?.updateLend(_amount: (amount.text! as NSString).floatValue, _type: 2, _descript: descript.text ?? "", _srcAccount: srcAccount!, _person: personTF.text!, _location: locationTF.text ?? "", _srcImg: "", _date: dateTime.date, _collectionDate:reDate)
+            temp?.updateLend(_amount: _amount!, _type: 2, _descript: descript.text ?? "", _srcAccount: srcAccount!, _person: personTF.text!, _location: locationTF.text ?? "", _srcImg: "", _date: dateTime.date, _collectionDate:reDate)
                 
                 temp?.doTransaction()
             print("Updated an lend!")
@@ -210,7 +240,7 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate {
             let temp = record?.borrow
                 temp?.undoTransaction()
                 
-                temp?.updateBorrow(_amount: (amount.text! as NSString).floatValue, _type: 3, _descript: descript.text ?? "", _srcAccount: srcAccount!, _person: personTF.text!, _location: locationTF.text ?? "", _srcImg: "", _date: dateTime.date, _repaymentDate:reDate)
+            temp?.updateBorrow(_amount: _amount!, _type: 3, _descript: descript.text ?? "", _srcAccount: srcAccount!, _person: personTF.text!, _location: locationTF.text ?? "", _srcImg: "", _date: dateTime.date, _repaymentDate:reDate)
                 temp?.doTransaction()
             print("Updated an borrow!")
             }

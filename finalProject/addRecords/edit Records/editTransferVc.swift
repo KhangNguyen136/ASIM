@@ -15,7 +15,7 @@ protocol selectDestinationAccountDelegate: class {
     func didSelectDestAccount(temp: polyAccount,name: String)
 }
 
-class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestinationAccountDelegate {
+class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestinationAccountDelegate, settingDelegate {
     func didSelectDestAccount(temp: polyAccount, name: String) {
         destAccount = temp
         chooseDestAccountBtn.setTitle(name, for: .normal)
@@ -46,13 +46,24 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
     @IBOutlet weak var locationTF: SearchTextField!
     @IBOutlet weak var dateTime: UIDatePicker!
     @IBOutlet weak var fee: UITextField!
+    @IBOutlet weak var unit: UILabel!
+    @IBOutlet weak var unit1: UILabel!
     
     func loadData() {
+        userInfor = realm.objects(User.self)[0]
+        
+        setting = settingObserve(user: userInfor!)
+        settingObser = settingObserver(object: setting!)
+        setting?.delegate = self
+        amount.isSecureTextEntry = userInfor!.isHideAmount
+        unit.text = currencyBase().symbol[userInfor!.currency]
+        unit1.text = currencyBase().symbol[userInfor!.currency]
+        
         typeRecord.clipsToBounds = true
         typeRecord.layer.cornerRadius = typeRecord.frame.width/8
         //load data from object
         record = src?.transfer
-        amount.text = String(record!.amount)
+        amount.text = String(loadAmount(value: record!.amount))
         descript.text = record?.descript
         dateTime.date = record!.date
         locationTF.text = record?.location
@@ -60,7 +71,7 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
         if record?.transferFee != nil
         {
             let temp = record?.transferFee?.expense
-            fee.text = String(temp!.amount)
+            fee.text = String(loadAmount(value: temp!.amount))
             transferFee = record?.transferFee
         }
         
@@ -69,7 +80,8 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
         
         destAccount = record?.destinationAccount
         chooseDestAccountBtn.setTitle(destAccount?.getname(), for: .normal)
-        userInfor = realm.objects(User.self)[0]
+        
+        
         var tempStr: [String] = []
         tempStr.append(contentsOf: userInfor!.locations)
         locationTF.filterStrings(tempStr)
@@ -82,6 +94,25 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         super.viewDidLoad()
+    }
+    var setting: settingObserve? = nil
+    var settingObser: settingObserver? = nil
+    func changedHideAmountValue(value: Bool) {
+        amount.isSecureTextEntry = value
+    }
+    func changedCurrency(value: Int) {
+        unit.text = currencyBase().symbol[value]
+        unit1.text = currencyBase().symbol[value]
+        amount.text = String(loadAmount(value: ((amount.text ?? "") as NSString).floatValue))
+        fee.text = String(loadAmount(value: ((fee.text ?? "") as NSString).floatValue))
+    }
+    func loadAmount(value: Float) -> Float
+    {
+        if userInfor?.currency == 0
+        {
+            return value
+        }
+        return value * Float(currencyBase().valueBaseDolar[userInfor!.currency])
     }
     @objc func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
@@ -102,7 +133,7 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
     }
     
     @IBAction func clickSave(_ sender: Any) {
-        let temp = (fee.text! as NSString).floatValue
+        var temp = (fee.text! as NSString).floatValue
         if (amount.text! as NSString).floatValue == 0
         {
             print("You have to enter amount!")
@@ -145,6 +176,10 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
                     transferFee = nil
                 }
                 //change amount of transfer fee
+                if userInfor?.currency != 0
+                {
+                    temp = temp / Float(currencyBase().valueBaseDolar[userInfor!.currency])
+                }
                 else if temp != record?.transferFee?.expense?.amount
                 {
                 record?.editTransFee(_fee: temp)
@@ -153,6 +188,10 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
             else{
                 if temp != 0
                 {
+                    if userInfor?.currency != 0
+                    {
+                        temp = temp / Float(currencyBase().valueBaseDolar[userInfor!.currency])
+                    }
                     let tempTransferFee = Expense()
                     let tempStr = "Fee of transfer from \(srcAccount?.getname() ?? "srcAccount") to \(destAccount?.getname() ?? "destAccount")"
                     //get data and do transaction
@@ -177,7 +216,13 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
             }
             record?.undoTransaction()
             //get data and do transaction
-            record?.getData(_amount: (amount.text! as NSString).floatValue, _type: 4, _descript: descript.text ?? "", _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: "", _date: dateTime.date, _destAccount: destAccount!, _transferFee: transferFee)
+            var _amount = (amount.text! as NSString).floatValue
+            if userInfor?.currency != 0
+            {
+                
+                _amount = _amount / Float(currencyBase().valueBaseDolar[userInfor!.currency])
+            }
+            record?.getData(_amount: _amount , _type: 4, _descript: descript.text ?? "", _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: "", _date: dateTime.date, _destAccount: destAccount!, _transferFee: transferFee)
             src?.isChanged = true
 
         }

@@ -11,7 +11,7 @@ import SearchTextField
 import SCLAlertView
 import FirebaseDatabase
 
-class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDelegate {
+class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDelegate,settingDelegate {
     
     var historyDelegate : editRecordDelegate? = nil
     var record: polyRecord? = nil
@@ -100,11 +100,16 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
     }
     
     func loadData()  {
-        
+        userInfor = realm.objects(User.self)[0]
+        setting = settingObserve(user: userInfor!)
+        settingObser = settingObserver(object: setting!)
+        setting?.delegate = self
+        amount.isSecureTextEntry = userInfor!.isHideAmount
+        unit.text = currencyBase().symbol[userInfor!.currency]
         if type == 0
         {
             let temp = record?.expense
-            amount.text = String(temp!.amount)
+            amount.text = String(loadAmount(value: temp!.amount))
             descript.text = temp?.descript
             category = temp!.category
             detailCategory = temp!.detailCategory
@@ -124,7 +129,7 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
         else
         {
             let temp = record?.income
-            amount.text = String(temp!.amount)
+            amount.text = String(loadAmount(value: temp!.amount))
             descript.text = temp?.descript
             category = 0
             detailCategory = temp!.category
@@ -140,7 +145,6 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
             tempRecord = temp?.lendRecord
         }
         var tempStr : [String] = []
-        userInfor = realm.objects(User.self)[0]
         tempStr.append(contentsOf: userInfor!.persons)
         personTF.filterStrings(tempStr)
         personTF.theme.font = UIFont.systemFont(ofSize: 15)
@@ -155,8 +159,26 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
         eventTF.theme.font = UIFont.systemFont(ofSize: 15)
         eventTF.maxNumberOfResults = 5
         eventTF.filterStrings(tempStr)
-    }
+        
 
+    }
+    var setting: settingObserve? = nil
+    var settingObser: settingObserver? = nil
+    func changedHideAmountValue(value: Bool) {
+        amount.isSecureTextEntry = value
+    }
+    func changedCurrency(value: Int) {
+        unit.text = currencyBase().symbol[value]
+        amount.text = String(loadAmount(value: ((amount.text ?? "") as NSString).floatValue))
+    }
+    func loadAmount(value: Float) -> Float
+    {
+        if userInfor?.currency == 0
+        {
+            return value
+        }
+        return value * Float(currencyBase().valueBaseDolar[userInfor!.currency])
+    }
     override func viewDidLoad() {
         type = record!.type
         
@@ -186,7 +208,7 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
     }
     
     @IBAction func saveRecord(_ sender: Any) {
-        let _amount = Float(amount.text!)
+        var _amount = Float(amount.text!)
         if  _amount == 0 || amount.text == ""
         {
             print("You have to enter amount!")
@@ -207,6 +229,9 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
         }
         //check if data changed?
         //update record and notify
+        if userInfor!.currency != 0 {
+            _amount = _amount! / Float(currencyBase().valueBaseDolar[userInfor!.currency])
+        }
         try! realm.write{
         if type == 0
         {

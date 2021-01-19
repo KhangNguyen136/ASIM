@@ -15,20 +15,44 @@ class accountCell: UITableViewCell {
     
     @IBOutlet weak var balance: UILabel!
     
-    func getData(acc: polyAccount)  {
+    func getData(acc: polyAccount,currency: Int, hideAmount: Bool)  {
         if acc.type == 0
         {
             let temp = acc.cashAcc
             img.image = UIImage(named: "wallet")
             accountName.text = temp?.name
-            balance.text = String(temp!.balance)
+            if hideAmount == false
+            {
+                var tempBalance: Float = temp!.balance
+                if currency != 0
+                {
+                    tempBalance = tempBalance * Float(currencyBase().valueBaseDolar[currency])
+                }
+            balance.text = String(tempBalance) + " " + currencyBase().symbol[currency]
+            }
+            else
+            {
+                balance.text = "******" + " " + currencyBase().symbol[currency]
+            }
         }
         else
         {
             let temp = acc.bankingAcc
             img.image = UIImage(named: "bank")
             accountName.text = temp?.name
-            balance.text = String(temp!.balance)
+            if hideAmount == false
+            {
+                var tempBalance: Float = temp!.balance
+                if currency != 0
+                {
+                    tempBalance = tempBalance * Float(currencyBase().valueBaseDolar[currency])
+                }
+            balance.text = String(tempBalance) + " " + currencyBase().symbol[currency]
+            }
+            else
+            {
+                balance.text = "******" + " " + currencyBase().symbol[currency]
+            }
         }
     }
     

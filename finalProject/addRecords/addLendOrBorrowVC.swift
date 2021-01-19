@@ -12,7 +12,7 @@ import SearchTextField
 import DatePicker
 import SCLAlertView
 
-class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAccountDelegate {
+class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAccountDelegate, settingDelegate {
 
     var type = 2
     var category = -1
@@ -20,6 +20,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
     var userInfor: User? = nil
     var srcAccount: polyAccount? = nil
 
+    @IBOutlet weak var unit: UILabel!
     @IBOutlet weak var amount: UITextField!
 
     @IBOutlet weak var personTF: SearchTextField!
@@ -245,9 +246,25 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
 //            return false
 //        }
 //    }
+    var setting: settingObserve? = nil
+    var settingObser: settingObserver? = nil
+    func changedHideAmountValue(value: Bool) {
+        amount.isSecureTextEntry = value
+    }
+    func changedCurrency(value: Int) {
+        unit.text = currencyBase().symbol[value]
+    }
     override func viewDidLoad() {
+        
         selectTypeRecord.semanticContentAttribute = .forceRightToLeft
         userInfor = realm.objects(User.self)[0]
+    
+        setting = settingObserve(user: userInfor!)
+        settingObser = settingObserver(object: setting!)
+        setting?.delegate = self
+        amount.isSecureTextEntry = userInfor!.isHideAmount
+        unit.text = currencyBase().symbol[userInfor!.currency]
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         super.viewDidLoad()
@@ -259,7 +276,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
 
     @IBAction func clickSave(_ sender: Any) {
         
-        let _amount = Float(amount.text ?? "0")
+        var _amount = Float(amount.text ?? "0")
         if _amount == 0 || amount.text == ""
         {
             print("You have to enter amount!")
@@ -291,6 +308,10 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
             print("You have to choose account for this action!")
             SCLAlertView().showError("You have to choose source account!", subTitle: "")
             return
+        }
+        if userInfor!.currency != 0
+        {
+            _amount = _amount! / Float(currencyBase().valueBaseDolar[userInfor!.currency])
         }
         try! realm.write{
         if type == 2 {

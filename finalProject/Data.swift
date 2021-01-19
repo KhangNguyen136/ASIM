@@ -9,8 +9,13 @@ import Foundation
 import RealmSwift
 import SCLAlertView
 import FirebaseDatabase
-
-
+	
+struct currencyBase{
+    let nameEnglish = ["Dollar ($)","Vietnamese Dong (VND)","Japanese Yen","Chinese Yuan","Euro","Korean Won"]
+    let nameVietnamese = ["Đô la ($)","Việt Nam đồng (VNĐ)","Yen Nhật Bản","Nhân dân tệ","Euro","Won Hàn Quốc"]
+    let symbol = ["$","VND","Yen","Yuan","Euro","Won"]
+    var valueBaseDolar = [1,23255,104.5,6.5,0.84,900]
+}
 struct categoryValues {
     let expense = [
                     ["Food and Dining", "Bars and Coffee","Groceries","Restaurant"],
@@ -48,7 +53,7 @@ class User: Object{
     @objc dynamic var isVietnamese: Bool = false
     @objc dynamic var defaultScreen = 0
     @objc dynamic var dateFormat = "dd/MM/yyyy"
-    @objc dynamic var isVietnamDong = false
+    @objc dynamic var currency = 1
     @objc dynamic var isHideAmount = false
     
     @objc dynamic var isChangedRecords: Bool = true
@@ -453,9 +458,9 @@ class User: Object{
         tempRef.removeValue()
         tempRef.setValue(isHideAmount)
         
-        tempRef = ref.child("users").child(username).child("isVietnamDong")
+        tempRef = ref.child("users").child(username).child("currency")
         tempRef.removeValue()
-        tempRef.setValue(isVietnamDong)
+        tempRef.setValue(currency)
         
         try! realm?.write{
             lastSync = Date()
@@ -519,7 +524,7 @@ class User: Object{
             isMale = data!["isMale"] as! Bool
             
             isVietnamese = data!["isVietnamese"] as! Bool
-            isVietnamDong = data!["isVietnamese"] as! Bool
+            currency = data!["currency"] as! Int
             defaultScreen = data!["defaultScreen"] as! Int
             dateFormat = data!["dateFormat"] as! String
             isHideAmount = data!["isHideAmount"] as! Bool
