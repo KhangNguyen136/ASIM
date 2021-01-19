@@ -21,6 +21,7 @@ class accountVC: UIViewController {
                           .font: UIFont(name: "MarkerFelt-Thin", size: 20)!]
        print(Realm.Configuration.defaultConfiguration.fileURL!)
         let realm = try! Realm()
+        Notify().showAll()
        // try! realm.write {
           //  realm.deleteAll()
         //}

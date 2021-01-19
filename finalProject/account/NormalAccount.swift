@@ -23,7 +23,7 @@ class NormalAccount: UIViewController, updateDataDelegate {
             
         }
         lblBalance.text = String(balance)
-        lblCurrency.text = ".đ"
+        lblCurrency.text = ".$"
         tableView.reloadData()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -182,9 +182,18 @@ extension NormalAccount: UITableViewDelegate, UITableViewDataSource {
                 return 0
             }
         }
-        return 60
+        return 50
     }
-  
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let scr=self.storyboard?.instantiateViewController(withIdentifier: "DetailAccount") as! DetailAccount
+        if indexPath.section == 0{
+            scr.Acc = self.activeAccount[indexPath.row]
+        }
+        else{
+            scr.Acc = self.blockedAccount[indexPath.row]
+        }
+        self.navigationController!.pushViewController(scr, animated: true)
+    }
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "Delete"){
             (action, view, nil) in
@@ -198,6 +207,19 @@ extension NormalAccount: UITableViewDelegate, UITableViewDataSource {
    
                 if indexPath.section == 0{
                   let account = Array(realm.objects(polyAccount.self).filter("type == 2"))
+                //Xoa account, xoá record liên quan
+                let record = Array(realm.objects(polyRecord.self))
+                for tempRecord in record{
+                    let srcAcc = tempRecord.srcAccount()
+                    if srcAcc.getname() == self.activeAccount[indexPath.row].cashAcc!.name{
+                        tempRecord.del()
+                    }
+                    else if srcAcc.getname() == self.activeAccount[indexPath.row].bankingAcc!.name{
+                        tempRecord.del()
+                    }
+                }
+               
+                //Xoá account, xoá saving account liên quan
                   for acc in account{
                       let sav = acc.savingAcc
                       if sav!.state == false{
@@ -215,10 +237,40 @@ extension NormalAccount: UITableViewDelegate, UITableViewDataSource {
                   }
                     obj = self.activeAccount[indexPath.row]
                     obj.del()
+                
                 }
                 else if indexPath.section == 1{
-                   obj = self.blockedAccount[indexPath.row]
-                    obj.del()
+                   let account = Array(realm.objects(polyAccount.self).filter("type == 2"))
+                    //Xoa account, xoá record liên quan
+                    let record = Array(realm.objects(polyRecord.self))
+                    for tempRecord in record{
+                        let srcAcc = tempRecord.srcAccount()
+                        if srcAcc.getname() == self.blockedAccount[indexPath.row].cashAcc!.name{
+                            tempRecord.del()
+                        }
+                        else if srcAcc.getname() == self.blockedAccount[indexPath.row].bankingAcc!.name{
+                            tempRecord.del()
+                        }
+                    }
+                   
+                    //Xoá account, xoá saving account liên quan
+                      for acc in account{
+                          let sav = acc.savingAcc
+                          if sav!.state == false{
+                              if sav?.srcAccount?.type == 0{
+                                  if sav?.srcAccount?.cashAcc?.id == self.blockedAccount[indexPath.row].cashAcc?.id{
+                                      acc.del()
+                                  }
+                              }
+                              else{
+                                  if sav?.srcAccount?.bankingAcc?.id == self.blockedAccount[indexPath.row].bankingAcc?.id{
+                                      acc.del()
+                                  }
+                              }
+                          }
+                      }
+                        obj = self.blockedAccount[indexPath.row]
+                        obj.del()
                 }
 
                 

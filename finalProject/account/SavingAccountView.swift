@@ -48,7 +48,7 @@ class SavingAccountView: UIViewController {
         for bal in self.activeAcc{
             total += bal.savingAcc!.ammount
        }
-        lblamount.text = "\(total)"
+        lblamount.text = "\(total) $"
         lblNumAcc.text = "(\(self.activeAcc.count) account)"
    }
 }
@@ -71,21 +71,22 @@ extension SavingAccountView: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "AllSavingAccountCell", for: indexPath) as! AllSavingAccountCell
         if indexPath.section == 0{
         cell.imgIcon.image = UIImage(named: "bank")
-            cell.lblName.text = activeAcc[indexPath.row].savingAcc!.bank
+            cell.lblName.text = infoChoice().bankName[activeAcc[indexPath.row].savingAcc!.bank]
             cell.lblRate.text = "\( activeAcc[indexPath.row].savingAcc!.interestRate)%"
         let dateFormatter = DateFormatter()
                dateFormatter.dateFormat = "MM/dd/yyyy"
             cell.lblDate.text = dateFormatter.string(from: activeAcc[indexPath.row].savingAcc!.startdate)
-            cell.lblAmount.text = "\(activeAcc[indexPath.row].savingAcc!.ammount) đ"
+            cell.lblAmount.text =  "\(round((activeAcc[indexPath.row].savingAcc!.ammount)*Float(currencyBase().valueBaseDolar[activeAcc[indexPath.row].savingAcc!.currency]))) \(currencyBase().symbol[activeAcc[indexPath.row].savingAcc!.currency])"
         }
         else{
             cell.imgIcon.image = UIImage(named: "bank")
-            cell.lblName.text = closeAcc[indexPath.row].savingAcc!.bank
+            cell.lblName.text = infoChoice().bankName[closeAcc[indexPath.row].savingAcc!.bank]
+                
             cell.lblRate.text = "\( closeAcc[indexPath.row].savingAcc!.interestRate)%"
             let dateFormatter = DateFormatter()
                    dateFormatter.dateFormat = "MM/dd/yyyy"
             cell.lblDate.text = dateFormatter.string(from: closeAcc[indexPath.row].savingAcc!.startdate)
-            cell.lblAmount.text = "\(closeAcc[indexPath.row].savingAcc!.ammount) đ"
+            cell.lblAmount.text = "\(round((closeAcc[indexPath.row].savingAcc!.ammount)*Float(currencyBase().valueBaseDolar[closeAcc[indexPath.row].savingAcc!.currency]))) \(currencyBase().symbol[closeAcc[indexPath.row].savingAcc!.currency])"
             
         }
         //

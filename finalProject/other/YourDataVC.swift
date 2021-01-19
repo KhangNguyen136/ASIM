@@ -112,7 +112,7 @@ class yourDataVC: UITableViewController {
                 tempRef.child("currency").setValue(tempAcc?.currency)
                 tempRef.child("active").setValue(tempAcc?.active)
                 tempRef.child("descrip").setValue(tempAcc?.descrip)
-                tempRef.child("bankName").setValue(tempAcc?.bankName)
+                tempRef.child("bankName").setValue(tempAcc?.bank)
             default:
                 let tempAcc = i.savingAcc
                 tempRef.child("type").setValue(2)
@@ -384,11 +384,25 @@ class yourDataVC: UITableViewController {
                         tempPolyAcc.bankingAcc = BankingAccount()
                         tempPolyAcc.bankingAcc?.id = temp["id"] as! Int
                         tempPolyAcc.bankingAcc?.name = temp["name"] as! String
-                        tempPolyAcc.bankingAcc?.currency = temp["currency"] as! String
+                        let currencybase = currencyBase().nameEnglish
+                        switch temp["currency"] as! String{
+                        case currencybase[0]:
+                            tempPolyAcc.bankingAcc?.currency = 0
+                        case currencybase[1]:
+                            tempPolyAcc.bankingAcc?.currency = 1
+                        case currencybase[2]:
+                        tempPolyAcc.bankingAcc?.currency = 2
+                        case currencybase[3]:
+                        tempPolyAcc.bankingAcc?.currency = 3
+                        case currencybase[4]:
+                        tempPolyAcc.cashAcc?.currency = 4
+                        default:
+                            tempPolyAcc.bankingAcc?.currency = 5
+                        }
                         tempPolyAcc.bankingAcc?.balance = temp["balance"] as! Float
                         tempPolyAcc.bankingAcc?.active = temp["active"] as! Bool
                         tempPolyAcc.bankingAcc?.descrip = temp["descrip"] as! String
-                        tempPolyAcc.bankingAcc?.bankName = temp["bankName"] as! String
+                        tempPolyAcc.bankingAcc?.bank = temp["bank"] as! Int
                         
                         result.append(tempPolyAcc)
                     }
@@ -397,7 +411,22 @@ class yourDataVC: UITableViewController {
                         tempPolyAcc.cashAcc = Account()
                         tempPolyAcc.cashAcc?.id = temp["id"] as! Int
                         tempPolyAcc.cashAcc?.name = temp["name"] as! String
-                        tempPolyAcc.cashAcc?.currency = temp["currency"] as! String
+                        let currencybase = currencyBase().nameEnglish
+                        switch temp["currency"] as! String{
+                        case currencybase[0]:
+                            tempPolyAcc.cashAcc?.currency = 0
+                        case currencybase[1]:
+                            tempPolyAcc.cashAcc?.currency = 1
+                        case currencybase[2]:
+                        tempPolyAcc.cashAcc?.currency = 2
+                        case currencybase[3]:
+                        tempPolyAcc.cashAcc?.currency = 3
+                        case currencybase[4]:
+                        tempPolyAcc.cashAcc?.currency = 4
+                        
+                        default:
+                            tempPolyAcc.cashAcc?.currency = 5
+                        }
                         tempPolyAcc.cashAcc?.balance = temp["balance"] as! Float
                         tempPolyAcc.cashAcc?.active = temp["active"] as! Bool
                         tempPolyAcc.cashAcc?.descrip = temp["descrip"] as! String
@@ -443,7 +472,7 @@ class yourDataVC: UITableViewController {
                         tempExpense.amount = temp["amount"] as! Float
 //                        find account by id
                         let srcAccountID = temp["srcAccount"] as! Int
-                        tempExpense.srcAccount = userInfor?.getAccountByID(id: srcAccountID)
+                        tempExpense.srcAccount = self.userInfor?.getAccountByID(id: srcAccountID)
                         tempExpense.category = temp["category"] as! Int
                         tempExpense.detailCategory = temp["detailCategory"] as! Int
                         tempExpense.payee = temp["payee"] as! String
@@ -475,7 +504,7 @@ class yourDataVC: UITableViewController {
                         //find account by id
                         let srcAccountID = temp["srcAccount"] as! Int
                         tempIncome.id = temp["id"] as! Int
-                        tempIncome.srcAccount = userInfor?.getAccountByID(id: srcAccountID)
+                        tempIncome.srcAccount = self.userInfor?.getAccountByID(id: srcAccountID)
                         tempIncome.category = temp["category"] as! Int
                         tempIncome.payer = temp["payer"] as! String
                         tempIncome.event = temp["event"] as! String
@@ -503,7 +532,7 @@ class yourDataVC: UITableViewController {
                         tempLend.amount = temp["amount"] as! Float
                         //find account by id
                         let srcAccountID = temp["srcAccount"] as! Int
-                        tempLend.srcAccount = userInfor?.getAccountByID(id: srcAccountID)
+                        tempLend.srcAccount = self.userInfor?.getAccountByID(id: srcAccountID)
                         tempLend.remain = temp["remain"] as! Float
                         tempLend.over = temp["over"] as! Float
                         tempLend.borrower = temp["borrower"] as! String
@@ -532,7 +561,7 @@ class yourDataVC: UITableViewController {
                         tempBorrow.amount = temp["amount"] as! Float
                         //find account by id
                         let srcAccountID = temp["srcAccount"] as! Int
-                        tempBorrow.srcAccount = userInfor?.getAccountByID(id: srcAccountID)
+                        tempBorrow.srcAccount = self.userInfor?.getAccountByID(id: srcAccountID)
                         
                         tempBorrow.remain = temp["remain"] as! Float
                         tempBorrow.over = temp ["over"] as! Float
@@ -563,10 +592,10 @@ class yourDataVC: UITableViewController {
                         tempTransfer.amount = temp["amount"] as! Float
                         //find srcAccount by id
                         let srcAccountID = temp["srcAccount"] as! Int
-                        tempTransfer.srcAccount = userInfor?.getAccountByID(id: srcAccountID)
+                        tempTransfer.srcAccount = self.userInfor?.getAccountByID(id: srcAccountID)
                         //find destAccount by id
                         let destAccountID = temp["destinationAccount"] as! Int
-                        tempTransfer.destinationAccount = userInfor?.getAccountByID(id: destAccountID)
+                        tempTransfer.destinationAccount = self.userInfor?.getAccountByID(id: destAccountID)
                         tempTransfer.location = temp["location"] as! String
                         tempTransfer.descript = temp["descript"] as! String
                         //get date by timeInterval
@@ -595,7 +624,7 @@ class yourDataVC: UITableViewController {
                         tempAdjustment.detailCategory = temp["detailCategory"] as! Int
                         //find srcAccount by id
                         let srcAccountID = temp["srcAccount"] as! Int
-                        tempAdjustment.srcAccount = userInfor?.getAccountByID(id: srcAccountID)
+                        tempAdjustment.srcAccount = self.userInfor?.getAccountByID(id: srcAccountID)
                         
                         tempAdjustment.location = temp["location"] as! String
                         tempAdjustment.descript = temp["descript"] as! String
@@ -621,7 +650,7 @@ class yourDataVC: UITableViewController {
                     for index in 0...parentIndex.count-1
                 {
                     //get record by id
-                    let temp = findRecordByID(arr: result,id: childID[index])
+                    let temp = self.findRecordByID(arr: result,id: childID[index])
                         switch result[parentIndex[index]].type {
                         case 0:
                             result[parentIndex[index]].expense?.borrowRecord = temp
@@ -685,7 +714,7 @@ class yourDataVC: UITableViewController {
         })
         msg.addButton("Yes", action: { [self] in
             print("Reload data begin...")
-            reloadDataFromFirebase()
+            self.reloadDataFromFirebase()
             print("Reload data end.")
         })
         msg.showWarning("Reload data will delete all current data.", subTitle: "Your data will be replaced by data you had been sync last time. Do you want to continue?")
@@ -742,24 +771,24 @@ class yourDataVC: UITableViewController {
             if let accounts = accountArrayClosure
             {
                 try! self.realm.write{
-                    realm.add(accounts)
-                    userInfor?.accounts.append(objectsIn: accounts)
+                    self.realm.add(accounts)
+                    self.userInfor?.accounts.append(objectsIn: accounts)
                 }
-                reloadRecords{ recordArrayClosure in
+                self.reloadRecords{ recordArrayClosure in
                     if let records = recordArrayClosure
                     {
-                        try! realm.write{
-                        realm.add(records)
-                        userInfor?.records.append(objectsIn: records)
+                        try! self.realm.write{
+                            self.realm.add(records)
+                            self.userInfor?.records.append(objectsIn: records)
                         }
                         ProgressHUD.dismiss()
-                        reloadView()
+                        self.reloadView()
                         SCLAlertView().showSuccess("Data reloaded successfully!", subTitle: "")
                     }
                     else
                     {
                     ProgressHUD.dismiss()
-                    reloadView()
+                        self.reloadView()
                     SCLAlertView().showSuccess("Data reloaded successfully with no record!", subTitle: "")
                     }
                 }
@@ -767,7 +796,7 @@ class yourDataVC: UITableViewController {
             else
             {
                 ProgressHUD.dismiss()
-                reloadView()
+                self.reloadView()
                 SCLAlertView().showSuccess("Data reloaded successfully with no account!", subTitle: "")
             }
         }
@@ -794,7 +823,7 @@ class yourDataVC: UITableViewController {
                 })
                 msg.addButton("Yes", action: { [self] in
                     print("Reset data begin")
-                    resetAllData()
+                    self.resetAllData()
                     print("Reset data end.")
                     return
                 })

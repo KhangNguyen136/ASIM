@@ -13,13 +13,13 @@ class ChoiceAccountView: UIViewController {
     var bankingMode:Bool = false
     var timeMode: Bool = false
     var termmMode: Bool = false
-    let currencyLabel = ["Vietnamese Dong", "United States Dollar"]
+    let currencyLabel = currencyBase().nameEnglish
     let accountLabel = ["Cash", "Banking Account"]
-    let abbrName = ["ACB", "TPBank","DAB","SeABank","ABBANK","BacABank","VietCapitalBank","MSB","TCB","KienLongBank","Nam A Bank","NCB","VPBank","HDBank","OCB","MB","PVcombank","VIB","SCB","SGB","SHB","STB","VAB","BVB","VietBank","PG Bank","EIB","LPB","VCB","CTG","BIDV","NHCSXH/VBSP","VDB","CB","Oceanbank","GPBank","Agribank"]
-    let bankName = ["Ngân hàng Á Châu","Ngân hàng Tiên Phong","Ngân hàng Đông Á","Ngân hàng Đông Nam Á","Ngân hàng An Bình","Ngân hàng Bắc Á","Ngân hàng Bản Việt","Hàng Hải Việt Nam","Kỹ Thương Việt Nam","Kiên Long","Nam Á","Quốc Dân","Việt Nam Thịnh Vượng","Phát triển nhà Thành phố Hồ Chí Minh","Phương Đông","Quân đội","Đại chúng","Quốc tế","Sài Gòn","Sài Gòn Công Thương","Sài Gòn-Hà Nội","Sài Gòn Thương Tín","Việt Á","Bảo Việt","Việt Nam Thương Tín","Xăng dầu Petrolimex","Xuất Nhập khẩu Việt Nam","Bưu điện Liên Việt","Ngoại thương Việt Nam","Công Thương Việt Nam","Đầu tư và Phát triển Việt Nam","Ngân hàng Chính sách xã hội","Ngân hàng Phát triển Việt Nam","Ngân hàng Xây dựng","Ngân hàng Đại Dương","Ngân hàng Dầu Khí Toàn Cầu","Ngân hàng Nông nghiệp và Phát triển Nông thôn VN"]
-    let bankImg = ["bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank"]
-    let howLong = ["1 month", "3 months", "6 months","1 year","2 years","5 years", "10 years", "other"]
-    let term = ["1 week","2 weeks", "3 weeks","1 month", "3 months", "6 months","12 months"]
+    let abbrName = infoChoice().abbrName
+    let bankName = infoChoice().bankName
+    let bankImg = infoChoice().abbrName
+    let howLong = infoChoice().howLong
+    let term = infoChoice().term
     //var backgroundImage: UIImageView!
     override func viewDidLoad() {
         
@@ -107,23 +107,15 @@ extension ChoiceAccountView: UITableViewDataSource, UITableViewDelegate {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if currencyMode == true {
-            if indexPath.row == 1{
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "currNotification"), object: nil, userInfo: ["currency": "USD"])
-            }
-            else {
-               NotificationCenter.default.post(name: NSNotification.Name(rawValue: "currNotification"), object: nil, userInfo: ["currency": "VND"])
-            }
-            //dismiss(animated: true, completion: nil)
-            self.navigationController?.popViewController(animated: true)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "currNotification"), object: nil, userInfo: ["currency": "\(indexPath.row)"])
+             self.navigationController?.popViewController(animated: true)
         }
         else if bankingMode == true{
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bankNotification"), object: nil, userInfo: ["nameBank": "Ngân hàng \(abbrName[indexPath.row])","imgBank":"\(bankImg[indexPath.row])"])
-            //dismiss(animated: true, completion: nil)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "bankNotification"), object: nil, userInfo: ["bank": "\(indexPath.row)"])
             self.navigationController?.popViewController(animated: true)
         }
         else if accountMode == true{
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "accountNotification"), object: nil, userInfo: ["accountType": accountLabel[indexPath.row]])
-            //dismiss(animated: true, completion: nil)
             self.navigationController?.popViewController(animated: true)
         }
         else if timeMode == true{

@@ -11,6 +11,8 @@
 		575A6A58CE9DE50D718ADAE3 /* Pods_finalProject_finalProjectUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0441D9C958AB7E390FACFC87 /* Pods_finalProject_finalProjectUITests.framework */; };
 		9FD178A20D2CA1DE9A3FEF52 /* Pods_finalProjectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F3FE369D7F62F58B0093548 /* Pods_finalProjectTests.framework */; };
 		DE19306F2590883C001B5D53 /* DepositView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE19306E2590883C001B5D53 /* DepositView.swift */; };
+		DE76212E25B16A3A006EAA59 /* DetailAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE76212D25B16A39006EAA59 /* DetailAccount.swift */; };
+		DE76213025B17756006EAA59 /* DetailAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE76212F25B17756006EAA59 /* DetailAccountCell.swift */; };
 		DE84DA1A2592303800E7D4D0 /* AllSavingAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE84DA192592303800E7D4D0 /* AllSavingAccountCell.swift */; };
 		DEAC0A692590C87A0000F378 /* PickAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAC0A682590C87A0000F378 /* PickAccountView.swift */; };
 		DEAC0A6B2590C89A0000F378 /* PickAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAC0A6A2590C89A0000F378 /* PickAccountCell.swift */; };
@@ -109,6 +111,8 @@
 		A86DEE0A7FBF21E354ABA869 /* Pods-finalProject-finalProjectUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-finalProject-finalProjectUITests.debug.xcconfig"; path = "Target Support Files/Pods-finalProject-finalProjectUITests/Pods-finalProject-finalProjectUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		AA01FDC3187D05B28034DA42 /* Pods_finalProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_finalProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE19306E2590883C001B5D53 /* DepositView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepositView.swift; sourceTree = "<group>"; };
+		DE76212D25B16A39006EAA59 /* DetailAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAccount.swift; sourceTree = "<group>"; };
+		DE76212F25B17756006EAA59 /* DetailAccountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAccountCell.swift; sourceTree = "<group>"; };
 		DE84DA192592303800E7D4D0 /* AllSavingAccountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllSavingAccountCell.swift; sourceTree = "<group>"; };
 		DEAC0A682590C87A0000F378 /* PickAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickAccountView.swift; sourceTree = "<group>"; };
 		DEAC0A6A2590C89A0000F378 /* PickAccountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickAccountCell.swift; sourceTree = "<group>"; };
@@ -312,6 +316,8 @@
 				DEAC0A682590C87A0000F378 /* PickAccountView.swift */,
 				DEAC0A6A2590C89A0000F378 /* PickAccountCell.swift */,
 				DE84DA192592303800E7D4D0 /* AllSavingAccountCell.swift */,
+				DE76212D25B16A39006EAA59 /* DetailAccount.swift */,
+				DE76212F25B17756006EAA59 /* DetailAccountCell.swift */,
 			);
 			path = account;
 			sourceTree = "<group>";
@@ -744,6 +750,7 @@
 				F156B53A25A839FE0022DCF2 /* DetailAccumulate.swift in Sources */,
 				F156B53925A839FE0022DCF2 /* DetailSavingCell.swift in Sources */,
 				F1538C50257DE79200531002 /* reportVC.swift in Sources */,
+				DE76213025B17756006EAA59 /* DetailAccountCell.swift in Sources */,
 				F160D6FC2597298900ACB5AD /* YourDataVC.swift in Sources */,
 				DEFDCC09258F81EB00A0FDDB /* BankingCell.swift in Sources */,
 				F1538C5E257DE79200531002 /* selectCategoryVC.swift in Sources */,
@@ -754,6 +761,7 @@
 				DEFDCC0A258F81EB00A0FDDB /* AddAccountView.swift in Sources */,
 				F1547C3A256B18B9001CD0AB /* SceneDelegate.swift in Sources */,
 				F1538C51257DE79200531002 /* otherVC.swift in Sources */,
+				DE76212E25B16A3A006EAA59 /* DetailAccount.swift in Sources */,
 				F1564746259465A700365C23 /* imagePicker.swift in Sources */,
 				F1538C5B257DE79200531002 /* selectAccountVC.swift in Sources */,
 				F15748822597FE4100DBF2F9 /* addLendOrBorrowVC.swift in Sources */,

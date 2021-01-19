@@ -38,7 +38,7 @@ class homeVC: UIViewController {
         let temp = realm.objects(User.self)
         if temp.isEmpty
         {
-            SCLAlertView().showError("User error!", subTitle: "")
+          SCLAlertView().showError("User error!", subTitle: "")
 //            try! realm.write{
 //            realm.add(User())
 //            }

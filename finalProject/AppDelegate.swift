@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if Auth.auth().currentUser != nil
             {
                 print("Singed in.")
+                print(Realm.Configuration.defaultConfiguration.fileURL!)
                 let realm = try! Realm()
 //                let userInfor = realm.objects(User.self)[0]
                 let userInfor = User()

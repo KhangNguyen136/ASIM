@@ -13,7 +13,7 @@ protocol delegateUpdate {
 }
 class AddAccumulateView: UIViewController, UITextFieldDelegate {
     var delegate: delegateUpdate?
-    var editID: Int = 0
+    var editGoal: String = ""
     var editMode = false
     @IBOutlet weak var txtbalance: UITextField!
     
@@ -70,7 +70,7 @@ class AddAccumulateView: UIViewController, UITextFieldDelegate {
     }
     func loadEditView(){
         let realm = try! Realm()
-        let obj = realm.objects(Accumulate.self).filter("id == \(editID)").first as! Accumulate
+        let obj = realm.objects(Accumulate.self).filter("goal == \(editGoal)").first!
         lblgoal.text = obj.goal
         lblCurrency.text = obj.currency
         let dateFormatter = DateFormatter()
@@ -94,7 +94,7 @@ class AddAccumulateView: UIViewController, UITextFieldDelegate {
     }
     @IBAction func saveEditedAccumulate(_ sender: Any) {
         let realm = try! Realm()
-        let obj = realm.objects(Accumulate.self).filter("id == \(editID)").first as! Accumulate
+        let obj = realm.objects(Accumulate.self).filter("goal == \(editGoal)").first as! Accumulate
         //Edit accumulate
          let acc = Accumulate()
          let dateFormatter = DateFormatter()
@@ -209,7 +209,7 @@ class AddAccumulateView: UIViewController, UITextFieldDelegate {
         let alertView = SCLAlertView(appearance: appearance)
         alertView.addButton("OK") {
             let realm = try! Realm()
-            let obj = realm.objects(Accumulate.self).filter("id == \(self.editID)")
+            let obj = realm.objects(Accumulate.self).filter("goal == \(self.editGoal)")
             try! realm.write {
                         realm.delete(obj)
                     }
@@ -254,9 +254,7 @@ class AddAccumulateView: UIViewController, UITextFieldDelegate {
         else {
             acc.includeReport = true
         }
-       try! realm.write {
-            realm.add(acc)
-            }
+        acc.add()
         delegate?.loadTable()
        //dismiss(animated: true, completion: nil)
         self.navigationController?.popViewController(animated: true)

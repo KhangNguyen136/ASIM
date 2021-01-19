@@ -266,42 +266,42 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
         )
         let msg = SCLAlertView(appearance: appearance)
         msg.addButton("Yes", action: { [self] in
-            try! realm.write{
-            if record?.isUploaded == true
+            try! self.realm.write{
+                if self.record?.isUploaded == true
             {
                 //mark record to be deleted and delete it when sync
-                record?.isDeleted = true
-                if record?.type == 0
+                self.record?.isDeleted = true
+                if self.record?.type == 0
                 {
-                    record?.expense?.undoTransaction()
+                    self.record?.expense?.undoTransaction()
                     print("Mark an expense as deleted!")
                 }
                 else
                 {
-                    record?.income?.undoTransaction()
+                    self.record?.income?.undoTransaction()
                     print("Deleted ab income as deleted!")
                 }
             }
             else
             {
-                if record?.type == 0
+                if self.record?.type == 0
                 {
-                    record?.expense?.undoTransaction()
-                    realm.delete((record?.expense)!)
+                    self.record?.expense?.undoTransaction()
+                    self.realm.delete((self.record?.expense)!)
                     print("Deleted a expense!")
                 }
                 else
                 {
-                    record?.income?.undoTransaction()
-                    realm.delete((record?.income)!)
+                    self.record?.income?.undoTransaction()
+                    self.realm.delete((self.record?.income)!)
                     print("Deleted a income!")
                 }
                 //remove value in database
-                realm.delete(record!)
+                self.realm.delete(self.record!)
             }
             }
             SCLAlertView().showSuccess("Transaction deleted!", subTitle: "")
-            historyDelegate?.editedRecord()
+            self.historyDelegate?.editedRecord()
             self.navigationController?.popViewController(animated: false)
         })
         msg.addButton("No", action: {

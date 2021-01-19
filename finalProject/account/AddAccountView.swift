@@ -17,14 +17,14 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
     var delegate: updateDataDelegate?
     var nameAccount: String = "Account name"
     var descAccount: String = "Description"
-    var currency: String = "VND"
+    var currency: String = "Vietnamese Dong (VND)"
     var account: String = "Cash"
     var bankName = "Bank Name"
     var imgName = "bank"
     //Edit mode
     var active = true
     var balance: String = "0"
-
+    var bank = 0
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var lblCurrency: UILabel!
@@ -34,17 +34,23 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
         
         super.viewDidLoad()
         if editMode == true {
+            let currencybase = currencyBase().nameEnglish
+            
             if editAcc.type == 0{
+                currency = currencyBase().nameEnglish[editAcc.cashAcc!.currency]
+                lblCurrency.text = currencyBase().symbol[editAcc.cashAcc!.currency]
                 account = "Cash"
-                balance = "\(editAcc.cashAcc?.balance as! Float)"
+                balance = "\(round((editAcc.cashAcc?.balance as! Float)*Float(currencyBase().valueBaseDolar[editAcc.cashAcc!.currency])))"
                 nameAccount = editAcc.cashAcc!.name
                 active = editAcc.cashAcc!.active
                 
             }
             else{
+                currency = currencyBase().nameEnglish[editAcc.bankingAcc!.currency]
+                lblCurrency.text = currencyBase().symbol[editAcc.bankingAcc!.currency]
                 account = "Banking Account"
-                bankName = editAcc.bankingAcc!.bankName
-                balance = "\(editAcc.bankingAcc?.balance as! Float)"
+                bankName = infoChoice().bankName[editAcc.bankingAcc!.bank]
+                balance = "\(round((editAcc.bankingAcc?.balance as! Float)*Float(currencyBase().valueBaseDolar[editAcc.bankingAcc!.currency])))"
                 nameAccount = editAcc.bankingAcc!.name
                 active = editAcc.bankingAcc!.active
             }
@@ -99,19 +105,20 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
         
     }
     @objc func updateCurrency (notification: Notification){
-        currency = notification.userInfo?["currency"] as! String
-        if currency == "VND" {
-            lblCurrency.text = ".đ"
-        }
-        else {
-            lblCurrency.text = ".$"
-        }
+        let index = notification.userInfo!["currency"] as! String
+
+        lblCurrency.text = currencyBase().symbol[Int(index)!]
+        currency = currencyBase().nameEnglish[Int(index)!]
+       
+        
         self.view.layoutIfNeeded()
         tableView.reloadData()
     }
     @objc func updateBankName (notification: Notification){
-        bankName = notification.userInfo?["nameBank"] as! String
-        imgName = notification.userInfo?["imgBank"] as! String
+        let index = notification.userInfo?["bank"] as! String
+        self.bank = Int(index)!
+        bankName = infoChoice().bankName[Int(index)!]
+        imgName = infoChoice().bankImg[Int(index)!]
         tableView.reloadData()
     }
     @objc func updateAccountType(notification: Notification){
@@ -121,6 +128,7 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
 
 
     @IBAction func savebtn(_ sender: Any) {
+        let realm = try! Realm()
         let indexName = IndexPath(row: 0, section: 0)
         let indexDes = IndexPath(row: 3, section: 0)
         let cellName: NameAccountViewCell = self.tableView.cellForRow(at: indexName) as! NameAccountViewCell
@@ -130,6 +138,13 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
             Notice().showAlert(content: "Please input Name Account")
             return
         }
+        let Acc = realm.objects(polyAccount.self).filter("type != 2")
+        for a in Acc{
+            if name == a.getname(){
+                Notice().showAlert(content: "Name existed")
+                return
+            }
+        }
         let des = cellDes.txtNameAcocunt.text!
         if txtMoney.text! == "0"{
             Notice().showAlert(content: "Please input balance")
@@ -137,8 +152,25 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
         }
         if account == "Cash"{
             let acc = Account()
-            acc.balance = Float(txtMoney.text!)!
-            acc.currency = self.currency
+            
+            let currencybase = currencyBase().nameEnglish
+            print(self.currency)
+            switch self.currency {
+            case currencybase[0]:
+                acc.currency = 0
+            case currencybase[1]:
+                acc.currency = 1
+            case currencybase[2]:
+            acc.currency = 2
+            case currencybase[3]:
+            acc.currency = 3
+            case currencybase[4]:
+            acc.currency = 4
+            
+            default:
+                acc.currency = 5
+            }
+            acc.balance = (Float(txtMoney.text!)!) / Float( currencyBase().valueBaseDolar[acc.currency])
             acc.name = name
             acc.descrip = des
             acc.includeReport = false
@@ -166,11 +198,26 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
                     let bankName = cellbankName.lblType.text!
                     let acc = BankingAccount()
                     acc.balance = Float(txtMoney.text!)!
-                    acc.currency = self.currency
+                    let currencybase = currencyBase().nameEnglish
+                    switch self.currency {
+                    case currencybase[0]:
+                        acc.currency = 0
+                    case currencybase[1]:
+                        acc.currency = 1
+                    case currencybase[2]:
+                    acc.currency = 2
+                    case currencybase[3]:
+                    acc.currency = 3
+                    case currencybase[4]:
+                    acc.currency = 4
+                    
+                    default:
+                        acc.currency = 5
+                    }
                     acc.name = name
                     acc.descrip = des
                     acc.includeReport = false
-                    acc.bankName = bankName
+                    acc.bank = bank
                     acc.add()
                 }
                     //let updAccount = 
@@ -188,13 +235,28 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
             let cellbankName: AddAcountViewCell = self.tableView.cellForRow(at: index) as! AddAcountViewCell
             let bankName = cellbankName.lblType.text!
             let acc = BankingAccount()
-            acc.balance = Float(txtMoney.text!)!
-            acc.currency = self.currency
+            let currencybase = currencyBase().nameEnglish
+            switch self.currency {
+            case currencybase[0]:
+                acc.currency = 0
+            case currencybase[1]:
+                acc.currency = 1
+            case currencybase[2]:
+            acc.currency = 2
+            case currencybase[3]:
+            acc.currency = 3
+            case currencybase[4]:
+            acc.currency = 4
+            default:
+                acc.currency = 5
+            }
+            acc.balance = (Float(txtMoney.text!)!) / Float( currencyBase().valueBaseDolar[acc.currency])
+            
+            
             acc.name = name
             acc.descrip = des
             acc.includeReport = false
-            acc.bankName = bankName
-            let realm = try! Realm()
+            acc.bank = bank
             if editMode == false{
                 acc.add()
                 
@@ -207,7 +269,7 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
                         editAcc.bankingAcc?.balance = acc.balance
                         editAcc.bankingAcc?.currency = acc.currency
                         editAcc.bankingAcc?.descrip = acc.descrip
-                        editAcc.bankingAcc?.bankName = acc.bankName
+                        editAcc.bankingAcc?.bank = acc.bank
                         
                         editAcc.isChanged = true
                     }
@@ -216,7 +278,22 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
                     editAcc.del()
                     let acc = Account()
                     acc.balance = Float(txtMoney.text!)!
-                    acc.currency = self.currency
+                    let currencybase = currencyBase().nameEnglish
+                    switch self.currency {
+                    case currencybase[0]:
+                        acc.currency = 0
+                    case currencybase[1]:
+                        acc.currency = 1
+                    case currencybase[2]:
+                    acc.currency = 2
+                    case currencybase[3]:
+                    acc.currency = 3
+                    case currencybase[4]:
+                    acc.currency = 4
+                    
+                    default:
+                        acc.currency = 5
+                    }
                     acc.name = name
                     acc.descrip = des
                     acc.includeReport = false
@@ -292,7 +369,7 @@ extension AddAccountView: UITableViewDelegate, UITableViewDataSource{
           return UITableViewCell()
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return 50
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 1{

@@ -43,12 +43,12 @@ class loginVC: UITableViewController {
             {
                 print(authResult!.description)
                 let userInfo = Auth.auth().currentUser
-                userInforRealm = User()
-                userInforRealm!.username = userInfo!.uid
-                try! realm.write{
-                    realm.add(userInforRealm!)
+                self.userInforRealm = User()
+                self.userInforRealm!.username = userInfo!.uid
+                try! self.realm.write{
+                    self.realm.add(self.userInforRealm!)
                 }
-                toApp()
+                self.toApp()
                 ProgressHUD.dismiss()
                 SCLAlertView().showSuccess("Login successfully!", subTitle: authResult!.description)
                 return

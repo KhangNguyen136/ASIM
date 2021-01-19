@@ -4,11 +4,22 @@
 //
 //  Created by Khang Nguyen on 11/26/20.
 //
-
 import Foundation
 import RealmSwift
 import SCLAlertView
-
+struct currencyBase{
+    let nameEnglish = ["Dollar ($)","Vietnamese Dong (VND)","Japanese Yen","Chinese Yuan","Euro","Korean Won"]
+    let nameVietnamese = ["Đô la ($)","Việt Nam đồng (VNĐ)","Yen Nhật Bản","Nhân dân tệ","Euro","Won Hàn Quốc"]
+    let symbol = ["$","VND","Yen","Yuan","Euro","Won"]
+    var valueBaseDolar = [1,23255,104.5,6.5,0.84,900]
+}
+struct infoChoice{
+    let abbrName = ["ACB", "TPBank","DAB","SeABank","ABBANK","BacABank","VietCapitalBank","MSB","TCB","KienLongBank","Nam A Bank","NCB","VPBank","HDBank","OCB","MB","PVcombank","VIB","SCB","SGB","SHB","STB","VAB","BVB","VietBank","PG Bank","EIB","LPB","VCB","CTG","BIDV","NHCSXH/VBSP","VDB","CB","Oceanbank","GPBank","Agribank"]
+    let bankName = ["Ngân hàng Á Châu","Ngân hàng Tiên Phong","Ngân hàng Đông Á","Ngân hàng Đông Nam Á","Ngân hàng An Bình","Ngân hàng Bắc Á","Ngân hàng Bản Việt","Hàng Hải Việt Nam","Kỹ Thương Việt Nam","Kiên Long","Nam Á","Quốc Dân","Việt Nam Thịnh Vượng","Phát triển nhà Thành phố Hồ Chí Minh","Phương Đông","Quân đội","Đại chúng","Quốc tế","Sài Gòn","Sài Gòn Công Thương","Sài Gòn-Hà Nội","Sài Gòn Thương Tín","Việt Á","Bảo Việt","Việt Nam Thương Tín","Xăng dầu Petrolimex","Xuất Nhập khẩu Việt Nam","Bưu điện Liên Việt","Ngoại thương Việt Nam","Công Thương Việt Nam","Đầu tư và Phát triển Việt Nam","Ngân hàng Chính sách xã hội","Ngân hàng Phát triển Việt Nam","Ngân hàng Xây dựng","Ngân hàng Đại Dương","Ngân hàng Dầu Khí Toàn Cầu","Ngân hàng Nông nghiệp và Phát triển Nông thôn VN"]
+    let bankImg = ["bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank"]
+    let howLong = ["1 month", "3 months", "6 months","1 year","2 years","5 years", "10 years", "other"]
+    let term = ["1 week","2 weeks", "3 weeks","1 month", "3 months", "6 months","12 months"]
+}
 struct categoryValues {
     let expense = [
                     ["Food and Dining", "Bars and Coffee","Groceries","Restaurant"],
@@ -29,6 +40,62 @@ struct categoryValues {
     let typeRecord = ["Expense", "Income", "Lend","Borrow","Transfer","Adjustment"]
     
 }
+class Notify: Object{
+    @objc dynamic var type: Int = 0
+    @objc dynamic var content: String = ""
+    @objc dynamic var title: String = ""
+    @objc dynamic var date: Date = Date()
+    func add(){
+        let realm = try! Realm()
+        try! realm.write {
+            realm.add(self)
+    realm.objects(User.self)[0].notifyList.append(self)
+        }
+    }
+    func del(){
+        let realm = try! Realm()
+        try! realm.write {
+            realm.delete(self)
+        }
+    }
+   func getData(_type: Int,_content: String,_title: String,_date: Date ) {
+           
+           type = _type
+           content = _content
+            title = _title
+           date = _date
+       }
+    func showAll(){
+           let realm = try! Realm()
+        let uptodate = realm.objects(Notify.self)
+        for obj in uptodate{
+            if obj.date <= Date(){
+                SCLAlertView().showInfo(obj.title, subTitle: obj.content)
+                obj.del()
+            }
+            
+        }
+        let lend = Array(realm.objects(polyRecord.self).filter("type = 2"))
+        for obj in lend{
+            if obj.lend!.collectionDate != nil{
+                if obj.lend!.collectionDate! <= Date(){
+                    SCLAlertView().showInfo("Thu nợ", subTitle: "Chỗ nãy tui hông biết nó thông báo gì, có gì ông sửa hộ")
+                }
+            }
+        }
+        let borrow = Array(realm.objects(polyRecord.self).filter("type = 3"))
+        for obj in borrow{
+            if obj.borrow?.repaymentDate != nil{
+                if obj.borrow!.repaymentDate! <= Date(){
+                    SCLAlertView().showInfo("Trả nợ", subTitle: "Chỗ nãy tui hông biết nó thông báo gì, có gì ông sửa hộ")
+                }
+            }
+        }
+       }
+    
+    
+}
+
 class User: Object{
     @objc dynamic var username: String = ""
     
@@ -62,6 +129,7 @@ class User: Object{
     var persons = List<String>()
     var locations = List<String>()
     var events = List<String>()
+    var notifyList = List<Notify>()
     
     func getRecordByID(id: String) -> polyRecord?
     {
@@ -167,6 +235,17 @@ class Expense: Record{
             borrowRecord?.isChanged = true
         }
     }
+    func add(){
+        let realm = try! Realm()
+        let record = polyRecord()
+        record.type = 0
+        record.expense = self
+        try! realm.write{
+            realm.add(self)
+            realm.add(record)
+            realm.objects(User.self)[0].records.append(record)
+        }
+    }
 }
 
 class Income: Record{
@@ -215,6 +294,7 @@ class Income: Record{
         try! realm.write{
             realm.add(self)
             realm.add(record)
+            realm.objects(User.self)[0].records.append(record)
         }
     }
 }
@@ -225,7 +305,17 @@ class Borrow: Record{
     @objc dynamic var repaymentDate: Date? = nil
     @objc dynamic var isRepayed: Bool = false
     @objc dynamic var lender: String = ""
-
+    func add(){
+        let realm = try! Realm()
+        let record = polyRecord()
+        record.type = 2
+        record.borrow = self
+        try! realm.write{
+            realm.add(self)
+            realm.add(record)
+            realm.objects(User.self)[0].records.append(record)
+        }
+    }
     func getData(_amount: Float,_type: Int,_descript: String,_srcAccount: polyAccount,_person: String,_location: String,_srcImg: String,_date: Date, _repaymentDate: Date?, _isRepayed: Bool)
     {
         super.getData(_amount: _amount, _type: _type, _descript: _descript, _srcAccount: _srcAccount, _location: _location, _srcImg: _srcImg,_date: _date )
@@ -314,7 +404,17 @@ class Lend: Record{
     @objc dynamic var collectionDate: Date? = nil
     @objc dynamic var isCollected: Bool = false
     @objc dynamic var borrower: String = ""
-
+    func add(){
+        let realm = try! Realm()
+        let record = polyRecord()
+        record.type = 3
+        record.lend = self
+        try! realm.write{
+            realm.add(self)
+            realm.add(record)
+            realm.objects(User.self)[0].records.append(record)
+        }
+    }
     func getData(_amount: Float,_type: Int,_descript: String,_srcAccount: polyAccount,_person: String,_location: String,_srcImg: String,_date: Date, _collectionDate: Date?,_isCollected: Bool)
     {
         super.getData(_amount: _amount, _type: _type, _descript: _descript, _srcAccount: _srcAccount, _location: _location, _srcImg: _srcImg,_date: _date)
@@ -416,6 +516,17 @@ class Transfer: Record{
         }
         doTransaction()
     }
+    func add(){
+        let realm = try! Realm()
+        let record = polyRecord()
+        record.type = 4
+        record.transfer = self
+        try! realm.write{
+            realm.add(self)
+            realm.add(record)
+            realm.objects(User.self)[0].records.append(record)
+        }
+    }
     func editTransFee(_fee: Float)  {
         transferFee?.expense?.amount = _fee
         transferFee?.isChanged = true
@@ -434,16 +545,7 @@ class Transfer: Record{
         destinationAccount?.expense(_amount: amount)
         destinationAccount?.isChanged = true
     }
-    func add(){
-        let realm = try! Realm()
-        let record = polyRecord()
-        record.type = 4
-        record.transfer = self
-        try! realm.write{
-            realm.add(self)
-            realm.add(record)
-        }
-    }
+   
 }
 
 class Adjustment: Record{
@@ -465,6 +567,17 @@ class Adjustment: Record{
         detailCategory = _detailCategory
         person = _person
         doTransaction()
+    }
+    func add(){
+        let realm = try! Realm()
+        let record = polyRecord()
+        record.type = 5
+        record.adjustment = self
+        try! realm.write{
+            realm.add(self)
+            realm.add(record)
+            realm.objects(User.self)[0].records.append(record)
+        }
     }
     func doTransaction() -> Void {
         print("Do transaction of adjustment with...")
@@ -533,7 +646,56 @@ class polyRecord: Object{
     @objc dynamic var isUploaded : Bool = false
     @objc dynamic var isChanged : Bool = true
     @objc dynamic var isDeleted : Bool = false
-
+    func del(){
+        //marked if account had been uploaded
+        if isUploaded == true
+        {
+            isDeleted = true
+            
+            //delete infor with this account
+            return
+        }
+        //
+        
+       
+        let realm = try! Realm()
+        switch self.type {
+        case 0:
+            try! realm.write{
+                realm.delete(self.expense!)
+                realm.delete(self)
+            }
+            
+        case 1:
+        try! realm.write{
+            realm.delete(self.income!)
+            realm.delete(self)
+        }
+        case 2:
+        try! realm.write{
+            realm.delete(self.borrow!)
+            realm.delete(self)
+        }
+        case 3:
+        try! realm.write{
+            realm.delete(self.lend!)
+            realm.delete(self)
+        }
+        case 4:
+        //realm.delete(self.transfer!)
+            try! realm.write{
+                realm.delete(self.transfer!)
+                realm.delete(self)
+            }
+        default:
+        
+        try! realm.write{
+            realm.delete(self.adjustment!)
+            realm.delete(self)
+        }
+        }
+       
+    }
     func getDescript() -> String {
         switch type {
         case 0:
@@ -548,6 +710,22 @@ class polyRecord: Object{
             return transfer!.descript
         default:
             return adjustment!.descript
+        }
+    }
+    func srcAccount() -> polyAccount{
+        switch type {
+        case 0:
+            return expense!.srcAccount!
+        case 1:
+            return income!.srcAccount!
+        case 2:
+            return lend!.srcAccount!
+        case 3:
+            return borrow!.srcAccount!
+        case 4:
+            return transfer!.srcAccount!
+        default:
+            return adjustment!.srcAccount!
         }
     }
     func getCategory() -> String {
@@ -602,6 +780,22 @@ class polyRecord: Object{
             return adjustment!.person
         }
     }
+    func getDate() -> Date{
+        switch type {
+        case 0:
+            return expense!.date
+        case 1:
+            return income!.date
+        case 2:
+            return lend!.date
+        case 3:
+            return borrow!.date
+        case 4:
+            return transfer!.date
+        default:
+            return adjustment!.date
+        }
+    }
 }
 class Account: Object{
     @objc dynamic var id: Int = -1
@@ -609,7 +803,7 @@ class Account: Object{
     @objc dynamic var balance: Float = 0
     @objc dynamic var descrip: String = ""
     @objc dynamic var includeReport: Bool = false
-    @objc dynamic var currency: String = ""
+    @objc dynamic var currency: Int = 0
     @objc dynamic var active: Bool = true
     func incrementID() -> Int {
           let realm = try! Realm()
@@ -638,7 +832,7 @@ class Account: Object{
     }
 }
 class BankingAccount:Account {
-     @objc dynamic var bankName: String = ""
+     @objc dynamic var bank: Int = 0
     override func add(){
         self.id = self.incrementID()
         let realm = try! Realm()
@@ -659,6 +853,7 @@ class polyAccount: Object{
     @objc dynamic var cashAcc: Account? = nil
     @objc dynamic var bankingAcc: BankingAccount? = nil
     @objc dynamic var savingAcc: savingAccount? = nil
+    @objc dynamic var accumulate: Accumulate? = nil
 
     @objc dynamic var type : Int = -1
     @objc dynamic var isUploaded : Bool = false
@@ -676,8 +871,10 @@ class polyAccount: Object{
             return cashAcc!.name
         case 1:
             return bankingAcc!.name
-        default:
+        case 2:
             return savingAcc!.name
+        default:
+            return accumulate!.goal
         }
     }
     func getBalance() -> Float{
@@ -722,6 +919,9 @@ class polyAccount: Object{
             //delete infor with this account
             return
         }
+        //
+        
+       
         let realm = try! Realm()
         if self.type == 0{
             try! realm.write{
@@ -735,9 +935,15 @@ class polyAccount: Object{
                 realm.delete(self)
             }
         }
-        else {
+        else if type == 2 {
             try! realm.write{
                 realm.delete(self.savingAcc!)
+                realm.delete(self)
+            }
+        }
+        else{
+            try! realm.write{
+                realm.delete(self.accumulate!)
                 realm.delete(self)
             }
         }
@@ -759,6 +965,17 @@ class Accumulate: Object{
     @objc dynamic var currency: String = ""
     @objc dynamic var startdate: Date = Date()
     @objc dynamic var enddate: Date = Date()
+    func add(){
+        let realm = try! Realm()
+        let polyAcc = polyAccount()
+        polyAcc.accumulate = self
+        polyAcc.type = 3
+        try! realm.write {
+            realm.add(self)
+            realm.add(polyAcc)
+            realm.objects(User.self)[0].accounts.append(polyAcc)
+        }
+    }
 
 }
 class savingAccount: Object{
@@ -768,8 +985,8 @@ class savingAccount: Object{
         return "id"
     }
     @objc dynamic var startdate: Date = Date()
-    @objc dynamic var currency: String = "VND"
-    @objc dynamic var bank: String = ""
+    @objc dynamic var currency: Int = 0
+    @objc dynamic var bank: Int = 0
     @objc dynamic var term: String = ""
     @objc dynamic var interestRate: Float = 0
     @objc dynamic var freeInterestRate: Float = 0
@@ -855,10 +1072,15 @@ class savingAccount: Object{
                     newincome.id = obj.id
                     //Tạo income
                     try! realm.write{
-                        newincome.getData(_amount: finalInterest, _type: 1, _descript: "", _srcAccount: srcAcc!, _person: "", _location: "", _event: "", _srcImg: "", _date: nextTerm, _category: 3, _lendRecord: nil)
+                        newincome.getData(_amount: finalInterest, _type: 1, _descript: "Interest from \(obj.savingAcc?.name as! String) rate \(interestRate*100) %", _srcAccount: srcAcc!, _person: "", _location: "", _event: "", _srcImg: "", _date: nextTerm, _category: 3, _lendRecord: nil)
                     }
-                    
+                    let notify = Notify()
+                    try! realm.write {
+                        notify.getData(_type: 0, _content: "Interest from \(obj.savingAcc?.name as! String) rate \(interestRate*100) % (\(dateFormatter.string(from: nextTerm)))", _title: "Saving interest", _date: nextTerm)
+                    }
+                    notify.add()
                     nextTerm =  Calendar.current.date(byAdding: dateComponent, to: nextTerm)!
+                    
                     if srcAcc?.type == 0{
                         try! realm.write {
                             obj.savingAcc!.nextTermDate = nextTerm
@@ -872,6 +1094,7 @@ class savingAccount: Object{
                         }
                         newincome.add()
                     }
+                    
                     
                    }
                 }
@@ -890,8 +1113,13 @@ class savingAccount: Object{
                     let finalInterest = pow(1+termInterest,temp1)*amount-amount
                      let newincome = Income()
                         newincome.id = obj.id
+                    let notify = Notify()
+                    try! realm.write {
+                        notify.getData(_type: 0, _content: "Interest from \(obj.savingAcc?.name as! String) rate \(interestRate*100) % (\(dateFormatter.string(from: nextTerm)))", _title: "Saving interest", _date: nextTerm)
+                    }
+                    notify.add()
                      try! realm.write{
-                          newincome.getData(_amount: finalInterest, _type: 1, _descript: "", _srcAccount: srcAcc!, _person: "", _location: "", _event: "", _srcImg: "", _date: nextTerm, _category: 3, _lendRecord: nil)
+                        newincome.getData(_amount: finalInterest, _type: 1, _descript: "Interest from \(obj.savingAcc?.name as! String) rate \(interestRate*100) %", _srcAccount: srcAcc!, _person: "", _location: "", _event: "", _srcImg: "", _date: nextTerm, _category: 3, _lendRecord: nil)
                      }
                     nextTerm =  Calendar.current.date(byAdding: dateComponent, to: nextTerm)!
                      if srcAcc?.type == 0{
@@ -920,10 +1148,13 @@ class savingAccount: Object{
                     newincome.id = obj.id
                         //Tạo transfer
                     let transfer = Transfer()
-                    transfer.id = obj.id
-                    
+                    let notify = Notify()
+                    try! realm.write {
+                        notify.getData(_type: 0, _content: "Interest from \(obj.savingAcc?.name as! String) rate \(interestRate*100) % (\(dateFormatter.string(from: nextTerm)))", _title: "Saving interest", _date: nextTerm)
+                    }
+                    notify.add()
                         try! realm.write{
-                             newincome.getData(_amount: finalInterest, _type: 1, _descript: "", _srcAccount: srcAcc!, _person: "", _location: "", _event: "", _srcImg: "", _date: nextTerm, _category: 3, _lendRecord: nil)
+                             newincome.getData(_amount: finalInterest, _type: 1, _descript: "Interest from \(obj.savingAcc?.name as! String) rate \(interestRate) %", _srcAccount: srcAcc!, _person: "", _location: "", _event: "", _srcImg: "", _date: nextTerm, _category: 3, _lendRecord: nil)
                             transfer.getData(_amount: obj.savingAcc!.ammount, _type: 4, _descript: "", _srcAccount: obj, _location: "", _srcImg: "", _date: endDate, _destAccount: obj.savingAcc!.srcAccount!, _transferFee: nil)
                         }
                     
@@ -931,18 +1162,18 @@ class savingAccount: Object{
                      if srcAcc?.type == 0{
                          try! realm.write {
                             obj.savingAcc!.state = true
-                            realm.add(newincome)
-                            realm.add(transfer)
                          }
+                        newincome.add()
+                        transfer.add()
                      }
                      else{
                          try! realm.write {
                             srcAcc?.bankingAcc?.income(amount: finalInterest)
                             obj.savingAcc!.state = true
-                             realm.add(newincome)
-                            realm.add(transfer)
                             
                          }
+                        newincome.add()
+                        transfer.add()
                      }
                        
                     }
@@ -958,9 +1189,14 @@ class savingAccount: Object{
                          let finalInterest = Float(termDays)/Float(numDays)*interestRate*amount
                          let newincome = Income()
                        newincome.id = obj.id
+                        let notify = Notify()
+                        try! realm.write {
+                            notify.getData(_type: 0, _content: "Interest from \(obj.savingAcc?.name as! String) rate \(interestRate*100) % (\(dateFormatter.string(from: nextTerm)))", _title: "Saving interest", _date: nextTerm)
+                        }
+                        notify.add()
                          //Tạo income
                         try! realm.write{
-                             newincome.getData(_amount: finalInterest, _type: 1, _descript: "", _srcAccount: srcAcc!, _person: "", _location: "", _event: "", _srcImg: "", _date: nextTerm, _category: 3, _lendRecord: nil)
+                            newincome.getData(_amount: finalInterest, _type: 1, _descript: "Interest from \(obj.savingAcc?.name as! String) rate \(interestRate) %", _srcAccount: (obj.savingAcc?.destAccount)!, _person: "", _location: "", _event: "", _srcImg: "", _date: nextTerm, _category: 3, _lendRecord: nil)
                         }
                          
                          nextTerm =  Calendar.current.date(byAdding: dateComponent, to: nextTerm)!
@@ -968,15 +1204,15 @@ class savingAccount: Object{
                              try! realm.write {
                                 destAcc?.cashAcc?.income(amount: finalInterest)
                                  obj.savingAcc!.nextTermDate = nextTerm
-                                 realm.add(newincome)
                              }
+                            newincome.add()
                          }
                          else{
                              try! realm.write {
                                 destAcc?.bankingAcc?.income(amount: finalInterest)
                                  obj.savingAcc!.nextTermDate = nextTerm
-                                 realm.add(newincome)
                              }
+                            newincome.add()
                          }
                          
                     }
@@ -985,21 +1221,30 @@ class savingAccount: Object{
                     //close account
                 else{
                     if(Date() >= nextTerm){
-                 
+                  let notify = Notify()
+                  try! realm.write {
+                    notify.getData(_type: 0, _content: "Interest from \(obj.savingAcc?.name as! String) rate \(interestRate*100) % (\(dateFormatter.string(from: nextTerm)))", _title: "Saving interest", _date: nextTerm)
+                  }
+                  notify.add()
                      nextTerm =  Calendar.current.date(byAdding: dateComponent, to: nextTerm)!
+                        let transfer = Transfer()
                      if srcAcc?.type == 0{
                          try! realm.write {
-                            srcAcc?.cashAcc?.income(amount: amount)
                              obj.savingAcc!.nextTermDate = nextTerm
                             obj.savingAcc!.state = true
+                            
+                            transfer.getData(_amount: obj.savingAcc!.ammount, _type: 4, _descript: "Interest from \(obj.savingAcc?.name as! String) rate \(interestRate) %", _srcAccount: obj, _location: "", _srcImg: "", _date: endDate, _destAccount: obj.savingAcc!.srcAccount!, _transferFee: nil)
                          }
+                        transfer.add()
                      }
                      else{
                          try! realm.write {
-                            srcAcc?.bankingAcc?.income(amount: amount)
                              obj.savingAcc!.nextTermDate = nextTerm
                             obj.savingAcc!.state = true
+                            
+                            transfer.getData(_amount: obj.savingAcc!.ammount, _type: 4, _descript: "", _srcAccount: obj, _location: "", _srcImg: "", _date: endDate, _destAccount: obj.savingAcc!.srcAccount!, _transferFee: nil)
                          }
+                        transfer.add()
                      }
                      
                     }

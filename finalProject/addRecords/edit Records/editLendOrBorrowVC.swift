@@ -235,44 +235,44 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate {
         )
         let msg = SCLAlertView(appearance: appearance)
         msg.addButton("Yes", action: { [self] in
-            try! realm.write{
-            if record?.isUploaded == true
+            try! self.realm.write{
+                if self.record?.isUploaded == true
             {
-                record?.isDeleted = true
-                if record?.type == 2
+                self.record?.isDeleted = true
+                if self.record?.type == 2
                 {
-                    record?.lend?.undoTransaction()
+                    self.record?.lend?.undoTransaction()
                     print("Mark a lend as deleted!")
                 }
                 else
                 {
-                    record?.borrow?.undoTransaction()
+                    self.record?.borrow?.undoTransaction()
                     print("Mark a borrow as deleted!")
                 }
             }
             else
             {
-                if record?.type == 2
+                if self.record?.type == 2
                 {
-                    record?.lend?.undoTransaction()
-                    realm.delete((record?.lend)!)
+                    self.record?.lend?.undoTransaction()
+                    self.realm.delete((self.record?.lend)!)
                     print("Delete a lend!")
 
                 }
                 else
                 {
-                    record?.borrow?.undoTransaction()
-                    realm.delete((record?.borrow)!)
+                    self.record?.borrow?.undoTransaction()
+                    self.realm.delete((self.record?.borrow)!)
                     print("Delete a borrow!")
 
                 }
-                realm.delete(record!)
+                self.realm.delete(self.record!)
             }
         //delete data in database
         }
             print("Deleted a lend or borrow")
             SCLAlertView().showSuccess("Transaction deleted!", subTitle: "")
-            historyDelegate?.editedRecord()
+            self.historyDelegate?.editedRecord()
             self.navigationController?.popViewController(animated: true)
         })
         msg.addButton("No", action: {
