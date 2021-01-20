@@ -142,9 +142,9 @@ class settingVC: UITableViewController {
 
 
         dropDown.selectionAction = { [self] (index: Int, item: String) in
-            dateFormatBtn.setTitle(item, for: .normal)
-            try! realm.write{
-                userInfor.dateFormat = item
+            self.dateFormatBtn.setTitle(item, for: .normal)
+            try! self.realm.write{
+                self.userInfor.dateFormat = item
             }
         }
         dropDown.show()

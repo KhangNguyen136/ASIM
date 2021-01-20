@@ -1,0 +1,18 @@
+
+/* Class = "UINavigationItem"; title = "Report"; ObjectID = "AC6-Ok-TDg"; */
+"AC6-Ok-TDg.title" = "Report";
+
+/* Class = "UIButton"; normalTitle = "Person"; ObjectID = "DLO-Lg-jpd"; */
+"DLO-Lg-jpd.normalTitle" = "Person";
+
+/* Class = "UIButton"; normalTitle = "Expense"; ObjectID = "Jdf-lc-zYa"; */
+"Jdf-lc-zYa.normalTitle" = "Expense";
+
+/* Class = "UIButton"; normalTitle = "Location"; ObjectID = "QCc-8Z-dfn"; */
+"QCc-8Z-dfn.normalTitle" = "Location";
+
+/* Class = "UITabBarItem"; title = "Report"; ObjectID = "pOi-Xr-ihM"; */
+"pOi-Xr-ihM.title" = "Report";
+
+/* Class = "UIButton"; normalTitle = "Income"; ObjectID = "yCa-0I-Kz2"; */
+"yCa-0I-Kz2.normalTitle" = "Income";

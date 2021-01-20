@@ -10,6 +10,15 @@ import RealmSwift
 
 class AddSavingAccount: UIViewController, UITextFieldDelegate {
 
+    @IBOutlet weak var StartDate: UILabel!
+    @IBOutlet weak var FreeInterestRate: UILabel!
+    @IBOutlet weak var numOfDayForInterest: UILabel!
+    @IBOutlet weak var InterestRate: UILabel!
+    @IBOutlet weak var TransferMoneyFrom: UILabel!
+    @IBOutlet weak var InterestPaidTo: UILabel!
+    @IBOutlet weak var NotAddToRecord: UILabel!
+    @IBOutlet weak var TermEnded: UILabel!
+    @IBOutlet weak var InterestPaid: UILabel!
     @IBOutlet weak var lblCurr: UILabel!
     @IBOutlet weak var lblBalance: UITextField!
     @IBOutlet weak var lblStartDate: UILabel!
@@ -47,6 +56,7 @@ class AddSavingAccount: UIViewController, UITextFieldDelegate {
     var objSource: polyAccount? = nil
     var objDest: polyAccount? = nil
     override func viewDidLoad() {
+        setLanguage()
         txtFreeInterest.delegate = self
         txtInterestRate.delegate = self
         lblBalance.delegate = self
@@ -130,6 +140,20 @@ class AddSavingAccount: UIViewController, UITextFieldDelegate {
                        }
         }
         }
+    func setLanguage(){
+        txtName.setupAutolocalization(withKey: "nameAccount", keyPath: "text")
+        InterestRate.setupAutolocalization(withKey: "InterestRate", keyPath: "text")
+InterestPaid.setupAutolocalization(withKey: "InterestPaid", keyPath: "text")
+        InterestPaid.setupAutolocalization(withKey: "InterestPaid", keyPath: "text")
+        InterestPaidTo.setupAutolocalization(withKey: "InterestPaidTo", keyPath: "text")
+        FreeInterestRate.setupAutolocalization(withKey: "FreeInterestRate", keyPath: "text")
+         TermEnded.setupAutolocalization(withKey: "TermEnded", keyPath: "text")
+        numOfDayForInterest.setupAutolocalization(withKey: "numOfDayForInterest", keyPath: "text")
+        TransferMoneyFrom.setupAutolocalization(withKey: "TransferMoneyFrom", keyPath: "text")
+        NotAddToRecord.setupAutolocalization(withKey: "NotAddToRecord", keyPath: "text")
+        txtDescription.setupAutolocalization(withKey: "Description", keyPath: "text")
+        
+    }
     @objc func chooseAccount(sender: UITapGestureRecognizer) {
            let scr=self.storyboard?.instantiateViewController(withIdentifier: "PickAccountView") as! PickAccountView
         scr.dest = false

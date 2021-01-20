@@ -1,0 +1,25 @@
+/* 
+  Localizable.strings
+  finalProject
+
+  Created by Nguyễn Bình Nguyên on 1/19/21.
+  
+*/
+"totalAmount" = "Tổng tiền";
+"nameAccount" = "Tên tài khoản";
+"InterestPaid" = "Trả lãi";
+"InterestPaidTo" = "Tiền lãi được chuyển đến TK";
+"numOfDayForInterest" = "Số ngày tính lãi / năm";
+"TermEnded" = "Khi đến hạn";
+"TransferMoneyFrom" = "Tiền gửi được chuyển từ TK";
+"FreeInterestRate" = "Lãi suất không kì hạn";
+"InterestRate" = "Lãi suất";
+"NotAddToRecord" = "Không tính vào báo cáo";
+"Description" = "Diễn giải";
+"StartDate" = "Ngày bắt đầu";
+"Today" = "Hôm nay";
+
+
+
+
+

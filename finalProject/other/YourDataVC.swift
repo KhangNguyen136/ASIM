@@ -78,7 +78,7 @@ class yourDataVC: UITableViewController {
             }
             else
             {
-            syncData()
+                self.syncData()
             }
         }
     }
@@ -110,7 +110,7 @@ class yourDataVC: UITableViewController {
                 return
             })
             msg.addButton("Yes", action: { [self] in
-                reloadDataFromFirebase()
+                self.reloadDataFromFirebase()
             })
             msg.showWarning("Reload data will delete all current data.", subTitle: "Your data will be replaced by data you had been sync last time. Do you want to continue?")
             }
@@ -167,10 +167,10 @@ class yourDataVC: UITableViewController {
             print(result)
             if result == true
             {
-                reloadView()
-                try! realm.write{
-                userInfor?.currency = currency
-                userInfor?.isHideAmount = isHide
+                self.reloadView()
+                try! self.realm.write{
+                    self.userInfor?.currency = currency
+                    self.userInfor?.isHideAmount = isHide
                 }
                 SCLAlertView().showSuccess("Reload data successfully", subTitle: "")
             }
@@ -201,7 +201,7 @@ class yourDataVC: UITableViewController {
                     })
                     msg.addButton("Yes", action: { [self] in
                         print("Reset data begin")
-                        resetAllData()
+                        self.resetAllData()
                         print("Reset data end.")
                         return
                     })

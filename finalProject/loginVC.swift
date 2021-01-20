@@ -48,13 +48,13 @@ class loginVC: UITableViewController {
             {
                 print(authResult!.description)
                 let userInfo = Auth.auth().currentUser
-                userInforRealm = User()
-                userInforRealm!.username = userInfo!.uid
-                userInforRealm?.email = userInfo?.email ?? ""
-                try! realm.write{
-                    realm.add(userInforRealm!)
+                self.userInforRealm = User()
+                self.userInforRealm!.username = userInfo!.uid
+                self.userInforRealm?.email = userInfo?.email ?? ""
+                try! self.realm.write{
+                    self.realm.add(self.userInforRealm!)
                 }
-                toApp()
+                self.toApp()
                 ProgressHUD.dismiss()
                 SCLAlertView().showSuccess("Login successfully", subTitle: "This app will reload your data in server automatically.")
                 return
@@ -79,7 +79,7 @@ class loginVC: UITableViewController {
             let emailTF = alert.textFields![0] as UITextField
             let email = emailTF.text!
             print(email)
-            if email.isEmpty == false || isValidEmail(email) == true
+            if email.isEmpty == false || self.isValidEmail(email) == true
             {
                 Auth.auth().sendPasswordReset(withEmail: email) { (error) in
                     if let error = error as NSError? {

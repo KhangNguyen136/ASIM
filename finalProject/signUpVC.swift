@@ -37,7 +37,7 @@ class signUpVC: UITableViewController {
             return
         }
         DispatchQueue.main.async { [self] in
-        Auth.auth().createUser(withEmail: email.text!, password: password.text!){authResult, error in
+            Auth.auth().createUser(withEmail: self.email.text!, password: self.password.text!){authResult, error in
             if let error = error as NSError?{
 //                switch AuthErrorCode(rawValue: error.code) {
 //                case :

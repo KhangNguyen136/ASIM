@@ -88,7 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,GIDSignInDelegate {
             SCLAlertView().showSuccess("Login successfully", subTitle: "You had logged in with your google account.")
         //This is where you should add the functionality of successful login
         //i.e. dismissing this view or push the home view controller etc
-            toApp()
+            self.toApp()
         }
             ProgressHUD.dismiss()
         }

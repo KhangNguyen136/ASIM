@@ -51,13 +51,16 @@ class otherVC: UIViewController {
 //            {
 //                SCLAlertView().showError("No connection.", subTitle: "Check your internet connection and try again!")
 //            }
+//        }
+
         let firebaseAuth = Auth.auth()
         do {
           try firebaseAuth.signOut()
         } catch let signOutError as NSError {
             print ("Error logging out: %@", signOutError)
             ProgressHUD.dismiss()
-            SCLAlertView().showError("Logging out error!.", subTitle: signOutError as! String)
+            SCLAlertView().showError("Logging error!.", subTitle: signOutError as! String)
+            return
         }
         try! realm.write{
             realm.deleteAll()
@@ -126,6 +129,9 @@ class otherCell: UITableViewCell {
             self.superview!.parentViewController!.navigationController?.pushViewController(dest, animated: false)
         case 4:
             let dest = self.superview!.parentViewController!.storyboard?.instantiateViewController(identifier: "passwordVC") as! passwordVC
+            self.superview!.parentViewController!.navigationController?.pushViewController(dest, animated: false)
+        case 7:
+            let dest = self.superview!.parentViewController!.storyboard?.instantiateViewController(identifier: "FeebackView") as! FeebackView
             self.superview!.parentViewController!.navigationController?.pushViewController(dest, animated: false)
         case 9:
             let appearance = SCLAlertView.SCLAppearance(
