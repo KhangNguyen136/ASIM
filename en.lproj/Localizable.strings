@@ -7,3 +7,19 @@
 */
 "totalAmount" = "Total amount";
 "nameAccount" = "Name account";
+"InterestPaid" = "Interest paid";
+"InterestPaidTo" = "Interest paid to";
+"numOfDayForInterest" = "Number of days for interest";
+"TermEnded" = "Term ended";
+"TransferMoneyFrom" = "Transfer money from";
+"FreeInterestRate" = "Free interest rate";
+"InterestRate" = "Interest";
+"NotAddToRecord" = "Not inclue in record";
+"Description" = "Description";
+"StartDate" = "Start Date";
+"Today" = "Today";
+"Bank" = "Bank";
+"RateYear" = "%/year";
+"Day" = "day";
+"Term" = "Term";
+"Amount" = "Amount";

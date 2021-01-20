@@ -8,6 +8,7 @@
 import UIKit
 import RealmSwift
 import DropDown
+import DPLocalization
 
 class settingVC: UITableViewController {
 
@@ -90,12 +91,14 @@ class settingVC: UITableViewController {
                 try! self!.realm.write{
                     self!.userInfor.isVietnamese = true
                 }
+                dp_set_current_language("vi");
             }
             else
             {
                 try! self!.realm.write{
                     self!.userInfor.isVietnamese = false
                 }
+                        dp_set_current_language("en");
             }
         }
         dropDown.show()

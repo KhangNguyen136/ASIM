@@ -31,7 +31,6 @@ class NormalAccount: UIViewController, updateDataDelegate {
     }
     func setLanguage(){
         totalAmount.setupAutolocalization(withKey: "totalAmount", keyPath: "text")
-        dp_set_current_language("vi");
     }
     override func viewWillAppear(_ animated: Bool) {
         updateTable()

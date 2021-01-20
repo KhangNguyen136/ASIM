@@ -18,6 +18,12 @@
 "Description" = "Diễn giải";
 "StartDate" = "Ngày bắt đầu";
 "Today" = "Hôm nay";
+"Bank" = "Ngân hàng";
+"RateYear" = "%/năm";
+"Day" = "ngày";
+"Term" = "Kỳ hạn";
+"Amount" = "Số tiền";
+
 
 
 

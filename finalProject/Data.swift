@@ -16,12 +16,23 @@ struct currencyBase{
     let symbol = ["$","VND","Yen","Yuan","Euro","Won"]
     var valueBaseDolar = [1,23255,104.5,6.5,0.84,900]
 }
+struct Interest{
+    let interestPaidEnglish = ["Maturity","Up-front"]
+    let interestPaidVietnamese = ["Cuối kì","Đầu kì"]
+    let termEndedEnglish = ["Rollover principal and interest", "Rollover principal", "Close account"]
+    let termEndedVietnamese = ["Tiếp tục lãi và gốc", "Tiếp tục gốc", "Tất toán sổ"]
+}
 struct infoChoice{
+    let typeAccountEnglish = ["Cash","Banking Account"]
+    let typeAccountVietnamese = ["Tiền mặt","Tài khoản ngân hàng"]
     let abbrName = ["ACB", "TPBank","DAB","SeABank","ABBANK","BacABank","VietCapitalBank","MSB","TCB","KienLongBank","Nam A Bank","NCB","VPBank","HDBank","OCB","MB","PVcombank","VIB","SCB","SGB","SHB","STB","VAB","BVB","VietBank","PG Bank","EIB","LPB","VCB","CTG","BIDV","NHCSXH/VBSP","VDB","CB","Oceanbank","GPBank","Agribank"]
     let bankName = ["Ngân hàng Á Châu","Ngân hàng Tiên Phong","Ngân hàng Đông Á","Ngân hàng Đông Nam Á","Ngân hàng An Bình","Ngân hàng Bắc Á","Ngân hàng Bản Việt","Hàng Hải Việt Nam","Kỹ Thương Việt Nam","Kiên Long","Nam Á","Quốc Dân","Việt Nam Thịnh Vượng","Phát triển nhà Thành phố Hồ Chí Minh","Phương Đông","Quân đội","Đại chúng","Quốc tế","Sài Gòn","Sài Gòn Công Thương","Sài Gòn-Hà Nội","Sài Gòn Thương Tín","Việt Á","Bảo Việt","Việt Nam Thương Tín","Xăng dầu Petrolimex","Xuất Nhập khẩu Việt Nam","Bưu điện Liên Việt","Ngoại thương Việt Nam","Công Thương Việt Nam","Đầu tư và Phát triển Việt Nam","Ngân hàng Chính sách xã hội","Ngân hàng Phát triển Việt Nam","Ngân hàng Xây dựng","Ngân hàng Đại Dương","Ngân hàng Dầu Khí Toàn Cầu","Ngân hàng Nông nghiệp và Phát triển Nông thôn VN"]
     let bankImg = ["bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank","bank"]
-    let howLong = ["1 month", "3 months", "6 months","1 year","2 years","5 years", "10 years", "other"]
-    let term = ["1 week","2 weeks", "3 weeks","1 month", "3 months", "6 months","12 months"]
+    let howLongEnglish = ["1 month", "3 months", "6 months","1 year","2 years","5 years", "10 years", "other"]
+    let howLongVietnamses = ["1 tháng", "3 tháng", "6 tháng","1 năm","2 năm","5 năm", "10 năm", "khác"]
+
+    let termEnglish = ["1 week","2 weeks", "3 weeks","1 month", "3 months", "6 months","12 months"]
+    let termVietnamese = ["1 tuần","2 tuần", "3 tuần","1 tháng", "3 tháng", "6 tháng","12 tháng"]
 }
 struct categoryValues {
     let expense = [
