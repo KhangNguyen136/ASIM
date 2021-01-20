@@ -18,8 +18,8 @@ class DepositView: UIViewController {
     @IBOutlet weak var lblrootName: UILabel!
     @IBOutlet weak var txtDescription: UITextField!
     var rootAccName: String = ""
-    var rootID: Int = 0
     var obj:polyAccount? = nil
+    var rootAccount:polyAccount? = nil
     @IBOutlet weak var lblBalance: UITextField!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,24 +42,27 @@ class DepositView: UIViewController {
 
     @IBAction func saveDeposit(_ sender: Any) {
         let realm = try! Realm()
-        let accumulate = realm.objects(Accumulate.self).filter("id == \(self.rootID)").first
+        
        // var accumulateBal:Float = 0.0
         var accountBal:Float = 0.0
         let balance: Float = Float(lblBalance.text!) as! Float
         //let accountBal
-        var accumulateBal:Float = accumulate!.addbalance + balance
-        //print(accumulateBal)
+        let transfer = Transfer()
+        try! realm.write {
+            transfer.getData(_amount: balance, _type: 4, _descript: "Deposit account", _srcAccount: obj!, _location: "", _srcImg: "", _date: Date(), _destAccount: rootAccount!, _transferFee: nil)
+        }
+        transfer.add()
+        var accumulateBal:Float = (rootAccount?.accumulate!.addbalance)! + balance
         if obj?.type == 0{
-           // print(obj!.name)
             try! realm.write {
                 obj?.cashAcc?.expense(amount: balance)
-                accumulate!.addbalance = accumulateBal
+                rootAccount?.accumulate?.addbalance = accumulateBal
             }
         }
         else {
            try! realm.write {
             obj?.bankingAcc?.expense(amount: balance)
-           accumulate!.addbalance = accumulateBal
+           rootAccount?.accumulate?.addbalance = accumulateBal
        }
             
         }

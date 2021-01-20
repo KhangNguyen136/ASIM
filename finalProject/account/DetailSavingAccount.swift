@@ -33,13 +33,9 @@ class DetailSavingAccount: UIViewController {
     }
     
     func loadData(){
-        if savingAcc.currency == "VND"{
-             lblBalance.text = "\(savingAcc.ammount as! Float)đ"
-        }
-        else{
-            lblBalance.text = "\(savingAcc.ammount as! Float)$"
-        }
-       
+        
+        lblBalance.text = "\(round((savingAcc.ammount as! Float)*Float(currencyBase().valueBaseDolar[savingAcc.currency]))) \(currencyBase().symbol[savingAcc.currency])"
+        
         let dateFormatter: DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
         lblStartDate.text = dateFormatter.string(from: savingAcc.startdate)
@@ -98,9 +94,9 @@ extension DetailSavingAccount:UITableViewDataSource, UITableViewDelegate{
                cell.lblDate.text = dateFormatter.string(from: transfer!.date)
                cell.lblTerm.text = savingAcc.term
                cell.lblCellInterestRate.text = "\(savingAcc.interestRate as! Float)%"
-               cell.lblIsavingAcc.text = "Create a deposit account"
-                cell.lblFinalInterest.text = "\(transfer?.amount as! Float)đ"
-               cell.lblNameAccFrom.text = "(\(transfer?.amount as! Float)đ)"
+                cell.lblIsavingAcc.text = transfer?.descript
+                cell.lblFinalInterest.text = "\(round((transfer?.amount as! Float)*Float(currencyBase().valueBaseDolar[savingAcc.currency]))) \(currencyBase().symbol[savingAcc.currency])"
+              
             }
            //Chuyển từ saving account lại account
             else if transfer?.srcAccount?.id == id{
@@ -108,8 +104,8 @@ extension DetailSavingAccount:UITableViewDataSource, UITableViewDelegate{
               cell.lblDate.text = dateFormatter.string(from: transfer!.date)
               cell.lblTerm.text = ""
               cell.lblCellInterestRate.text = ""
-                cell.lblIsavingAcc.text = "Principal \(savingAcc.name)"
-               cell.lblFinalInterest.text = "\(transfer?.amount as! Float)đ"
+                cell.lblIsavingAcc.text = transfer?.descript
+               cell.lblFinalInterest.text = "\(round((transfer?.amount as! Float)*Float(currencyBase().valueBaseDolar[savingAcc.currency]))) \(currencyBase().symbol[savingAcc.currency])"
                 cell.lblNameAccFrom.text = "\(savingAcc.name)"
             }
            
@@ -123,7 +119,7 @@ extension DetailSavingAccount:UITableViewDataSource, UITableViewDelegate{
             let dateFormatter: DateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MM/dd/yyyy"
             cell.lblDate.text = dateFormatter.string(from: obj!.date)
-            cell.lblFinalInterest.text = "\(obj!.amount as! Float)đ"
+            cell.lblFinalInterest.text = "\(round((obj?.amount as! Float)*Float(currencyBase().valueBaseDolar[savingAcc.currency]))) \(currencyBase().symbol[savingAcc.currency])"
             cell.lblIsavingAcc.text = "Interestfrom \(savingAcc.name)"
             var termEnded: String = ""
             if savingAcc.termEnded == 0{

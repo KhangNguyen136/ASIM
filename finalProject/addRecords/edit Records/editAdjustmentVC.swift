@@ -118,7 +118,7 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         category = temp!.category
         detailCategory = temp!.detailCategory
         tempRecord = temp?.tempRecord
-        didSelectCategory(section: category, row: detailCategory)
+        
         
         _acttualBalance = loadAmount(value: (record?.adjustment!.amount)!)
         acctualBalance.text = String(_acttualBalance)
@@ -138,6 +138,20 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         }
 //        loadRootSrcAccount()
         didSelectAccount(temp: temp!.srcAccount!, name: temp!.srcAccount!.getname())
+        print(subtype)
+        print(category)
+        print(detailCategory)
+        if subtype == 0
+        {
+            categoryImg.image = UIImage(named: "category\(category)\(detailCategory)")
+            chooseCategoryBtn.setTitle(categoryValues().expense[category][detailCategory], for: .normal)
+        }
+        else
+        {
+            categoryImg.image = UIImage(named: "income\(detailCategory)")
+            chooseCategoryBtn.setTitle(categoryValues().income[0][detailCategory], for: .normal)
+        }
+
         
         var tempStr : [String] = []
         tempStr.append(contentsOf: userInfor!.locations)

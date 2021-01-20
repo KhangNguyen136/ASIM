@@ -61,6 +61,8 @@
 		F157582F2582C2DD00FB0D13 /* chooseLendOrBorrowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F157582E2582C2DD00FB0D13 /* chooseLendOrBorrowVC.swift */; };
 		F1588A0325B747490011351F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1588A0225B747490011351F /* Assets.xcassets */; };
 		F1588A0625B750C00011351F /* observeValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1588A0525B750C00011351F /* observeValue.swift */; };
+		F15ADE3025B82351007CB55B /* DetailAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15ADE2E25B82351007CB55B /* DetailAccountCell.swift */; };
+		F15ADE3125B82351007CB55B /* DetailAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15ADE2F25B82351007CB55B /* DetailAccount.swift */; };
 		F15BE38925B39144009A7CE1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F15BE38825B39144009A7CE1 /* GoogleService-Info.plist */; };
 		F15EFB7425927F5F0071F94F /* filterHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15EFB7325927F5F0071F94F /* filterHistoryCell.swift */; };
 		F160D6F22597122B00ACB5AD /* personInforVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F160D6F12597122B00ACB5AD /* personInforVC.swift */; };
@@ -139,6 +141,8 @@
 		F157582E2582C2DD00FB0D13 /* chooseLendOrBorrowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chooseLendOrBorrowVC.swift; sourceTree = "<group>"; };
 		F1588A0225B747490011351F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F1588A0525B750C00011351F /* observeValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = observeValue.swift; sourceTree = "<group>"; };
+		F15ADE2E25B82351007CB55B /* DetailAccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailAccountCell.swift; sourceTree = "<group>"; };
+		F15ADE2F25B82351007CB55B /* DetailAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailAccount.swift; sourceTree = "<group>"; };
 		F15BE38825B39144009A7CE1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F15EFB7325927F5F0071F94F /* filterHistoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = filterHistoryCell.swift; sourceTree = "<group>"; };
 		F160D6F12597122B00ACB5AD /* personInforVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = personInforVC.swift; sourceTree = "<group>"; };
@@ -244,6 +248,8 @@
 		F1538C38257DE79200531002 /* account */ = {
 			isa = PBXGroup;
 			children = (
+				F15ADE2F25B82351007CB55B /* DetailAccount.swift */,
+				F15ADE2E25B82351007CB55B /* DetailAccountCell.swift */,
 				F156B53725A839FE0022DCF2 /* DetailAccumulate.swift */,
 				F156B53825A839FE0022DCF2 /* DetailSavingAccount.swift */,
 				F156B53625A839FE0022DCF2 /* DetailSavingCell.swift */,
@@ -496,7 +502,9 @@
 			files = (
 				F157008C25B7BCC600CBB259 /* reportVC.swift in Sources */,
 				DEFDCC19258F822600A0FDDB /* AddAccumulateView.swift in Sources */,
+				F15ADE3125B82351007CB55B /* DetailAccount.swift in Sources */,
 				F14E951325A035160078EE00 /* accountLinkVC.swift in Sources */,
+				F15ADE3025B82351007CB55B /* DetailAccountCell.swift in Sources */,
 				DEFDCC1E258F822600A0FDDB /* AccumulateAccountView.swift in Sources */,
 				F14EB7D6259FCCCA00FCFDEF /* settingVC.swift in Sources */,
 				DEAC0A6B2590C89A0000F378 /* PickAccountCell.swift in Sources */,

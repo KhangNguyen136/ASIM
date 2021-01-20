@@ -163,11 +163,15 @@ class yourDataVC: UITableViewController {
     func reloadDataFromFirebase(){
         ProgressHUD.show("Reloading your data from database online...")
         deleteLocalData()
-        userInfor?.reloadData{ [self] result in
+        userInfor?.reloadData{ [self] result, currency,isHide in
             print(result)
             if result == true
             {
                 reloadView()
+                try! realm.write{
+                userInfor?.currency = currency
+                userInfor?.isHideAmount = isHide
+                }
                 SCLAlertView().showSuccess("Reload data successfully", subTitle: "")
             }
             else

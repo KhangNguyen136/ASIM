@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class AddSavingAccount: UIViewController {
+class AddSavingAccount: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var lblCurr: UILabel!
     @IBOutlet weak var lblBalance: UITextField!
@@ -38,13 +38,19 @@ class AddSavingAccount: UIViewController {
     @IBOutlet weak var txtDescription: UITextField!
     @IBOutlet weak var imgAccount: UIImageView!
     @IBOutlet weak var swincludeRecord: UISwitch!
+    var bank = 0
     var share: Int = 0
+    var currency = 0
     var interestPaid = ["Maturity","Up-front","Monthly"]
     var termEnded = ["Rollover principal and interest", "Rollover principal", "Close account"]
     @IBOutlet weak var destAccHeight: NSLayoutConstraint!
     var objSource: polyAccount? = nil
     var objDest: polyAccount? = nil
     override func viewDidLoad() {
+        txtFreeInterest.delegate = self
+        txtInterestRate.delegate = self
+        lblBalance.delegate = self
+        lblCurrency.text = "Vietnamese Dong (VND)"
         super.viewDidLoad()
         destAccountView.isHidden = true
         destAccHeight.constant = 0
@@ -84,6 +90,14 @@ class AddSavingAccount: UIViewController {
         //Pick Des Account
         let pickDestAccount = UITapGestureRecognizer(target: self, action: #selector(chooseDestAccount(sender:)))
         destAccountView.addGestureRecognizer(pickDestAccount)
+    }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let isNumber = CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: string))
+        let withDecimal = (
+            string == NumberFormatter().decimalSeparator &&
+            textField.text?.contains(string) == false
+        )
+        return isNumber || withDecimal
     }
     @objc func updateAccount (notification: Notification){
         let dest = notification.userInfo!["dest"] as! Bool
@@ -168,23 +182,19 @@ class AddSavingAccount: UIViewController {
               self.present(alert,animated: true, completion: nil )
     }
     @objc func updateCurrency (notification: Notification){
-        lblCurrency.text = notification.userInfo?["currency"] as! String
-        if lblCurrency.text == "VND" {
-            lblCurr.text = ".đ"
-        }
-        else {
-            lblCurr.text = ".$"
-        }
-
+        let index = notification.userInfo?["currency"] as! String
+        self.currency = Int(index)!
+        lblCurrency.text = currencyBase().nameEnglish[Int(index)!]
+            lblCurr.text = currencyBase().symbol[Int(index)!]
     }
     @objc func updateTerm(notification: Notification){
         lblTerm.text = notification.userInfo?["term"] as! String
     }
     @objc func updateBankName (notification: Notification){
-        lblNameBank.text = notification.userInfo?["nameBank"] as! String
-           let imgName = notification.userInfo?["imgBank"] as! String
-        
-        imgbank.image = UIImage(named:imgName)
+        let index = notification.userInfo?["bank"] as! String
+        self.bank = Int(index)!
+        lblNameBank.text = infoChoice().bankName[Int(index)!]
+        imgbank.image = UIImage(named:infoChoice().bankImg[Int(index)!] )
        }
     @objc func chooseCurrency(sender: UITapGestureRecognizer) {
     let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView
@@ -257,14 +267,15 @@ class AddSavingAccount: UIViewController {
             Notice().showAlert(content: "Please input amount")
             return;
           }
-        acc.ammount = Float(lblBalance.text!) as! Float
+        acc.ammount = (Float(lblBalance.text!) as! Float) / Float( currencyBase().valueBaseDolar[self.currency])
+        print(acc.ammount)
        
         if lblNameBank.text! == "Bank"{
            Notice().showAlert(content: "Please choose Bank")
             return;
        }
-        acc.currency = lblCurrency.text!
-        acc.bank = lblNameBank.text!.components(separatedBy: " ")[2]
+        acc.currency = self.currency
+        acc.bank = self.bank
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
         if lblStartDate.text == "Today"{
@@ -326,12 +337,11 @@ class AddSavingAccount: UIViewController {
                 //Tru vao sourceAcc
                 srcAcc!.expense(amount: acc.ammount)
             }
+            
         }
         else if acc.srcAccount?.type == 1{
         let srcAcc = acc.srcAccount?.bankingAcc
-        let transfer = Transfer()
-            transfer.id = acc.id
-        
+       
         try! realm.write {
             //Tru vao sourceAcc
             srcAcc!.expense(amount: acc.ammount)
@@ -363,11 +373,11 @@ class AddSavingAccount: UIViewController {
         acc.add()
         let polyAcc = realm.objects(polyAccount.self).filter("type == 2")
         for sav in polyAcc{
-            if sav.savingAcc!.id == acc.id{
+            if sav.savingAcc!.name == acc.name{
                 let transfer = Transfer()
-                transfer.id = sav.id
+               
                 try! realm.write{
-                    transfer.getData(_amount: acc.ammount, _type: 4, _descript: "", _srcAccount: acc.srcAccount!, _location: "", _srcImg: "", _date: sav.savingAcc!.startdate, _destAccount: sav, _transferFee:nil)
+                    transfer.getData(_amount: acc.ammount, _type: 4, _descript: "Create a deposit account", _srcAccount: acc.srcAccount!, _location: "", _srcImg: "", _date: sav.savingAcc!.startdate, _destAccount: sav, _transferFee:nil)
                 }
                 transfer.add()
             }

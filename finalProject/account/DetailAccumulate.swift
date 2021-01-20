@@ -9,7 +9,7 @@ import UIKit
 
 class DetailAccumulate: UIViewController {
     var viewName = ""
-    var accumulate = Accumulate()
+    var accumulate = polyAccount()
     @IBOutlet weak var lblStartDate: UILabel!
     @IBOutlet weak var lblEndDate: UILabel!
     @IBOutlet weak var lblRemainDate: UILabel!
@@ -31,12 +31,12 @@ class DetailAccumulate: UIViewController {
     }
     
     func loadData(){
-        let purBalance = accumulate.balance
-        let addBalance = accumulate.addbalance
+        let purBalance = accumulate.accumulate!.balance
+        let addBalance = accumulate.accumulate!.addbalance
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
-        lblStartDate.text = "\(dateFormatter.string(from: accumulate.startdate)) - "
-        lblEndDate.text = dateFormatter.string(from: accumulate.enddate)
+        lblStartDate.text = "\(dateFormatter.string(from: accumulate.accumulate!.startdate)) - "
+        lblEndDate.text = dateFormatter.string(from: accumulate.accumulate!.enddate)
         if addBalance >= purBalance{
             
         }
@@ -48,16 +48,16 @@ class DetailAccumulate: UIViewController {
         lblRemain.text = "\(remain) đ"
         progress.progress = addBalance/purBalance
         lblAdded.text = "\(addBalance)"
-        let timeTerm = Calendar.current.dateComponents([.day], from: accumulate.startdate, to: accumulate.enddate)
+        let timeTerm = Calendar.current.dateComponents([.day], from: accumulate.accumulate!.startdate, to: accumulate.accumulate!.enddate)
         if timeTerm.day! < 30{
             lblRemainDate.text = "(Remain \(timeTerm.day!) days)"
         }
         else if timeTerm.day! <= 365{
-            let timeTerm = Calendar.current.dateComponents([.month], from: accumulate.startdate, to: accumulate.enddate)
+            let timeTerm = Calendar.current.dateComponents([.month], from: accumulate.accumulate!.startdate, to: accumulate.accumulate!.enddate)
             lblRemainDate.text = "(Remain \(timeTerm.month!) months)"
         }
         else {
-            let timeTerm = Calendar.current.dateComponents([.year], from: accumulate.startdate, to: accumulate.enddate)
+            let timeTerm = Calendar.current.dateComponents([.year], from: accumulate.accumulate!.startdate, to: accumulate.accumulate!.enddate)
             lblRemainDate.text = "(Remain \(timeTerm.year!) years)"
         }
         

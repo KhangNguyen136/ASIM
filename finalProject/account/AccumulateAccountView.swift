@@ -15,7 +15,7 @@ class AccumulateAccountView: UIViewController, delegateUpdate {
     }
     
     @IBOutlet weak var tableView: UITableView!
-    var allAccumulate: [Accumulate] = []
+    var allAccumulate: [polyAccount] = []
     @IBOutlet weak var lbltotal: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,11 +35,11 @@ class AccumulateAccountView: UIViewController, delegateUpdate {
     
     func loadData(){
         let realm = try! Realm()
-               let accumulate = realm.objects(Accumulate.self)
+        let accumulate = realm.objects(polyAccount.self).filter("type == 3")
                allAccumulate = Array(accumulate)
         var total: Float = 0.0
         for bal in accumulate{
-            total += bal.addbalance
+            total += bal.accumulate!.addbalance
         }
         lbltotal.text = "\(total)"
     }
@@ -52,8 +52,8 @@ extension AccumulateAccountView: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        let cell = tableView.dequeueReusableCell(withIdentifier: "AddAccumulateCell", for: indexPath) as! AddAccumulateCell
-        let purBalance = allAccumulate[indexPath.row].balance
-        let addBalance = allAccumulate[indexPath.row].addbalance
+        let purBalance = allAccumulate[indexPath.row].accumulate!.balance
+        let addBalance = allAccumulate[indexPath.row].accumulate!.addbalance
         if addBalance >= purBalance{
             cell.showComplete(condition: true)
         }
@@ -63,7 +63,7 @@ extension AccumulateAccountView: UITableViewDelegate, UITableViewDataSource{
         let remain = purBalance - addBalance
         cell.lblnowBalance.text = "\(addBalance)"
         cell.lblremain.text = "\(remain)"
-        cell.lblTitle.text = allAccumulate[indexPath.row].goal
+        cell.lblTitle.text = allAccumulate[indexPath.row].accumulate?.goal
         cell.lblstartBalance.text = "\(purBalance)"
         cell.progressView.progress = addBalance/purBalance
         cell.backgroundView = UIImageView(image: UIImage(named: "row"))
@@ -90,11 +90,14 @@ extension AccumulateAccountView: UITableViewDelegate, UITableViewDataSource{
                 let alertView = SCLAlertView(appearance: appearance)
                 alertView.addButton("OK") {
                     let realm = try! Realm()
-                    let obj = realm.objects(Accumulate.self).filter("id == '\(self.allAccumulate[indexPath.row].id)'")
-                    try! realm.write {
-                                realm.delete(obj)
-                            }
-                    //print(obj.count)
+                    let obj = realm.objects(polyAccount.self).filter("type  == 3")
+                    
+                    for del in obj{
+                        del.accumulate?.goal == self.allAccumulate[indexPath.row].accumulate?.goal
+                        del.del()
+                        break;
+                    }
+                   
                     self.loadData()
                     tableView.reloadData()
                        
@@ -112,8 +115,8 @@ extension AccumulateAccountView: UITableViewDelegate, UITableViewDataSource{
                 (action, view, nil) in
                  let scr=self.storyboard?.instantiateViewController(withIdentifier: "DepositView") as! DepositView
                               
-            scr.rootAccName = self.allAccumulate[indexPath.row].goal
-            scr.rootID = self.allAccumulate[indexPath.row].id
+            scr.rootAccName = self.allAccumulate[indexPath.row].accumulate!.goal
+            scr.rootAccount = self.allAccumulate[indexPath.row]
             self.navigationController?.pushViewController(scr, animated: true )
                 
             }
@@ -124,7 +127,7 @@ extension AccumulateAccountView: UITableViewDelegate, UITableViewDataSource{
                        (action, view, nil) in
              let scr=self.storyboard?.instantiateViewController(withIdentifier: "AddAccumulateView") as! AddAccumulateView
             scr.editMode = true
-            scr.editID = self.allAccumulate[indexPath.row].id
+            scr.editGoal = self.allAccumulate[indexPath.row].accumulate!.goal
             self.navigationController?.pushViewController(scr, animated: true)
                        
             }
@@ -136,7 +139,7 @@ extension AccumulateAccountView: UITableViewDelegate, UITableViewDataSource{
         }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let scr=self.storyboard?.instantiateViewController(withIdentifier: "DetailAccumulate") as! DetailAccumulate
-        scr.viewName = allAccumulate[indexPath.row].goal
+        scr.viewName = allAccumulate[indexPath.row].accumulate!.goal
         scr.accumulate = allAccumulate[indexPath.row]
         self.navigationController?.pushViewController(scr, animated: true)
     }
