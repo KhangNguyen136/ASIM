@@ -26,6 +26,7 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
     @IBOutlet weak var personTF: SearchTextField!
     @IBOutlet weak var locationTF: SearchTextField!
     @IBOutlet weak var chooseCategoryBtn: UIButton!
+    @IBOutlet weak var categoryImg: UIImageView!
     @IBOutlet weak var selectTypeRecord: UIButton!
     @IBOutlet weak var descript: UITextField!
     @IBOutlet weak var chooseAccountBtn: UIButton!
@@ -75,7 +76,7 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
     }
     func loadData()  {
         type = record!.type
-        
+        categoryImg.image = UIImage(named: "other\(type-2)")
         chooseCategoryBtn.setTitle(categoryValues().typeRecord[type], for: .normal)
         
         selectTypeRecord.setTitle(categoryValues().typeRecord[type],for: .normal)

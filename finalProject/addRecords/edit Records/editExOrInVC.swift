@@ -29,6 +29,7 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
     
     @IBOutlet weak var chooseTypeRecordBtn: UIButton!
     @IBOutlet weak var chooseCategoryBtn: UIButton!
+    @IBOutlet weak var categoryImg: UIImageView!
     
     @IBOutlet weak var dateTime: UIDatePicker!
     
@@ -54,6 +55,7 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
             detailCategory = 2
             
             tempRecord = temp
+            categoryImg.image = UIImage(named: "category112")
             chooseCategoryBtn.setTitle("Repayment", for: .normal)
             let borrow = temp.borrow
             amount.text = String(borrow!.remain)
@@ -65,6 +67,8 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
             category = 0
             detailCategory = 4
             tempRecord = temp
+            
+            categoryImg.image = UIImage(named: "category4")
             chooseCategoryBtn.setTitle("Collecting debt", for: .normal)
             
             let lend = temp.lend
@@ -88,14 +92,13 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
         detailCategory = row
         if(type == 0)
         {
-            //catch exception lend
+            categoryImg.image = UIImage(named: "category\(section)\(row)")
             chooseCategoryBtn.setTitle(categoryValues().expense[section][row], for: .normal)
         }
         else
         {
-            //catch exception borrow
+            categoryImg.image = UIImage(named: "income\(row)")
             chooseCategoryBtn.setTitle(categoryValues().income[section][row], for: .normal)
-
         }
     }
     
@@ -113,6 +116,7 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
             descript.text = temp?.descript
             category = temp!.category
             detailCategory = temp!.detailCategory
+            categoryImg.image = UIImage(named: "category\(category)\(detailCategory)")
             chooseCategoryBtn.setTitle(categoryValues().expense[category][detailCategory], for: .normal)
             personTF.text = temp?.payee
             locationTF.text = temp?.location
@@ -133,6 +137,7 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
             descript.text = temp?.descript
             category = 0
             detailCategory = temp!.category
+            categoryImg.image = UIImage(named: "income\(detailCategory)")
             chooseCategoryBtn.setTitle(categoryValues().income[category][detailCategory], for: .normal)
             personTF.text = temp?.payer
             locationTF.text = temp?.location

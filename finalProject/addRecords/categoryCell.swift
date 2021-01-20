@@ -11,10 +11,10 @@ class categoryCell: UITableViewCell {
 
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var icon: UIImageView!
-    func getData(name: String, id: Int)  {
+    func getData(name: String, imgName: String)  {
         title.text = name
 //        icon.image = UIImage(named: "category\(id)")
-        icon.image = UIImage(named: "home")
+        icon.image = UIImage(named: imgName)
     }
     
     override func awakeFromNib() {
@@ -36,10 +36,9 @@ class detailCategoryCell: UITableViewCell {
 
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var icon: UIImageView!
-    func getData(name: String, id: Int)  {
+    func getData(name: String, imgName: String)  {
         title.text = name
-//        icon.image = UIImage(named: "category\(id)")
-        icon.image = UIImage(named: "home")
+        icon.image = UIImage(named: imgName)
     }
     
     override func awakeFromNib() {

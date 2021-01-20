@@ -149,20 +149,27 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
         if(indexPath.row == 0)
         {
         let cell: categoryCell = listTv.dequeueReusableCell(withIdentifier: "categoryRow", for: indexPath) as! categoryCell
-        cell.getData(name: dataSource[indexPath.section][indexPath.row], id: 0)
+            cell.getData(name: dataSource[indexPath.section][indexPath.row], imgName: "category\(indexPath.section)\(indexPath.row)")
         return cell
         }
         else
         {
             let cell: detailCategoryCell = listTv.dequeueReusableCell(withIdentifier: "detailCategoryRow", for: indexPath) as! detailCategoryCell
-            cell.getData(name: dataSource[indexPath.section][indexPath.row], id: 0)
+            cell.getData(name: dataSource[indexPath.section][indexPath.row],imgName: "category\(indexPath.section)\(indexPath.row)" )
             return cell
         }
     }
     else
     {
         let cell: detailCategoryCell = listTv.dequeueReusableCell(withIdentifier: "detailCategoryRow", for: indexPath) as! detailCategoryCell
-        cell.getData(name: dataSource[indexPath.section][indexPath.row], id: 0)
+        if type == 1
+        {
+        cell.getData(name: dataSource[indexPath.section][indexPath.row],imgName: "income\(indexPath.row)" )
+        }
+        else
+        {
+            cell.getData(name: dataSource[indexPath.section][indexPath.row],imgName: "other\(indexPath.row)" )
+        }
         return cell
     }
     
@@ -184,6 +191,7 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
             return
         }
         didSelectedCategory(section: indexPath.section, row: indexPath.row)
-        }
+        
+}
 }
 

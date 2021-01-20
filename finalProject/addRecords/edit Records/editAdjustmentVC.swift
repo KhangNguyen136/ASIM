@@ -20,6 +20,7 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
             detailCategory = 2
             
             tempRecord = temp
+            categoryImg.image = UIImage(named: "category111")
             chooseCategoryBtn.setTitle("Repayment", for: .normal)
             let borrow = temp.borrow
             descript.text = "Repay for " + borrow!.lender
@@ -30,6 +31,7 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
             category = 0
             detailCategory = 4
             tempRecord = temp
+            categoryImg.image = UIImage(named: "income4")
             chooseCategoryBtn.setTitle("Collecting debt", for: .normal)
             let lend = temp.lend
             descript.text = "Collect debt from " + lend!.borrower
@@ -56,6 +58,7 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
     @IBOutlet weak var typeReccord: UIButton!
     @IBOutlet weak var chooseAccountBtn: UIButton!
     @IBOutlet weak var chooseCategoryBtn: UIButton!
+    @IBOutlet weak var categoryImg: UIImageView!
     @IBOutlet weak var descript: UITextField!
     @IBOutlet weak var acctualBalance: UITextField!
     @IBOutlet weak var currentBalance: UILabel!
@@ -115,6 +118,7 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         category = temp!.category
         detailCategory = temp!.detailCategory
         tempRecord = temp?.tempRecord
+        didSelectCategory(section: category, row: detailCategory)
         
         _acttualBalance = loadAmount(value: (record?.adjustment!.amount)!)
         acctualBalance.text = String(_acttualBalance)
@@ -171,10 +175,12 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
 
         if subtype == 0
         {
+            categoryImg.image = UIImage(named: "category\(section)\(row)")
             chooseCategoryBtn.setTitle(categoryValues().expense[category][detailCategory], for: .normal)
         }
         else
         {
+            categoryImg.image = UIImage(named: "income\(row)")
             chooseCategoryBtn.setTitle(categoryValues().income[0][detailCategory], for: .normal)
         }
     }
@@ -242,6 +248,7 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
             {
                 category = -1
                 detailCategory = -1
+                categoryImg.image = UIImage(systemName: "archivebox")
                 chooseCategoryBtn.setTitle("Select category", for: .normal)
                 subtype = 1
                 different.textColor = UIColor.green
@@ -255,6 +262,7 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
             {
                 category = -1
                 detailCategory = -1
+                categoryImg.image = UIImage(systemName: "archivebox")
                 chooseCategoryBtn.setTitle("Select category", for: .normal)
                 subtype = 0
                 different.textColor = UIColor.red

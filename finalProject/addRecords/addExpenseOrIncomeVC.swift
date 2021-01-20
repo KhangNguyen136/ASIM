@@ -36,6 +36,7 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
     
     @IBOutlet weak var chooseTypeRecordBtn: UIButton!
     
+    @IBOutlet weak var categoryLogo: UIImageView!
     @IBOutlet weak var chooseCategoryBtn: UIButton!
     
     @IBOutlet weak var dateTime: UIDatePicker!
@@ -57,6 +58,10 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
     var imagePicker = UIImagePickerController()
 
     let dropDown = DropDown()
+    
+    @IBAction func clickChooseImg(_ sender: Any) {
+        
+    }
     func setUp()
     {
         amount.isSecureTextEntry = userInfor!.isHideAmount
@@ -114,6 +119,7 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
             detailCategory = 2
             
             tempRecord = temp
+            categoryLogo.image = UIImage(named: "category112")
             chooseCategoryBtn.setTitle("Repayment", for: .normal)
             
             let borrow = temp.borrow
@@ -127,6 +133,7 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
             detailCategory = 4
             
             tempRecord = temp
+            categoryLogo.image = UIImage(named: "income4")
             chooseCategoryBtn.setTitle("Collecting debt", for: .normal)
             
             let lend = temp.lend
@@ -150,10 +157,12 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
         detailCategory = row
         if(type == 0)
         {
+            categoryLogo.image = UIImage(named: "category\(section)\(row)")
             chooseCategoryBtn.setTitle(categoryValues().expense[section][row], for: .normal)
         }
         else
         {
+            categoryLogo.image = UIImage(named: "income\(row)")
             chooseCategoryBtn.setTitle(categoryValues().income[section][row], for: .normal)
         }
     }
@@ -264,7 +273,7 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
            guard let cell = cell as? typeRecord else { return }
 
            // Setup your custom UI components
-           cell.logo.image = UIImage(named: "home")
+           cell.logo.image = UIImage(named: "typeRecord\(index)")
         }
         dropDown.selectionAction = { [weak self] (index: Int, item: String) in
             sender.setTitle(item, for: .normal)
@@ -275,6 +284,7 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
                     self!.category = -1
                     self!.detailCategory = -1
                     self?.chooseCategoryBtn.setTitle("Select category", for: .normal)
+                    self!.categoryLogo.image = UIImage(systemName: "archivebox")
                     self?.descript.text = ""
                     self!.type = index
                     if index == 0

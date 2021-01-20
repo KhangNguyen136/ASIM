@@ -27,6 +27,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
     
     @IBOutlet weak var locationTF: SearchTextField!
     
+    @IBOutlet weak var categoryLogo: UIImageView!
     @IBOutlet weak var chooseCategoryBtn: UIButton!
     @IBOutlet weak var selectTypeRecord: UIButton!
     @IBOutlet weak var descript: UITextField!
@@ -68,6 +69,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
             descript.text = personTF.text! + " took out a loan"
             type = 2
             selectTypeRecord.setTitle("Lend", for: .normal)
+            categoryLogo.image = UIImage(named: "other0")
             chooseCategoryBtn.setTitle(categoryValues().other[0][category], for: .normal)
         }
         if row == 1
@@ -77,6 +79,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
             personTF.placeholder = "Lender"
             descript.text = "Borrowed money from " + personTF.text!
             selectTypeRecord.setTitle("Borrow", for: .normal)
+            categoryLogo.image = UIImage(named: "other1")
             chooseCategoryBtn.setTitle(categoryValues().other[0][category], for: .normal)
         }
     }
@@ -89,6 +92,8 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         selectTypeRecord.layer.cornerRadius = selectTypeRecord.frame.width/8
 
         category = type - 2
+
+        categoryLogo.image = UIImage(named: "typeRecord\(type)")
         chooseCategoryBtn.setTitle(categoryValues().other[0][category], for: .normal)
         if type == 2 {
             amount.textColor = UIColor.red
@@ -174,7 +179,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
            guard let cell = cell as? typeRecord else { return }
 
            // Setup your custom UI components
-           cell.logo.image = UIImage(named: "home")
+           cell.logo.image = UIImage(named: "typeRecord\(index)")
         }
         
         
@@ -202,6 +207,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
 
                         
                         self!.selectTypeRecord.setTitle("Lend", for: .normal)
+                        self!.categoryLogo.image = UIImage(named: "other0")
                         self!.chooseCategoryBtn.setTitle("Lend", for: .normal)
                         self?.descript.text = ""
                     }
@@ -212,6 +218,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
                         self!.personTF.placeholder = "Lender"
 
                         self!.selectTypeRecord.setTitle("Borrow", for: .normal)
+                        self!.categoryLogo.image = UIImage(named: "other1")
                         self!.chooseCategoryBtn.setTitle("Borrow", for: .normal)
                         self?.descript.text = ""
                     }

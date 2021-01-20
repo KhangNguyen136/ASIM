@@ -85,6 +85,7 @@ class yourDataVC: UITableViewController {
     func syncData(){
         ProgressHUD.show("Sync your data...")
         userInfor?.syncData()
+        print("Synced!")
         ProgressHUD.dismiss()
         SCLAlertView().showSuccess("Sync data successfully!", subTitle: "")
         getLastSync()
@@ -162,10 +163,11 @@ class yourDataVC: UITableViewController {
     func reloadDataFromFirebase(){
         ProgressHUD.show("Reloading your data from database online...")
         deleteLocalData()
-        userInfor?.reloadData{ result in
+        userInfor?.reloadData{ [self] result in
             print(result)
             if result == true
             {
+                reloadView()
                 SCLAlertView().showSuccess("Reload data successfully", subTitle: "")
             }
             else

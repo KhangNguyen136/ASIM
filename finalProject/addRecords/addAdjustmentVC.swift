@@ -28,6 +28,7 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
     
     @IBOutlet weak var selectTypeRecord: UIButton!
     @IBOutlet weak var chooseAccountBtn: UIButton!
+    @IBOutlet weak var categoryLogo: UIImageView!
     @IBOutlet weak var chooseCategoryBtn: UIButton!
     @IBOutlet weak var descript: UITextField!
     @IBOutlet weak var locationTF: SearchTextField!
@@ -50,6 +51,7 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
             detailCategory = 2
             
             tempRecord = temp
+            categoryLogo.image = UIImage(named: "category112")
             chooseCategoryBtn.setTitle("Repayment", for: .normal)
             
             let borrow = temp.borrow
@@ -62,6 +64,7 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
             detailCategory = 4
             
             tempRecord = temp
+            categoryLogo.image = UIImage(named: "income4")
             chooseCategoryBtn.setTitle("Collecting debt", for: .normal)
             
             let lend = temp.lend
@@ -86,10 +89,12 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
 
         if subtype == 0
         {
+            categoryLogo.image = UIImage(named: "category\(section)\(row)")
             chooseCategoryBtn.setTitle(categoryValues().expense[category][detailCategory], for: .normal)
         }
         else
         {
+            categoryLogo.image = UIImage(named: "income\(row)")
             chooseCategoryBtn.setTitle(categoryValues().income[0][detailCategory], for: .normal)
         }
         
@@ -193,7 +198,7 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
            guard let cell = cell as? typeRecord else { return }
 
            // Setup your custom UI components
-           cell.logo.image = UIImage(named: "home")
+           cell.logo.image = UIImage(named: "typeRecord\(index)")
         }
         dropDown.selectionAction = { [weak self] (index: Int, item: String) in
             sender.setTitle(item, for: .normal)
@@ -250,6 +255,7 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
             {
                 category = -1
                 detailCategory = -1
+                categoryLogo.image = UIImage(systemName: "archivebox")
                 chooseCategoryBtn.setTitle("Select category", for: .normal)
                 personTF.placeholder = "Payee"
                 descript.text = ""
@@ -265,6 +271,7 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
             {
                 category = -1
                 detailCategory = -1
+                categoryLogo.image = UIImage(systemName: "archivebox")
                 chooseCategoryBtn.setTitle("Select category", for: .normal)
                 personTF.placeholder = "Payer"
                 descript.text = ""

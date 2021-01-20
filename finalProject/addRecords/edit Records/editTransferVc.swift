@@ -11,9 +11,7 @@ import SearchTextField
 import SCLAlertView
 import FirebaseDatabase
 
-protocol selectDestinationAccountDelegate: class {
-    func didSelectDestAccount(temp: polyAccount,name: String)
-}
+
 
 class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestinationAccountDelegate, settingDelegate {
     func didSelectDestAccount(temp: polyAccount, name: String) {

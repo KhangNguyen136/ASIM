@@ -104,7 +104,7 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
            guard let cell = cell as? typeRecord else { return }
 
            // Setup your custom UI components
-           cell.logo.image = UIImage(named: "home")
+           cell.logo.image = UIImage(named: "typeRecord\(index)")
         }
         dropDown.selectionAction = { [weak self] (index: Int, item: String) in
             sender.setTitle(item, for: .normal)
