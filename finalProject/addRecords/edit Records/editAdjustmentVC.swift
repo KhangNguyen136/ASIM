@@ -398,20 +398,20 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
                 self.record?.adjustment?.undoTransaction()
                 if self.record?.isUploaded == true
                 {
-                    if record?.adjustment?.img != nil
+                    if self.record?.adjustment?.img != nil
                     {
-                        record?.adjustment?.img?.isDeleted = true
+                        self.record?.adjustment?.img?.isDeleted = true
                     }
-                    record?.isDeleted = true
+                    self.record?.isDeleted = true
                 }
                     else
                 {
-                    if record?.adjustment?.img != nil
+                    if self.record?.adjustment?.img != nil
                     {
-                        realm.delete(record!.adjustment!.img!)
+                        self.realm.delete(self.record!.adjustment!.img!)
                     }
-                realm.delete((record?.adjustment)!)
-                realm.delete(record!)
+                    self.realm.delete((self.record?.adjustment)!)
+                    self.realm.delete(self.record!)
 
                 }
         }

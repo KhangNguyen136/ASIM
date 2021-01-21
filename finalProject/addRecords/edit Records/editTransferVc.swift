@@ -304,12 +304,12 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
                     }
                     self.record?.transferFee = nil
                 }
-                if src?.transfer?.img != nil
+                if self.src?.transfer?.img != nil
                 {
-                    src?.transfer?.img?.isDeleted = true
+                    self.src?.transfer?.img?.isDeleted = true
                 }
-                src?.transfer?.undoTransaction()
-                src?.isDeleted = true
+                self.src?.transfer?.undoTransaction()
+                self.src?.isDeleted = true
 
                 print("Mark a transfer as deleted.")
             }
@@ -321,13 +321,13 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
                     self.realm.delete((self.record?.transferFee?.expense)!)
                     self.realm.delete((self.record?.transferFee)!)
                 }
-                if src?.transfer?.img != nil
+                if self.src?.transfer?.img != nil
                 {
-                    realm.delete(src!.transfer!.img!)
+                    self.realm.delete(self.src!.transfer!.img!)
                 }
-                src?.transfer?.undoTransaction()
-                realm.delete((src?.transfer)!)
-                realm.delete(src!)
+                self.src?.transfer?.undoTransaction()
+                self.realm.delete((self.src?.transfer)!)
+                self.realm.delete(self.src!)
 
                 print("Deleted a transfer.")
             }

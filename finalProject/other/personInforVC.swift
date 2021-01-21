@@ -11,12 +11,16 @@ import RealmSwift
 class personInforVC: UIViewController {
     let realm = try! Realm()
     var userInfor: User!
-    let _title = ["Display name: ","Numberphone: ","","Address: ","Job: ","Email: "]
+    var _title = ["Display name: ","Numberphone: ","","Address: ","Job: ","Email: "]
     var content:[String] = []
     @IBOutlet weak var avtImg: UIImageView!
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var listTV: UITableView!
     override func viewDidLoad() {
+        let lang = self.realm.objects(User.self).first?.isVietnamese
+               if lang == true{
+                  _title = ["Tên hiển thị: ","Số điện thoại: ","","Địa chỉ: ","Công việc: ","Email: "]
+               }
         listTV.register(inforTextFieldCell.self, forCellReuseIdentifier: "inforTextFieldCell")
         listTV.register(dobInforCell.self, forCellReuseIdentifier: "dobInforCell")
         listTV.register(submitInforCell.self, forCellReuseIdentifier: "submitInforCell")

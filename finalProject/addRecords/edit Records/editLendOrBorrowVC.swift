@@ -344,21 +344,21 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
                 self.record?.isDeleted = true
                 if self.record?.type == 2
                 {
-                    if record?.lend?.img != nil && record!.lend!.img!.isUploaded == true
+                    if self.record?.lend?.img != nil && self.record!.lend!.img!.isUploaded == true
                     {
-                        record!.lend!.img!.isDeleted = true
+                        self.record!.lend!.img!.isDeleted = true
                     }
-                    record?.lend?.undoTransaction()
+                    self.record?.lend?.undoTransaction()
 
                     print("Mark a lend as deleted!")
                 }
                 else
                 {
-                    if record?.borrow?.img != nil && record!.borrow!.img!.isUploaded == true
+                    if self.record?.borrow?.img != nil && self.record!.borrow!.img!.isUploaded == true
                     {
-                        record!.borrow!.img!.isDeleted = true
+                        self.record!.borrow!.img!.isDeleted = true
                     }
-                    record?.borrow?.undoTransaction()
+                    self.record?.borrow?.undoTransaction()
 
                     print("Mark a borrow as deleted!")
                 }
@@ -367,24 +367,24 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
             {
                 if self.record?.type == 2
                 {
-                    if record?.lend?.img != nil
+                    if self.record?.lend?.img != nil
                     {
-                        realm.delete(record!.lend!.img!)
+                        self.realm.delete(self.record!.lend!.img!)
                     }
-                    record?.lend?.undoTransaction()
-                    realm.delete((record?.lend)!)
+                    self.record?.lend?.undoTransaction()
+                    self.realm.delete((self.record?.lend)!)
 
                     print("Delete a lend!")
 
                 }
                 else
                 {
-                    if record?.borrow?.img != nil
+                    if self.record?.borrow?.img != nil
                     {
-                        realm.delete(record!.borrow!.img!)
+                        self.realm.delete(self.record!.borrow!.img!)
                     }
-                    record?.borrow?.undoTransaction()
-                    realm.delete((record?.borrow)!)
+                    self.record?.borrow?.undoTransaction()
+                    self.realm.delete((self.record?.borrow)!)
 
                     print("Delete a borrow!")
 

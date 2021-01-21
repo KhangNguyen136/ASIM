@@ -11,17 +11,23 @@ import RealmSwift
 
 class DepositView: UIViewController {
 
+    @IBOutlet weak var txtFee: UITextField!
     @IBOutlet weak var imgAccount: UIImageView!
+    @IBOutlet weak var Amount: UILabel!
     @IBOutlet weak var lblNameAccount: UILabel!
     @IBOutlet weak var lblTime: UILabel!
     @IBOutlet weak var accountView: UIView!
     @IBOutlet weak var lblrootName: UILabel!
+    @IBOutlet weak var FromAccount: UILabel!
     @IBOutlet weak var txtDescription: UITextField!
+    @IBOutlet weak var TransferFee: UILabel!
+    @IBOutlet weak var ToAccount: UILabel!
     var rootAccName: String = ""
     var obj:polyAccount? = nil
     var rootAccount:polyAccount? = nil
     @IBOutlet weak var lblBalance: UITextField!
     override func viewDidLoad() {
+        setLanguage()
         super.viewDidLoad()
 
          self.view.backgroundColor = UIColor(red: 71/255, green: 181/255, blue: 190/255, alpha: 1)
@@ -39,17 +45,33 @@ class DepositView: UIViewController {
         txtDescription.text = "Desposit to saving account \(rootAccName)"
         
     }
-
+    func setLanguage(){
+        FromAccount.setupAutolocalization(withKey: "FromAccount", keyPath: "text")
+        Amount.setupAutolocalization(withKey: "Amount", keyPath: "text")
+        ToAccount.setupAutolocalization(withKey: "ToAccount", keyPath: "text")
+        TransferFee.setupAutolocalization(withKey: "TransferFee", keyPath: "text")
+        lblNameAccount.setupAutolocalization(withKey: "ChooseAccount", keyPath: "text")
+        
+    }
     @IBAction func saveDeposit(_ sender: Any) {
         let realm = try! Realm()
         
        // var accumulateBal:Float = 0.0
+        if obj == nil{
+            Notice().showAlert(content: "Please input source account")
+            return
+        }
+       
+        if lblBalance.text! == "0"{
+            Notice().showAlert(content: "Please input balance")
+            return
+        }
         var accountBal:Float = 0.0
         let balance: Float = Float(lblBalance.text!) as! Float
-        //let accountBal
+        let fee = Float(txtFee.text!) as! Float
         let transfer = Transfer()
         try! realm.write {
-            transfer.getData(_amount: balance, _type: 4, _descript: "Deposit account", _srcAccount: obj!, _location: "", _srcImg: nil, _date: Date(), _destAccount: rootAccount!, _transferFee: nil)
+            transfer.getData(_amount: balance, _type: 4, _descript: "Deposit account", _srcAccount: obj!, _location: "", _srcImg: nil, _date: Date(), _destAccount: rootAccount!, _transferFee: nil )
         }
         transfer.add()
         var accumulateBal:Float = (rootAccount?.accumulate!.addbalance)! + balance
@@ -87,26 +109,6 @@ class DepositView: UIViewController {
         self.navigationController?.pushViewController(scr, animated: true )
        // self.present(scr, animated: true, completion: nil)
        }
-    @IBAction func chooseType(_ sender: UIButton) {
-               let dropDown = DropDown()
-
-               // The view to which the drop down will appear on
-               dropDown.anchorView = sender // UIView or UIBarButtonItem
-
-               // The list of items to display. Can be changed dynamically
-               dropDown.dataSource = ["Income","Transfer"]
-
-               /*** IMPORTANT PART FOR CUSTOM CELLS ***/
-               dropDown.cellNib = UINib(nibName: "typeRecord", bundle: nil)
-
-               dropDown.customCellConfiguration = { (index: Index, item: String, cell: DropDownCell) -> Void in
-                  guard let cell = cell as? typeRecord else { return }
-
-                  // Setup your custom UI components
-                  cell.logo.image = UIImage(named: "home")
-               }
-        
-               dropDown.show()
-    }
+    
 
 }

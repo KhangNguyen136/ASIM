@@ -13,6 +13,7 @@ class AddAccumulateCell: UITableViewCell {
     @IBOutlet weak var lblstartBalance: UILabel!
     @IBOutlet weak var lblTitle: UILabel!
 
+    @IBOutlet weak var btnOption: UIButton!
     @IBOutlet weak var lblComlete: UILabel!
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var lblnowBalance: UILabel!

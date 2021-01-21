@@ -139,7 +139,7 @@ extension ChoiceAccountView: UITableViewDataSource, UITableViewDelegate {
             self.navigationController?.popViewController(animated: true)
         }
         else if accountMode == true{
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "accountNotification"), object: nil, userInfo: ["accountType": accountLabel[indexPath.row]])
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "accountNotification"), object: nil, userInfo: ["accountType": "\(indexPath.row)"])
             self.navigationController?.popViewController(animated: true)
         }
         else if timeMode == true{
@@ -169,4 +169,5 @@ static let bankNotification = Notification.Name("bankNotification")
 static let accountNotification = Notification.Name("accountNotification")
 static let timeNotification = Notification.Name("timeNotification")
 static let termNotification = Notification.Name("termNotification")
+static let updateNotification = Notification.Name("updateNotification")
 }

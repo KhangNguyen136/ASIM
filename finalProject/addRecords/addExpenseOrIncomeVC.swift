@@ -15,6 +15,7 @@ import SCLAlertView
 class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectAccountDelegate,settingDelegate,delteImageDelegate {
     
     
+    @IBOutlet weak var AmountL: UILabel!
     
     var type = 0
     var category = -1
@@ -78,6 +79,8 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
         settingObser = settingObserver(object: setting!)
         unit.text = currencyBase().symbol[userInfor!.currency]
     }
+    func setLanguage(){
+     }
     func loadData() {
         chooseTypeRecordBtn.setTitle(categoryValues().typeRecord[type],for: .normal)
         chooseTypeRecordBtn.clipsToBounds = true
@@ -364,6 +367,7 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
         dropDown.show()
         }
     override func viewDidLoad() {
+       setLanguage()
         loadData()
         chooseTypeRecordBtn.semanticContentAttribute = .forceRightToLeft
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
@@ -371,6 +375,7 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
         let reviewImg = UITapGestureRecognizer(target: self, action: #selector(clickImg))
         imgView.isUserInteractionEnabled = true
         imgView.addGestureRecognizer(reviewImg)
+        
         super.viewDidLoad()
     }
     @objc func clickImg() {

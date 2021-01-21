@@ -659,4 +659,20 @@ class polyRecord: Object{
             return adjustment!.date
         }
     }
+    func getAmount() -> Float{
+        switch type {
+        case 0:
+            return expense!.amount
+        case 1:
+            return income!.amount
+        case 2:
+            return lend!.amount
+        case 3:
+            return borrow!.amount
+        case 4:
+            return transfer!.amount
+        default:
+            return adjustment!.amount
+        }
+    }
 }

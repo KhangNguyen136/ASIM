@@ -510,17 +510,17 @@ class User: Object{
                 return
             }
             let data = snapshot.value as? [String: Any]
-            try! realm?.write{
-            numberPhone = data!["numberPhone"] as! String
-            address = data!["address"] as! String
-            job = data!["job"] as! String
-            birthDay = Date(timeIntervalSince1970: (data!["birthDay"] as! TimeInterval))
-            isMale = data!["isMale"] as! Bool
+            try! self.realm?.write{
+                self.numberPhone = data!["numberPhone"] as! String
+                self.address = data!["address"] as! String
+                self.job = data!["job"] as! String
+                self.birthDay = Date(timeIntervalSince1970: (data!["birthDay"] as! TimeInterval))
+                self.isMale = data!["isMale"] as! Bool
             
-            isVietnamese = data!["isVietnamese"] as! Bool
+                self.isVietnamese = data!["isVietnamese"] as! Bool
             tempCurrency = data!["currency"] as! Int
-            defaultScreen = data!["defaultScreen"] as! Int
-            dateFormat = data!["dateFormat"] as! String
+                self.defaultScreen = data!["defaultScreen"] as! Int
+                self.dateFormat = data!["dateFormat"] as! String
             tempIsHide = data!["isHideAmount"] as! Bool
             }
             
@@ -579,9 +579,9 @@ class User: Object{
                     tempPolyAcc.savingAcc?.termEnded = temp["termEnded"] as! Int
                     tempPolyAcc.savingAcc?.termEnded = temp["termEnded"] as! Int
                     let tempSrcAcc = temp["srcAccount"] as! Int
-                    tempPolyAcc.savingAcc?.srcAccount = getAccountByID(id: tempSrcAcc)
+                    tempPolyAcc.savingAcc?.srcAccount = self.getAccountByID(id: tempSrcAcc)
                     let tempDestAcc = temp["destAccount"] as! Int
-                    tempPolyAcc.savingAcc?.destAccount = getAccountByID(id: tempDestAcc)
+                    tempPolyAcc.savingAcc?.destAccount = self.getAccountByID(id: tempDestAcc)
                     tempPolyAcc.savingAcc?.descrip = temp["descrip"] as! String
                     tempPolyAcc.savingAcc?.includeRecord = temp["includeRecord"] as! Bool
                     tempPolyAcc.savingAcc?.ammount = temp["ammount"] as! Float
@@ -590,9 +590,9 @@ class User: Object{
                     resultAccount.append(tempPolyAcc)
                     print("Reload an saving account.")
                 }
-                try! realm?.write{
-                    realm?.add(tempPolyAcc)
-                    accounts.append(tempPolyAcc)
+                try! self.realm?.write{
+                    self.realm?.add(tempPolyAcc)
+                    self.accounts.append(tempPolyAcc)
                 }
             }
             //reload records
@@ -795,7 +795,7 @@ class User: Object{
                 for index in 0...parentIndex.count-1
             {
                 //get record by id
-                let temp = findRecordByID(arr: recordsResult,id: childID[index])
+                let temp = self.findRecordByID(arr: recordsResult,id: childID[index])
                     switch recordsResult[parentIndex[index]].type {
                     case 0:
                         recordsResult[parentIndex[index]].expense?.borrowRecord = temp
@@ -808,11 +808,11 @@ class User: Object{
                     }
             }
             }
-            try! realm?.write{
+            try! self.realm?.write{
                 for i in recordsResult{
-                    realm?.add(i)
+                    self.realm?.add(i)
                 }
-            records.append(objectsIn: recordsResult)
+                self.records.append(objectsIn: recordsResult)
             }
             completionHandler(true,tempCurrency,tempIsHide)
         })

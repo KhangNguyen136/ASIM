@@ -33,6 +33,7 @@ struct infoChoice{
 
     let termEnglish = ["1 week","2 weeks", "3 weeks","1 month", "3 months", "6 months","12 months"]
     let termVietnamese = ["1 tuần","2 tuần", "3 tuần","1 tháng", "3 tháng", "6 tháng","12 tháng"]
+
 }
 struct categoryValues {
     let expense = [
@@ -106,6 +107,7 @@ class Notify: Object{
             }
         }
        }
+    
     
     
 }
@@ -273,7 +275,7 @@ class Accumulate: Object{
     @objc dynamic var balance: Float = 0
     @objc dynamic var addbalance: Float = 0
     @objc dynamic var includeReport: Bool = true
-    @objc dynamic var currency: String = ""
+    @objc dynamic var currency: Int = 0
     @objc dynamic var startdate: Date = Date()
     @objc dynamic var enddate: Date = Date()
     func add(){

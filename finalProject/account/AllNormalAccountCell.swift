@@ -12,6 +12,7 @@ class AllNormalAccountCell: UITableViewCell {
     @IBOutlet weak var imgIcon: UIImageView!
     @IBOutlet weak var lblName: UILabel!
     @IBOutlet weak var lblMoney: UILabel!
+    @IBOutlet weak var btnOption: UIButton!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

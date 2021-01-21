@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   finalProject
 
@@ -23,7 +23,30 @@
 "Day" = "ngày";
 "Term" = "Kỳ hạn";
 "Amount" = "Số tiền";
-
+"TotalSave" = "Tổng tích luỹ";
+"Folowings" = "Đang theo dõi";
+"goal" = "Tích luỹ cho việc gì";
+"howLong" = "Trong bao lâu?";
+"EndDate" = "Ngày kết thúc";
+"Time" = "Thời gian";
+"Remain" = "Còn lại";
+"NeedMore" = "Cần thêm";
+"Month" = "Tháng";
+"Year" = "Năm";
+"FromAccount" = "Từ tài khoản";
+"ToAccount" = "Đến tài khoản";
+"TransferFee" = "Phí chuyển tiền";
+"TotalIncome" = "Tổng thu";
+"TotalExpense" = "Tổng chi";
+"ChooseAccount" = "Chọn tài khoản";
+"Balance" = "Số dư";
+"All" = "Tất cả";
+"BankName" = "Tên ngân hàng";
+"Language" = "Ngôn ngữ";
+"Currency" = "Đơn vị tiền tệ";
+"HideAmount" = "Ẩn số tiền";
+"DefaultUseScreen" = "Màn hình sử dụng mặc định";
+"DateFormat" = "Định dạng thời gian";
 
 
 
