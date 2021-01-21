@@ -15,22 +15,45 @@ struct entry
     var label: Int
 }
 
-class chartType1VC: UITableViewController {
+class chartType1VC: UITableViewController, settingDelegate {
+    func changedHideAmountValue(value: Bool) {
+        
+    }
+    
+    func changedCurrency(value: Int) {
+        currency = value
+        drawChart()
+    }
+    func loadAmountByCurrency(value: Float) -> Float
+    {
+        if userInfor?.currency == 0
+        {
+            return value
+        }
+        return value * Float(currencyBase().valueBaseDolar[userInfor!.currency])
+    }
+    
     @IBOutlet weak var chooseTypeBtn: UIButton!
     @IBOutlet weak var barChart: BarChartView!
     
-    @IBOutlet weak var titleTime: UILabel!
+
     @IBOutlet weak var totalIncome: UILabel!
     @IBOutlet weak var totalExpense: UILabel!
     @IBOutlet weak var total: UILabel!
     
     @IBOutlet weak var filterBtn: UIButton!
+    @IBOutlet weak var filterTitle: UILabel!
     
-    
+    var currency:Int = 0;
     var type = -1
     var userInfor: User? = nil
     let realm = try! Realm()
+    let filterLabels = ["This year","This month","This week","Today"]
     var recordList: [polyRecord] = []
+    //observed setting change
+    var setting: settingObserve? = nil
+    var settingObser: settingObserver? = nil
+
     
     var filterBy = 1
     @IBAction func chooseOptionFilter(_ sender: Any) {
@@ -38,7 +61,7 @@ class chartType1VC: UITableViewController {
         // The view to which the drop down will appear on
         dropDown.anchorView = sender as! AnchorView // UIView or UIBarButtonItem
         // The list of items to display. Can be changed dynamically
-        dropDown.dataSource = ["This year","This month","This week","Today"]
+        dropDown.dataSource = filterLabels
         /*** IMPORTANT PART FOR CUSTOM CELLS ***/
         
         dropDown.selectionAction = { [weak self] (index: Int, item: String) in
@@ -46,7 +69,7 @@ class chartType1VC: UITableViewController {
             {
                 self?.filterBtn.setTitle(item, for: .normal)
                 self!.filterBy = index
-                self!.loadData()
+                self!.drawChart()
             }
         }
         dropDown.show()
@@ -90,8 +113,8 @@ class chartType1VC: UITableViewController {
         dropDown.show()
     }
     func drawChart(){
-        let xStrings:[String]=["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec","test"]
-        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(values:xStrings)
+        var xStrings:[String]=[]
+
         if (type == 0)
         {
             chooseTypeBtn.setTitle("Expense vs Income", for: .normal)
@@ -99,17 +122,34 @@ class chartType1VC: UITableViewController {
             var expenseList:[Expense] = []
             var incomeList:[Income] = []
             for record in recordList{
-                if((record.expense) != nil){
-                    expenseList.append(record.expense!)
+                if((record.expense) != nil && filterReportByDate(date: record.getDate(), by: filterBy)){
+                    expenseList.append(Expense(value: record.expense))
                 }
-                else if(record.income != nil){
-                    incomeList.append(record.income!)
+                else if(record.income != nil && filterReportByDate(date: record.getDate(), by: filterBy)){
+                    incomeList.append(Income(value: record.income))
                 }
             }
-            var chartIncomeList = totalOfMonths(incomeList: incomeList)
-            var chartExpenseList = totalOfMonths(expenseList: expenseList)
-            chartIncomeList = chartIncomeList.sorted(by: {(s1:entry,s2:entry)->Bool in return s1.label < s2.label})
-            chartExpenseList = chartExpenseList.sorted(by: {(s1:entry,s2:entry)->Bool in return s1.label < s2.label})
+            for income in incomeList{
+                income.amount = loadAmountByCurrency(value: income.amount)
+            }
+            for expense in expenseList{
+                expense.amount = loadAmountByCurrency(value: expense.amount)
+            }
+            switch filterBy {
+            case 0:
+                xStrings.append(String(Date().year))
+            case 1:
+                xStrings.append(String(Date().month(shortHand: false)))
+            case 2:
+                xStrings.append("week "+String(Date().weekOfYear))
+            default:
+                xStrings.append(String(Date().string()))
+            }
+            barChart.xAxis.valueFormatter = IndexAxisValueFormatter(values:xStrings)
+            
+            let chartIncomeList = finalProject.totalIncome(incomeList: incomeList)
+            let chartExpenseList = finalProject.totalExpense(expenseList: expenseList)
+
             var IncomeEntries:[BarChartDataEntry]=[]
             var ExpenseEntries:[BarChartDataEntry]=[]
             for income in chartIncomeList{
@@ -132,7 +172,7 @@ class chartType1VC: UITableViewController {
             let barWidth = 0.3
                     // (0.3 + 0.05) * 2 + 0.3 = 1.00 -> interval per "group"
 
-            let groupCount = 12
+            let groupCount = xStrings.count
             let startYear = 0
 
 
@@ -145,6 +185,25 @@ class chartType1VC: UITableViewController {
             chartData.groupWidth(groupSpace: groupSpace, barSpace: barSpace)
             barChart.chartDescription?.text = "income vs expense "
             barChart.data = chartData
+            
+            
+            //set title
+            let currencyFormatter = NumberFormatter()
+            currencyFormatter.usesGroupingSeparator = true
+            currencyFormatter.numberStyle = .currency
+            let currencyType = currencyBase().symbol[currency]
+            filterTitle.text = filterLabels[filterBy]
+            totalIncome.text = currencyFormatter.string(from: NSNumber(value: chartIncomeList[0].amount))! + currencyType
+            totalExpense.text = currencyFormatter.string(from: NSNumber(value: chartExpenseList[0].amount))! + currencyType
+            if (chartIncomeList[0].amount - chartExpenseList[0].amount > 0)
+            {
+                total.textColor = .green
+            }
+            else{
+                total.textColor = .red
+            }
+            total.text = String(chartIncomeList[0].amount - chartExpenseList[0].amount) + currencyType
+            
         }
         else{
             chooseTypeBtn.setTitle("Lend vs Borrow", for: .normal)
@@ -160,10 +219,15 @@ class chartType1VC: UITableViewController {
                     borrowList.append(record.borrow!)
                 }
             }
-            var chartBorrowList = totalOfMonths(borrowList: borrowList)
-            var chartLendList = totalOfMonths(lendList: lendList)
-            chartLendList = chartLendList.sorted(by: {(s1:entry,s2:entry)->Bool in return s1.label < s2.label})
-            chartBorrowList = chartBorrowList.sorted(by: {(s1:entry,s2:entry)->Bool in return s1.label < s2.label})
+            for lend in lendList{
+                lend.amount = loadAmountByCurrency(value: lend.amount)
+            }
+            for borrow in borrowList{
+                borrow.amount = loadAmountByCurrency(value: borrow.amount)
+            }
+            let chartBorrowList = totalBorrow(borrowList: borrowList)
+            let chartLendList = totalLend(lendList: lendList)
+
             var LendEntries:[BarChartDataEntry]=[]
             var BorrowEntries:[BarChartDataEntry]=[]
             for lend in chartLendList{
@@ -186,7 +250,7 @@ class chartType1VC: UITableViewController {
             let barWidth = 0.3
                     // (0.3 + 0.05) * 2 + 0.3 = 1.00 -> interval per "group"
 
-            let groupCount = 12
+            let groupCount = xStrings.count
             let startYear = 0
 
 
@@ -199,6 +263,24 @@ class chartType1VC: UITableViewController {
             chartData.groupWidth(groupSpace: groupSpace, barSpace: barSpace)
             barChart.chartDescription?.text = "lend vs borrow "
             barChart.data = chartData
+            //set label
+            let currencyFormatter = NumberFormatter()
+            currencyFormatter.usesGroupingSeparator = true
+            currencyFormatter.numberStyle = .currency
+            let currencyType = currencyBase().symbol[currency]
+            filterTitle.text = filterLabels[filterBy]
+            totalIncome.text = currencyFormatter.string(from: NSNumber(value: chartLendList[0].amount))! + currencyType
+            totalExpense.text = currencyFormatter.string(from: NSNumber(value: chartBorrowList[0].amount))! + currencyType
+
+            if (chartLendList[0].amount - chartBorrowList[0].amount > 0)
+            {
+                total.textColor = .green
+            }
+            else{
+                total.textColor = .red
+            }
+            total.text = String(chartLendList[0].amount - chartBorrowList[0].amount) + currencyType
+            print("currencyType\(currencyType)")
         }
         
     }
@@ -206,12 +288,19 @@ class chartType1VC: UITableViewController {
     {
         userInfor = realm.objects(User.self)[0]
         recordList.append(contentsOf: userInfor!.records)
+        currency = userInfor!.currency
     }
     override func viewDidLoad() {
+        loadData()
         chooseTypeBtn.semanticContentAttribute = .forceRightToLeft
         chooseTypeBtn.clipsToBounds = true
         chooseTypeBtn.layer.cornerRadius = chooseTypeBtn.frame.width/8
-        loadData()
+        //obserse setting change
+        setting = settingObserve(user: userInfor!)
+        settingObser = settingObserver(object: setting!)
+        setting?.delegate = self
+        
+
         barChart.noDataText = "You need to provide data for the chart."
                     //legend
                     let legend = barChart.legend
@@ -239,7 +328,7 @@ class chartType1VC: UITableViewController {
                     yaxis.spaceTop = 0.35
                     yaxis.axisMinimum = 0
                     yaxis.drawGridLinesEnabled = false
-                    xaxis.labelCount = 12
+                    xaxis.labelCount = 1
                     barChart.rightAxis.enabled = false
         drawChart()
         super.viewDidLoad()
@@ -293,84 +382,43 @@ func filterReportByDate(date: Date, by: Int) -> Bool
     
 }
 
-func totalOfMonths(incomeList:[Income])->[entry]{
-    var dict:[Int:Float] = [:]
-    var chartData:[entry]=[]
-    let today = Date().get(.day,.month,.year);
-    for i in 0...11{
-        dict[i] = 0
-    }
+func totalIncome(incomeList:[Income])->[entry]{
+    var total:Float = 0
+    var entries:[entry]=[]
     for income in incomeList{
-        let expenseDate = income.date.get(.day,.month,.year)
-        if(expenseDate.year == today.year){
-            dict[expenseDate.month!-1]! += income.amount;
-        }
+        total += income.amount
     }
-    for key in dict.keys{
-        chartData.append(entry(amount: dict[key]!, label: key))
-    }
-    return chartData
+    entries.append(entry(amount: total, label: 0))
+    return entries
 }
-func totalOfMonths(borrowList:[Borrow])->[entry]{
-    var dict:[Int:Float] = [:]
-    var chartData:[entry]=[]
-    let today = Date().get(.day,.month,.year);
-    for i in 0...11{
-        dict[i] = 0
+func totalExpense(expenseList:[Expense])->[entry]{
+    var total:Float = 0
+    var entries:[entry]=[]
+    for expense in expenseList{
+        total += expense.amount
     }
-    for income in borrowList{
-        let expenseDate = income.date.get(.day,.month,.year)
-        if(expenseDate.year == today.year){
-            
-            dict[expenseDate.month!-1]! += income.amount;
-        }
-        
-    }
-    for key in dict.keys{
-        chartData.append(entry(amount: dict[key]!, label: key))
-    }
-    return chartData
+    entries.append(entry(amount: total, label: 0))
+    return entries
 }
-func totalOfMonths(lendList:[Lend])->[entry]{
-    var dict:[Int:Float] = [:]
-    var chartData:[entry]=[]
-    let today = Date().get(.day,.month,.year);
-    for i in 0...11{
-        dict[i] = 0
+func totalLend(lendList:[Lend])->[entry]{
+    var total:Float = 0
+    var entries:[entry]=[]
+    for lend in lendList{
+        total += lend.amount
     }
-    for income in lendList{
-        let expenseDate = income.date.get(.day,.month,.year)
-        if(expenseDate.year == today.year){
-            
-            dict[expenseDate.month!-1]! += income.amount;
-        }
-        
-    }
-    for key in dict.keys{
-        chartData.append(entry(amount: dict[key]!, label: key))
-    }
-    return chartData
+    entries.append(entry(amount: total, label: 0))
+    return entries
 }
-func totalOfMonths(expenseList:[Expense])->[entry]{
-    var dict:[Int:Float] = [:]
-    var chartData:[entry]=[]
-    let today = Date().get(.day,.month,.year);
-    for i in 0...11{
-        dict[i] = 0
+func totalBorrow(borrowList:[Borrow])->[entry]{
+    var total:Float = 0
+    var entries:[entry]=[]
+    for borrow in borrowList{
+        total += borrow.amount
     }
-    for income in expenseList{
-        let expenseDate = income.date.get(.day,.month,.year)
-        if(expenseDate.year == today.year){
-            
-            dict[expenseDate.month!-1]! += income.amount;
-        }
-        
-    }
-    for key in dict.keys{
-        chartData.append(entry(amount: dict[key]!, label: key))
-    }
-    return chartData
+    entries.append(entry(amount: total, label: 0))
+    return entries
 }
+
 extension Date {
     func get(_ components: Calendar.Component..., calendar: Calendar = Calendar.current) -> DateComponents {
         return calendar.dateComponents(Set(components), from: self)

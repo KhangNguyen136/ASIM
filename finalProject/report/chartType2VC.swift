@@ -10,8 +10,20 @@ import RealmSwift
 import Charts
 import DropDown
 
-class chartType2VC: UITableViewController {
+class chartType2VC: UITableViewController,settingDelegate {
+    func changedHideAmountValue(value: Bool) {
+        
+    }
+    
+    func changedCurrency(value: Int) {
+        currency = value
+        drawChart()
+        
+    }
+    
 
+    
+    
     @IBOutlet weak var filterBtn: UIButton!
     var filterBy = 1
 @IBAction func chooseOptionFilter(_ sender: Any) {
@@ -74,6 +86,7 @@ class chartType2VC: UITableViewController {
 }
 @IBOutlet weak var pieChartView: PieChartView!
 var type = -1
+    var currency:Int = 0
 var userInfor: User? = nil
 let realm = try! Realm()
 var categorieNames = ["Food and Dining","Utilities","Auto and Transport","Home"
@@ -91,6 +104,7 @@ var recordList: [polyRecord] = []
 func loadData()
 {
     userInfor = realm.objects(User.self)[0]
+    currency = userInfor!.currency
     recordList.append(contentsOf: userInfor!.records)
 }
 func drawChart(){
@@ -100,8 +114,11 @@ func drawChart(){
         var incomeList:[Income] = []
         for record in recordList{
             if((record.income) != nil){
-                incomeList.append(record.income!)
+                incomeList.append(Income(value:record.income!))
             }
+        }
+        for income in incomeList{
+            income.amount = 
         }
         let categories = totalOfCategory(incomeList: incomeList)
         var categoryEntries:[PieChartDataEntry] = []
@@ -175,7 +192,9 @@ override func viewDidLoad() {
     drawChart()
     super.viewDidLoad()
 }
-
+    
+    @IBOutlet weak var listCategory: UITableView!
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -190,6 +209,7 @@ override func viewDidLoad() {
 
    
 }
+
 func totalOfCategory(expenseList: [Expense])->[entry]{
     var entries:[entry] = [];
     var dict:[Int:Float] = [:]
