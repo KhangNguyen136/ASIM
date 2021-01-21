@@ -66,6 +66,10 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
+        
+        let reviewImg = UITapGestureRecognizer(target: self, action: #selector(clickImg))
+        imgView.isUserInteractionEnabled = true
+        imgView.addGestureRecognizer(reviewImg)
         super.viewDidLoad()
     }
     @objc func dismissKeyboard() {
@@ -168,6 +172,15 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
         let temp = Transfer()
         var temp2 :polyRecord? = nil
         try! realm.write{
+            var imgStored: imgClass? = nil
+            if imgURL != nil{
+                if let imgData = NSData(contentsOf: imgURL! as URL) {
+                    imgStored = imgClass()
+//                    imgStored!.url = try! String(contentsOf: imgURL! as URL)
+                    imgStored!.data = imgData
+                    realm.add(imgStored!)
+                }
+            }
         if (transFree != 0)
         {
             let tempTransferFee = Expense()
@@ -177,7 +190,7 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
             {
                 transFree = transFree / Float(currencyBase().valueBaseDolar[userInfor!.currency])
             }
-            tempTransferFee.getData(_amount: transFree, _type: 0, _descript: tempStr, _srcAccount: srcAccount!, _person: "", _location: locationTF.text ?? "", _event: "", _srcImg: "srcImage", _date: dateTime.date, _category: categoryValues().expense.count - 1, _detailCategory: 1, _borrowRecord: nil)
+            tempTransferFee.getData(_amount: transFree, _type: 0, _descript: tempStr, _srcAccount: srcAccount!, _person: "", _location: locationTF.text ?? "", _event: "", _srcImg: imgStored, _date: dateTime.date, _category: categoryValues().expense.count - 1, _detailCategory: 1, _borrowRecord: nil)
             
             temp2 = polyRecord()
             temp2!.expense = tempTransferFee
@@ -193,7 +206,7 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
             {
                 amountValue = amountValue / Float(currencyBase().valueBaseDolar[userInfor!.currency])
             }
-        temp.getData(_amount: amountValue , _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: "srcImage",_date: dateTime.date,_destAccount: destAccount!,_transferFee: temp2 )
+        temp.getData(_amount: amountValue , _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: imgStored,_date: dateTime.date,_destAccount: destAccount!,_transferFee: temp2 )
         
         let temp1 = polyRecord()
             temp1.transfer = temp
@@ -241,5 +254,56 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
         // #warning Incomplete implementation, return the number of rows
         return 9
     }
-
+    
+    private lazy var imagePicker: ImagePicker = {
+            let imagePicker = ImagePicker()
+            imagePicker.delegate = self
+            return imagePicker
+        }()
+    var imgURL: NSURL? = nil
+    @IBOutlet weak var imgView: UIImageView!
+    @IBAction func chooseImg(_ sender: Any) {
+        imagePicker.photoGalleryAsscessRequest()
+    }
+    @objc func clickImg() {
+        if imgURL == nil
+        {
+            return
+        }
+        let dest = self.storyboard?.instantiateViewController(identifier: "previewImgVC") as! previewImgVC
+        dest.delegate = self
+        self.present(dest, animated: true, completion: nil)
+        dest.img.image = imgView.image
+    }
+    
 }
+
+extension addTransferVc: ImagePickerDelegate{
+    func imagePicker(_ imagePicker: ImagePicker, didSelect image: UIImage,url: NSURL) {
+        if url == imgURL
+        {
+            imagePicker.dismiss()
+            return
+        }
+        imgView.image = image
+        imgURL = url
+        print(url)
+        imagePicker.dismiss()
+        }
+
+        func cancelButtonDidClick(on imageView: ImagePicker) {
+            imagePicker.dismiss()
+        }
+        func imagePicker(_ imagePicker: ImagePicker, grantedAccess: Bool,
+                         to sourceType: UIImagePickerController.SourceType) {
+            guard grantedAccess else { return }
+            imagePicker.present(parent: self, sourceType: sourceType)
+        }
+}
+extension addTransferVc: delteImageDelegate{
+    func didDeletedImage() {
+        imgURL = nil
+        imgView.image = UIImage(systemName: "film")
+    }
+}
+

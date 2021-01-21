@@ -10,6 +10,7 @@ import RealmSwift
 import SearchTextField
 import SCLAlertView
 import FirebaseDatabase
+import ProgressHUD
 
 class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDelegate,settingDelegate {
     
@@ -103,6 +104,7 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
     }
     
     func loadData()  {
+        ProgressHUD.show()
         userInfor = realm.objects(User.self)[0]
         setting = settingObserve(user: userInfor!)
         settingObser = settingObserver(object: setting!)
@@ -128,7 +130,18 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
 
             //get borrow record from expense if it has
             tempRecord = temp?.borrowRecord
-            
+            if temp?.img != nil
+            {
+                if let img = UIImage(data: temp!.img!.data! as Data)
+                {
+                    imgView.image = img
+                    hasImg = true
+                }
+                else
+                {
+                    SCLAlertView().showError("Image error", subTitle: "Location path had changed or file had been deleted!")
+                }
+            }
     }
         else
         {
@@ -148,6 +161,18 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
             dateTime.date = temp!.date
             //get lend record if it has
             tempRecord = temp?.lendRecord
+            if temp?.img != nil
+            {
+                if let img = UIImage(data: temp!.img!.data! as Data)
+                {
+                    imgView.image = img
+                    hasImg = true
+                }
+                else
+                {
+                    SCLAlertView().showError("Image error", subTitle: "Location path had changed or file had been deleted!")
+                }
+            }
         }
         var tempStr : [String] = []
         tempStr.append(contentsOf: userInfor!.persons)
@@ -165,7 +190,7 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
         eventTF.maxNumberOfResults = 5
         eventTF.filterStrings(tempStr)
         
-
+        ProgressHUD.dismiss()
     }
     var setting: settingObserve? = nil
     var settingObser: settingObserver? = nil
@@ -188,6 +213,10 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
         type = record!.type
         
         loadData()
+        let reviewImg = UITapGestureRecognizer(target: self, action: #selector(clickImg))
+        imgView.isUserInteractionEnabled = true
+        imgView.addGestureRecognizer(reviewImg)
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         super.viewDidLoad()
@@ -238,6 +267,39 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
             _amount = _amount! / Float(currencyBase().valueBaseDolar[userInfor!.currency])
         }
         try! realm.write{
+            var imgStored: imgClass? = nil
+            if record?.type == 0
+            {
+                imgStored = record?.expense?.img
+            }
+            else
+            {
+                imgStored = record?.income?.img
+            }
+            if imgChange == true
+            {
+            if imgStored == nil && hasImg == true {
+                if let imgData = NSData(contentsOf: imgURL! as URL) {
+                    imgStored = imgClass()
+                    imgStored!.data = imgData
+                    realm.add(imgStored!)
+                    }
+                }
+                else
+                {
+                    if hasImg == false
+                    {
+                        realm.delete(imgStored!)
+                        imgStored = nil
+                    }
+                    else
+                    {
+                        if let imgData = NSData(contentsOf: imgURL! as URL) {
+                            imgStored!.data = imgData
+                        }
+                    }
+                }
+            }
         if type == 0
         {
             let temp = record?.expense
@@ -247,7 +309,7 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
                 temp?.undoTransaction()
 
                 //get new data and do new transaction
-                temp?.getData(_amount: _amount!, _type: type, _descript: descript.text ?? "", _srcAccount: srcAccount!, _person: personTF.text ?? "", _location: locationTF.text ?? "", _event: eventTF.text ?? "", _srcImg: "", _date: dateTime.date, _category: category, _detailCategory: detailCategory, _borrowRecord: tempRecord)
+                temp?.getData(_amount: _amount!, _type: type, _descript: descript.text ?? "", _srcAccount: srcAccount!, _person: personTF.text ?? "", _location: locationTF.text ?? "", _event: eventTF.text ?? "", _srcImg: imgStored, _date: dateTime.date, _category: category, _detailCategory: detailCategory, _borrowRecord: tempRecord)
                 print("Updated an expense!")
             }
          }
@@ -260,7 +322,7 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
                 temp?.undoTransaction()
 
                 //update new value and do transaction
-                temp?.getData(_amount: _amount!, _type: type, _descript: descript.text ?? "", _srcAccount: srcAccount!, _person: personTF.text ?? "", _location: locationTF.text ?? "", _event: eventTF.text ?? "", _srcImg: "", _date: dateTime.date, _category: detailCategory, _lendRecord: tempRecord)
+                temp?.getData(_amount: _amount!, _type: type, _descript: descript.text ?? "", _srcAccount: srcAccount!, _person: personTF.text ?? "", _location: locationTF.text ?? "", _event: eventTF.text ?? "", _srcImg: imgStored, _date: dateTime.date, _category: detailCategory, _lendRecord: tempRecord)
                 print("Updated an income!")
             }
 //            else
@@ -307,11 +369,19 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
                 record?.isDeleted = true
                 if record?.type == 0
                 {
+                    if record?.expense?.img != nil && record!.expense!.img!.isUploaded == true
+                    {
+                        record!.expense!.img!.isDeleted = true
+                    }
                     record?.expense?.undoTransaction()
                     print("Mark an expense as deleted!")
                 }
                 else
                 {
+                    if record?.income?.img != nil && record!.income!.img!.isUploaded == true
+                    {
+                        record!.income!.img!.isDeleted = true
+                    }
                     record?.income?.undoTransaction()
                     print("Deleted ab income as deleted!")
                 }
@@ -320,12 +390,20 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
             {
                 if record?.type == 0
                 {
+                    if record?.expense?.img != nil
+                    {
+                        realm.delete(record!.expense!.img!)
+                    }
                     record?.expense?.undoTransaction()
                     realm.delete((record?.expense)!)
                     print("Deleted a expense!")
                 }
                 else
                 {
+                    if record?.income?.img != nil
+                    {
+                        realm.delete(record!.income!.img!)
+                    }
                     record?.income?.undoTransaction()
                     realm.delete((record?.income)!)
                     print("Deleted a income!")
@@ -371,60 +449,62 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
         // #warning Incomplete implementation, return the number of rows
         return 10
     }
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
+    private lazy var imagePicker: ImagePicker = {
+            let imagePicker = ImagePicker()
+            imagePicker.delegate = self
+            return imagePicker
+        }()
+    var hasImg = false
+    var imgChange: Bool = false
+    var imgURL: NSURL? = nil
+    @IBOutlet weak var imgView: UIImageView!
+    @IBAction func chooseImg(_ sender: Any) {
+        imagePicker.photoGalleryAsscessRequest()
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    @objc func clickImg() {
+        if hasImg == false
+        {
+            return
+        }
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        let dest = sb.instantiateViewController(identifier: "previewImgVC") as! previewImgVC
+        dest.delegate = self
+        self.present(dest, animated: true, completion: nil)
+        dest.img.image = imgView.image
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    
 }
+
+extension editExOrInVC: ImagePickerDelegate{
+    func imagePicker(_ imagePicker: ImagePicker, didSelect image: UIImage,url: NSURL) {
+        if url == imgURL
+        {
+            imagePicker.dismiss()
+            return
+        }
+        hasImg = true
+        imgView.image = image
+        imgURL = url
+        imgChange = true
+        print(url)
+        imagePicker.dismiss()
+        }
+
+        func cancelButtonDidClick(on imageView: ImagePicker) {
+            imagePicker.dismiss()
+        }
+        func imagePicker(_ imagePicker: ImagePicker, grantedAccess: Bool,
+                         to sourceType: UIImagePickerController.SourceType) {
+            guard grantedAccess else { return }
+            imagePicker.present(parent: self, sourceType: sourceType)
+        }
+}
+extension editExOrInVC: delteImageDelegate{
+    func didDeletedImage() {
+        imgURL = nil
+        imgView.image = UIImage(systemName: "film")
+        hasImg = false
+        imgChange = true
+    }
+}
+

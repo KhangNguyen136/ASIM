@@ -425,46 +425,33 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="52"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3XT-JF-QiR">
-                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="22.5"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="kCi-pH-s1Q">
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                                                     <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="29" translatesAutoresizingMaskIntoConstraints="NO" id="jJl-QE-QfB">
-                                                            <rect key="frame" x="0.0" y="0.0" width="414" height="22.5"/>
-                                                            <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n6H-Ux-sWY">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="192.5" height="22.5"/>
-                                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <state key="normal" image="photo" catalog="system">
-                                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
-                                                                    </state>
-                                                                </button>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sce-45-5in">
-                                                                    <rect key="frame" x="221.5" y="0.0" width="192.5" height="22.5"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="height" constant="60" id="6iT-VJ-aQj"/>
-                                                                    </constraints>
-                                                                    <state key="normal" image="camera.fill" catalog="system">
-                                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
-                                                                    </state>
-                                                                </button>
-                                                            </subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="erl-9O-H2s">
+                                                            <rect key="frame" x="0.0" y="0.0" width="197" height="50"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </stackView>
+                                                            <state key="normal" image="photo" catalog="system">
+                                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="chooseImg:" destination="edV-L5-GEZ" eventType="touchUpInside" id="LTK-Iw-cAW"/>
+                                                            </connections>
+                                                        </button>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="film" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="A3Z-8d-Jmf">
+                                                            <rect key="frame" x="217" y="1" width="197" height="47.5"/>
+                                                        </imageView>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="trailing" secondItem="jJl-QE-QfB" secondAttribute="trailing" id="Jpw-pE-4pc"/>
-                                                        <constraint firstItem="jJl-QE-QfB" firstAttribute="top" secondItem="3XT-JF-QiR" secondAttribute="top" id="XSP-fs-wzQ"/>
-                                                        <constraint firstItem="jJl-QE-QfB" firstAttribute="leading" secondItem="3XT-JF-QiR" secondAttribute="leading" id="nTp-gd-CZM"/>
-                                                        <constraint firstAttribute="bottom" secondItem="jJl-QE-QfB" secondAttribute="bottom" id="rQz-Ib-u3J"/>
+                                                        <constraint firstAttribute="height" constant="50" id="Yiw-FE-D5B"/>
                                                     </constraints>
-                                                </view>
+                                                </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="3XT-JF-QiR" secondAttribute="trailing" id="57z-Ti-Xnz"/>
-                                                <constraint firstItem="3XT-JF-QiR" firstAttribute="leading" secondItem="ajm-vI-th7" secondAttribute="leading" id="FS6-Fs-z6V"/>
-                                                <constraint firstItem="3XT-JF-QiR" firstAttribute="top" secondItem="ajm-vI-th7" secondAttribute="top" id="rfR-Mg-ucr"/>
-                                                <constraint firstAttribute="bottom" secondItem="3XT-JF-QiR" secondAttribute="bottom" id="xMr-CK-p8J"/>
+                                                <constraint firstAttribute="trailing" secondItem="kCi-pH-s1Q" secondAttribute="trailing" id="41v-zI-CHN"/>
+                                                <constraint firstItem="kCi-pH-s1Q" firstAttribute="leading" secondItem="ajm-vI-th7" secondAttribute="leading" id="EqM-aR-eii"/>
+                                                <constraint firstItem="kCi-pH-s1Q" firstAttribute="top" secondItem="ajm-vI-th7" secondAttribute="top" id="rMN-xW-tva"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -560,6 +547,7 @@
                         <outlet property="dateTime" destination="2Zg-H9-jfB" id="UcH-sg-vOI"/>
                         <outlet property="descript" destination="xJc-QW-tyB" id="Ig5-fM-i4c"/>
                         <outlet property="eventTF" destination="ffi-IS-Xg1" id="qEx-tC-dJk"/>
+                        <outlet property="imgView" destination="A3Z-8d-Jmf" id="n5i-fA-xRy"/>
                         <outlet property="locationTF" destination="pc2-fw-AJ7" id="YSE-ee-vYa"/>
                         <outlet property="personTF" destination="P4k-Qs-D2W" id="vXE-wt-O1I"/>
                         <outlet property="unit" destination="ven-99-XHe" id="g04-HC-pVp"/>
@@ -994,46 +982,33 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="52"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="omK-z3-vdp">
-                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="22.5"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="xsa-56-AZZ">
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                                                     <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="29" translatesAutoresizingMaskIntoConstraints="NO" id="Ejl-49-TxV">
-                                                            <rect key="frame" x="0.0" y="0.0" width="414" height="22.5"/>
-                                                            <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aag-yU-wSY">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="192.5" height="22.5"/>
-                                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <state key="normal" image="photo" catalog="system">
-                                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
-                                                                    </state>
-                                                                </button>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XiB-yJ-6Om">
-                                                                    <rect key="frame" x="221.5" y="0.0" width="192.5" height="22.5"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="height" constant="60" id="iTV-z4-c0k"/>
-                                                                    </constraints>
-                                                                    <state key="normal" image="camera.fill" catalog="system">
-                                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
-                                                                    </state>
-                                                                </button>
-                                                            </subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ej3-qZ-Sqy">
+                                                            <rect key="frame" x="0.0" y="0.0" width="197" height="50"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </stackView>
+                                                            <state key="normal" image="photo" catalog="system">
+                                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="chooseImg:" destination="nSb-S1-k2L" eventType="touchUpInside" id="KEq-2h-sHc"/>
+                                                            </connections>
+                                                        </button>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="film" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="2Dy-OZ-q9V">
+                                                            <rect key="frame" x="217" y="1" width="197" height="47.5"/>
+                                                        </imageView>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
-                                                        <constraint firstItem="Ejl-49-TxV" firstAttribute="top" secondItem="omK-z3-vdp" secondAttribute="top" id="5GW-Hz-4Xk"/>
-                                                        <constraint firstAttribute="trailing" secondItem="Ejl-49-TxV" secondAttribute="trailing" id="QNk-EP-E0t"/>
-                                                        <constraint firstItem="Ejl-49-TxV" firstAttribute="leading" secondItem="omK-z3-vdp" secondAttribute="leading" id="bwt-l5-4J1"/>
-                                                        <constraint firstAttribute="bottom" secondItem="Ejl-49-TxV" secondAttribute="bottom" id="pIv-96-evA"/>
+                                                        <constraint firstAttribute="height" constant="50" id="sFC-b1-YMi"/>
                                                     </constraints>
-                                                </view>
+                                                </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="omK-z3-vdp" firstAttribute="leading" secondItem="XVa-zf-9iQ" secondAttribute="leading" id="HbI-9R-Z5s"/>
-                                                <constraint firstAttribute="bottom" secondItem="omK-z3-vdp" secondAttribute="bottom" id="IEY-cC-Crq"/>
-                                                <constraint firstAttribute="trailing" secondItem="omK-z3-vdp" secondAttribute="trailing" id="XYC-l1-Uf1"/>
-                                                <constraint firstItem="omK-z3-vdp" firstAttribute="top" secondItem="XVa-zf-9iQ" secondAttribute="top" id="cdU-En-agP"/>
+                                                <constraint firstItem="xsa-56-AZZ" firstAttribute="top" secondItem="XVa-zf-9iQ" secondAttribute="top" id="BIB-ag-EDj"/>
+                                                <constraint firstAttribute="trailing" secondItem="xsa-56-AZZ" secondAttribute="trailing" id="miS-4G-Rmn"/>
+                                                <constraint firstItem="xsa-56-AZZ" firstAttribute="leading" secondItem="XVa-zf-9iQ" secondAttribute="leading" id="qVd-kk-bhS"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -1179,6 +1154,7 @@
                         <outlet property="descript" destination="LpB-AP-eLb" id="AXB-eS-8eV"/>
                         <outlet property="doneTitle" destination="fbx-yx-qEk" id="WeK-m9-m9b"/>
                         <outlet property="doneValue" destination="Zx2-Rf-bOH" id="7jy-s1-r4W"/>
+                        <outlet property="imgView" destination="2Dy-OZ-q9V" id="Ezm-mg-FfT"/>
                         <outlet property="locationTF" destination="x1b-BU-MRG" id="VA6-0q-hY2"/>
                         <outlet property="personTF" destination="LcW-c5-kDM" id="Qjn-Mc-5Dp"/>
                         <outlet property="reDateBtn" destination="SAf-hR-NTX" id="Zuw-3Y-PIR"/>
@@ -1590,46 +1566,33 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="52"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Sc-P4-PhN">
-                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="22.5"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Vvl-CP-8i8">
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                                                     <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="29" translatesAutoresizingMaskIntoConstraints="NO" id="yOV-DS-y98">
-                                                            <rect key="frame" x="0.0" y="0.0" width="414" height="22.5"/>
-                                                            <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ta2-m6-VF3">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="192.5" height="22.5"/>
-                                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <state key="normal" image="photo" catalog="system">
-                                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
-                                                                    </state>
-                                                                </button>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CzS-4z-hAz">
-                                                                    <rect key="frame" x="221.5" y="0.0" width="192.5" height="22.5"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="height" constant="50" id="29p-Yc-2uL"/>
-                                                                    </constraints>
-                                                                    <state key="normal" image="camera.fill" catalog="system">
-                                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
-                                                                    </state>
-                                                                </button>
-                                                            </subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mNL-h2-qxD">
+                                                            <rect key="frame" x="0.0" y="0.0" width="197" height="50"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </stackView>
+                                                            <state key="normal" image="photo" catalog="system">
+                                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="chooseImg:" destination="2Ic-Qc-AxU" eventType="touchUpInside" id="rko-Lf-Irq"/>
+                                                            </connections>
+                                                        </button>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="film" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="wh1-43-y9V">
+                                                            <rect key="frame" x="217" y="1" width="197" height="47.5"/>
+                                                        </imageView>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="trailing" secondItem="yOV-DS-y98" secondAttribute="trailing" id="F75-8t-XSo"/>
-                                                        <constraint firstItem="yOV-DS-y98" firstAttribute="top" secondItem="7Sc-P4-PhN" secondAttribute="top" id="L4k-V5-mbc"/>
-                                                        <constraint firstItem="yOV-DS-y98" firstAttribute="leading" secondItem="7Sc-P4-PhN" secondAttribute="leading" id="UXV-Ie-lGe"/>
-                                                        <constraint firstAttribute="bottom" secondItem="yOV-DS-y98" secondAttribute="bottom" id="gAh-Me-DKb"/>
+                                                        <constraint firstAttribute="height" constant="50" id="2eS-59-x3Z"/>
                                                     </constraints>
-                                                </view>
+                                                </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="7Sc-P4-PhN" firstAttribute="leading" secondItem="XLI-Kw-5Ko" secondAttribute="leading" id="1ag-ix-Qvq"/>
-                                                <constraint firstAttribute="bottom" secondItem="7Sc-P4-PhN" secondAttribute="bottom" id="HmZ-sT-dU9"/>
-                                                <constraint firstAttribute="trailing" secondItem="7Sc-P4-PhN" secondAttribute="trailing" id="alb-Nc-576"/>
-                                                <constraint firstItem="7Sc-P4-PhN" firstAttribute="top" secondItem="XLI-Kw-5Ko" secondAttribute="top" id="otJ-sb-pwR"/>
+                                                <constraint firstItem="Vvl-CP-8i8" firstAttribute="top" secondItem="XLI-Kw-5Ko" secondAttribute="top" id="1p3-a8-8I2"/>
+                                                <constraint firstAttribute="trailing" secondItem="Vvl-CP-8i8" secondAttribute="trailing" id="6Wt-vQ-8C3"/>
+                                                <constraint firstItem="Vvl-CP-8i8" firstAttribute="leading" secondItem="XLI-Kw-5Ko" secondAttribute="leading" id="xxw-N0-hQS"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -1723,6 +1686,7 @@
                         <outlet property="dateTime" destination="qJL-AQ-m5u" id="I4z-w8-qcl"/>
                         <outlet property="descript" destination="kvr-IM-aJR" id="CEl-Hg-0vB"/>
                         <outlet property="fee" destination="wyw-5z-xgJ" id="dKS-ra-2nx"/>
+                        <outlet property="imgView" destination="wh1-43-y9V" id="a9u-LL-8Q9"/>
                         <outlet property="locationTF" destination="q54-MT-jpm" id="VFm-VT-kJK"/>
                         <outlet property="typeRecord" destination="elY-dP-EAR" id="x6d-7M-7QI"/>
                         <outlet property="unit" destination="eu4-MD-PCt" id="Zym-SF-cqO"/>
@@ -2212,46 +2176,33 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="52"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cde-a7-E3s">
-                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="22.5"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="JcT-3v-Afe">
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                                                     <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="29" translatesAutoresizingMaskIntoConstraints="NO" id="Wy5-gs-Fav">
-                                                            <rect key="frame" x="0.0" y="0.0" width="414" height="22.5"/>
-                                                            <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EQd-IN-cU6">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="192.5" height="22.5"/>
-                                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <state key="normal" image="photo" catalog="system">
-                                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
-                                                                    </state>
-                                                                </button>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xjO-YW-nM6">
-                                                                    <rect key="frame" x="221.5" y="0.0" width="192.5" height="22.5"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="height" constant="60" id="ruc-AY-weI"/>
-                                                                    </constraints>
-                                                                    <state key="normal" image="camera.fill" catalog="system">
-                                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
-                                                                    </state>
-                                                                </button>
-                                                            </subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G6Q-S2-FsP">
+                                                            <rect key="frame" x="0.0" y="0.0" width="197" height="50"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </stackView>
+                                                            <state key="normal" image="photo" catalog="system">
+                                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="chooseImg:" destination="O8n-mm-q7G" eventType="touchUpInside" id="a9v-xp-Vs4"/>
+                                                            </connections>
+                                                        </button>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="film" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="BPN-e8-bmO">
+                                                            <rect key="frame" x="217" y="1" width="197" height="47.5"/>
+                                                        </imageView>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="bottom" secondItem="Wy5-gs-Fav" secondAttribute="bottom" id="TWq-cv-yh8"/>
-                                                        <constraint firstItem="Wy5-gs-Fav" firstAttribute="leading" secondItem="cde-a7-E3s" secondAttribute="leading" id="XHR-kR-m5k"/>
-                                                        <constraint firstItem="Wy5-gs-Fav" firstAttribute="top" secondItem="cde-a7-E3s" secondAttribute="top" id="h8M-tq-l5B"/>
-                                                        <constraint firstAttribute="trailing" secondItem="Wy5-gs-Fav" secondAttribute="trailing" id="sbO-Eh-rGY"/>
+                                                        <constraint firstAttribute="height" constant="50" id="kjH-rX-ldJ"/>
                                                     </constraints>
-                                                </view>
+                                                </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="cde-a7-E3s" firstAttribute="leading" secondItem="lb0-cc-ATp" secondAttribute="leading" id="1pR-f9-QEc"/>
-                                                <constraint firstItem="cde-a7-E3s" firstAttribute="top" secondItem="lb0-cc-ATp" secondAttribute="top" id="9Dh-lQ-nfF"/>
-                                                <constraint firstAttribute="bottom" secondItem="cde-a7-E3s" secondAttribute="bottom" id="H5V-B3-Y6M"/>
-                                                <constraint firstAttribute="trailing" secondItem="cde-a7-E3s" secondAttribute="trailing" id="HgF-Em-QIn"/>
+                                                <constraint firstItem="JcT-3v-Afe" firstAttribute="leading" secondItem="lb0-cc-ATp" secondAttribute="leading" id="175-tX-aKV"/>
+                                                <constraint firstItem="JcT-3v-Afe" firstAttribute="top" secondItem="lb0-cc-ATp" secondAttribute="top" id="Ib6-Bk-UKx"/>
+                                                <constraint firstAttribute="trailing" secondItem="JcT-3v-Afe" secondAttribute="trailing" id="f28-Sz-yHM"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -2347,6 +2298,7 @@
                         <outlet property="dateTime" destination="eZ5-JO-jxq" id="ODq-5n-mv5"/>
                         <outlet property="descript" destination="ofw-Mp-g3C" id="2Wx-iQ-LyX"/>
                         <outlet property="different" destination="yNR-dx-mc3" id="5Td-iZ-dEC"/>
+                        <outlet property="imgView" destination="BPN-e8-bmO" id="Tkc-0W-sXc"/>
                         <outlet property="locationTF" destination="beb-jM-MtC" id="6Ug-dC-mpy"/>
                         <outlet property="personTF" destination="nxb-zJ-Qev" id="Ied-g9-uuu"/>
                         <outlet property="subTypeTitle" destination="FzA-sX-T8p" id="sF0-SP-x3Z"/>
@@ -2365,11 +2317,11 @@
         <image name="airplane" catalog="system" width="128" height="115"/>
         <image name="archivebox" catalog="system" width="128" height="106"/>
         <image name="calendar" catalog="system" width="128" height="106"/>
-        <image name="camera.fill" catalog="system" width="128" height="94"/>
         <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="checkmark.rectangle" catalog="system" width="128" height="93"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="decrease.indent" catalog="system" width="128" height="89"/>
+        <image name="film" catalog="system" width="128" height="93"/>
         <image name="location.fill" catalog="system" width="128" height="121"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="photo" catalog="system" width="128" height="93"/>

@@ -195,7 +195,7 @@ extension SavingAccountView: UITableViewDelegate, UITableViewDataSource{
                     let transfer = Transfer()
                     transfer.id = self.activeAcc[indexPath.row].savingAcc!.id
                     try! realm.write{
-                        transfer.getData(_amount: obj!.ammount, _type: 4, _descript: "", _srcAccount: self.activeAcc[indexPath.row], _location: "", _srcImg: "", _date: Date(), _destAccount: obj!.srcAccount!, _transferFee: nil)
+                        transfer.getData(_amount: obj!.ammount, _type: 4, _descript: "", _srcAccount: self.activeAcc[indexPath.row], _location: "", _srcImg: nil, _date: Date(), _destAccount: obj!.srcAccount!, _transferFee: nil)
                         obj?.state = true
                         obj?.srcAccount?.income(_amount: obj!.ammount)
                         

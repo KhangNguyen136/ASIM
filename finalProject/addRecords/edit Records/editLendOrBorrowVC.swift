@@ -10,7 +10,7 @@ import RealmSwift
 import SearchTextField
 import DatePicker
 import SCLAlertView
-import FirebaseDatabase
+import ProgressHUD
 
 class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDelegate {
     
@@ -75,7 +75,10 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
         }
     }
     func loadData()  {
+        ProgressHUD.show()
         type = record!.type
+        userInfor = realm.objects(User.self)[0]
+
         categoryImg.image = UIImage(named: "other\(type-2)")
         chooseCategoryBtn.setTitle(categoryValues().typeRecord[type], for: .normal)
         
@@ -114,6 +117,18 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
                 reDate = temp?.collectionDate
                 reDateBtn.setTitle(reDate?.string(), for: .normal)
             }
+            if temp?.img != nil
+            {
+                if let img = UIImage(data: temp!.img!.data! as Data)
+                {
+                    imgView.image = img
+                    hasImg = true
+                }
+                else
+                {
+                    SCLAlertView().showError("Image error", subTitle: "Location path had changed or file had been deleted!")
+                }
+            }
         }
         else
         {
@@ -131,8 +146,19 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
                 reDate = temp?.repaymentDate
                 reDateBtn.setTitle(reDate?.string(), for: .normal)
             }
+            if temp?.img != nil
+            {
+                if let img = UIImage(data: temp!.img!.data! as Data)
+                {
+                    imgView.image = img
+                    hasImg = true
+                }
+                else
+                {
+                    SCLAlertView().showError("Image error", subTitle: "Location path had changed or file had been deleted!")
+                }
+            }
         }
-        userInfor = realm.objects(User.self)[0]
         
         setting = settingObserve(user: userInfor!)
         settingObser = settingObserver(object: setting!)
@@ -151,7 +177,7 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
         locationTF.theme.font = UIFont.systemFont(ofSize: 15)
         locationTF.maxNumberOfResults = 5
         
-        
+        ProgressHUD.dismiss()
     }
     override func viewWillAppear(_ animated: Bool) {
         
@@ -183,6 +209,10 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
     }
     
     override func viewDidLoad() {
+        
+        let reviewImg = UITapGestureRecognizer(target: self, action: #selector(clickImg))
+        imgView.isUserInteractionEnabled = true
+        imgView.addGestureRecognizer(reviewImg)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
@@ -225,13 +255,51 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
             _amount = _amount! / Float(currencyBase().valueBaseDolar[userInfor!.currency])
         }
         try! realm.write{
+            var imgStored: imgClass? = nil
+            if record?.type == 2
+            {
+                imgStored = record?.lend?.img
+            }
+            else
+            {
+                imgStored = record?.borrow?.img
+            }
+            
+            if imgChange == true
+            {
+                if imgStored == nil && hasImg == true
+                {
+                    if imgURL != nil{
+                        if let imgData = NSData(contentsOf: imgURL! as URL) {
+                            imgStored = imgClass()
+                            imgStored!.data = imgData
+                            realm.add(imgStored!)
+                        }
+                    }
+                }
+                else
+                {
+                    if hasImg == false
+                    {
+                        realm.delete(imgStored!)
+                        imgStored = nil
+                    }
+                    else
+                    {
+                    if let imgData = NSData(contentsOf: imgURL! as URL) {
+                        imgStored!.data = imgData
+                    }
+                    }
+                }
+            }
+            
         if type == 2
         {
             let temp = record?.lend
                 //undo transaction
                 temp?.undoTransaction()
 
-            temp?.updateLend(_amount: _amount!, _type: 2, _descript: descript.text ?? "", _srcAccount: srcAccount!, _person: personTF.text!, _location: locationTF.text ?? "", _srcImg: "", _date: dateTime.date, _collectionDate:reDate)
+            temp?.updateLend(_amount: _amount!, _type: 2, _descript: descript.text ?? "", _srcAccount: srcAccount!, _person: personTF.text!, _location: locationTF.text ?? "", _srcImg: imgStored, _date: dateTime.date, _collectionDate:reDate)
                 
                 temp?.doTransaction()
             print("Updated an lend!")
@@ -241,7 +309,7 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
             let temp = record?.borrow
                 temp?.undoTransaction()
                 
-            temp?.updateBorrow(_amount: _amount!, _type: 3, _descript: descript.text ?? "", _srcAccount: srcAccount!, _person: personTF.text!, _location: locationTF.text ?? "", _srcImg: "", _date: dateTime.date, _repaymentDate:reDate)
+            temp?.updateBorrow(_amount: _amount!, _type: 3, _descript: descript.text ?? "", _srcAccount: srcAccount!, _person: personTF.text!, _location: locationTF.text ?? "", _srcImg: imgStored, _date: dateTime.date, _repaymentDate:reDate)
                 temp?.doTransaction()
             print("Updated an borrow!")
             }
@@ -276,11 +344,19 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
                 record?.isDeleted = true
                 if record?.type == 2
                 {
+                    if record?.lend?.img != nil && record!.lend!.img!.isUploaded == true
+                    {
+                        record!.lend!.img!.isDeleted = true
+                    }
                     record?.lend?.undoTransaction()
                     print("Mark a lend as deleted!")
                 }
                 else
                 {
+                    if record?.borrow?.img != nil && record!.borrow!.img!.isUploaded == true
+                    {
+                        record!.borrow!.img!.isDeleted = true
+                    }
                     record?.borrow?.undoTransaction()
                     print("Mark a borrow as deleted!")
                 }
@@ -289,6 +365,10 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
             {
                 if record?.type == 2
                 {
+                    if record?.lend?.img != nil
+                    {
+                        realm.delete(record!.lend!.img!)
+                    }
                     record?.lend?.undoTransaction()
                     realm.delete((record?.lend)!)
                     print("Delete a lend!")
@@ -296,6 +376,10 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
                 }
                 else
                 {
+                    if record?.borrow?.img != nil
+                    {
+                        realm.delete(record!.borrow!.img!)
+                    }
                     record?.borrow?.undoTransaction()
                     realm.delete((record?.borrow)!)
                     print("Delete a borrow!")
@@ -328,59 +412,62 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
         return 11
     }
 
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
+    private lazy var imagePicker: ImagePicker = {
+            let imagePicker = ImagePicker()
+            imagePicker.delegate = self
+            return imagePicker
+        }()
+    
+    var hasImg = false
+    var imgChange = false
+    var imgURL: NSURL? = nil
+    @IBOutlet weak var imgView: UIImageView!
+    @IBAction func chooseImg(_ sender: Any) {
+        imagePicker.photoGalleryAsscessRequest()
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    @objc func clickImg() {
+        if hasImg == false
+        {
+            return
+        }
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        let dest = sb.instantiateViewController(identifier: "previewImgVC") as! previewImgVC
+        dest.delegate = self
+        self.present(dest, animated: true, completion: nil)
+        dest.img.image = imgView.image
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
+
+extension editLendOrBorrowVC: ImagePickerDelegate{
+    func imagePicker(_ imagePicker: ImagePicker, didSelect image: UIImage,url: NSURL) {
+        if url == imgURL
+        {
+            imagePicker.dismiss()
+            return
+        }
+        hasImg = true
+        imgChange = true
+        imgView.image = image
+        imgURL = url
+        print(url)
+        imagePicker.dismiss()
+        }
+
+        func cancelButtonDidClick(on imageView: ImagePicker) {
+            imagePicker.dismiss()
+        }
+        func imagePicker(_ imagePicker: ImagePicker, grantedAccess: Bool,
+                         to sourceType: UIImagePickerController.SourceType) {
+            guard grantedAccess else { return }
+            imagePicker.present(parent: self, sourceType: sourceType)
+        }
+}
+extension editLendOrBorrowVC: delteImageDelegate{
+    func didDeletedImage() {
+        imgURL = nil
+        imgView.image = UIImage(systemName: "film")
+        hasImg = false
+        imgChange = true
+    }
+}
+

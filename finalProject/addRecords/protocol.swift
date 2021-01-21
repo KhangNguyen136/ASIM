@@ -23,6 +23,9 @@ protocol selectLendOrBorrowDelegate: class {
     func didSelectLendOrBorrow(_type: Int, temp: polyRecord)
 }
 
+protocol delteImageDelegate: class {
+    func didDeletedImage()
+}
 protocol settingDelegate: class {
     func changedHideAmountValue(value: Bool)
     func changedCurrency(value: Int)

@@ -377,7 +377,7 @@ class AddSavingAccount: UIViewController, UITextFieldDelegate {
                 let transfer = Transfer()
                
                 try! realm.write{
-                    transfer.getData(_amount: acc.ammount, _type: 4, _descript: "Create a deposit account", _srcAccount: acc.srcAccount!, _location: "", _srcImg: "", _date: sav.savingAcc!.startdate, _destAccount: sav, _transferFee:nil)
+                    transfer.getData(_amount: acc.ammount, _type: 4, _descript: "Create a deposit account", _srcAccount: acc.srcAccount!, _location: "", _srcImg: nil, _date: sav.savingAcc!.startdate, _destAccount: sav, _transferFee:nil)
                 }
                 transfer.add()
             }

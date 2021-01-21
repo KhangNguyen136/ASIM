@@ -12,7 +12,9 @@ import RealmSwift
 import SCLAlertView
 
 
-class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectAccountDelegate,settingDelegate {
+class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectAccountDelegate,settingDelegate,delteImageDelegate {
+    
+    
     
     var type = 0
     var category = -1
@@ -55,12 +57,20 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
     
     @IBOutlet weak var chooseImageBtn: UIButton!
     
-    var imagePicker = UIImagePickerController()
+    @IBOutlet weak var imgView: UIImageView!
+    var imgURL: NSURL? = nil
+    
+    //    var imagePicker = UIImagePickerController()
+    private lazy var imagePicker: ImagePicker = {
+            let imagePicker = ImagePicker()
+            imagePicker.delegate = self
+            return imagePicker
+        }()
 
     let dropDown = DropDown()
     
     @IBAction func clickChooseImg(_ sender: Any) {
-        
+        imagePicker.photoGalleryAsscessRequest()
     }
     func setUp()
     {
@@ -192,29 +202,38 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
             tempAmount = tempAmount / Float(currencyBase().valueBaseDolar[userInfor!.currency])
         }
         try! realm.write{
-        if type == 0
-        {
-            //create and do transaction
-            let temp = Expense()
-            temp.getData(_amount: tempAmount, _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _person: personTF.text ?? "", _location: locationTF.text ?? "", _event: eventTF.text ?? "", _srcImg: "srcImage",_date: dateTime.date, _category: category, _detailCategory: detailCategory, _borrowRecord: tempRecord)
-            let temp1 = polyRecord()
-                temp1.expense = temp
-                temp1.type = 0
-//            temp1.isChanged = true
-            realm.add(temp1)
-            userInfor?.records.append(temp1)
-        }
-        else
-        {
-                let temp = Income()
-                temp.getData(_amount: tempAmount, _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _person: personTF.text ?? "", _location: locationTF.text ?? "", _event: eventTF.text ?? "", _srcImg: "srcImage", _date: dateTime.date, _category: detailCategory,_lendRecord: tempRecord)
+            var imgStored: imgClass? = nil
+            if imgURL != nil{
+                if let imgData = NSData(contentsOf: imgURL! as URL) {
+                    imgStored = imgClass()
+//                    imgStored!.url = try! String(contentsOf: imgURL! as URL)
+                    imgStored!.data = imgData
+                    realm.add(imgStored!)
+                }
+            }
+            if type == 0
+            {
+                //create and do transaction
+                let temp = Expense()
+                temp.getData(_amount: tempAmount, _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _person: personTF.text ?? "", _location: locationTF.text ?? "", _event: eventTF.text ?? "", _srcImg: imgStored,_date: dateTime.date, _category: category, _detailCategory: detailCategory, _borrowRecord: tempRecord)
                 let temp1 = polyRecord()
-                    temp1.income = temp
-                    temp1.type = 1
-//                    temp1.isChanged = true
+                    temp1.expense = temp
+                    temp1.type = 0
+    //            temp1.isChanged = true
                 realm.add(temp1)
                 userInfor?.records.append(temp1)
-        }
+            }
+            else
+            {
+                    let temp = Income()
+                temp.getData(_amount: tempAmount, _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _person: personTF.text ?? "", _location: locationTF.text ?? "", _event: eventTF.text ?? "", _srcImg: imgStored , _date: dateTime.date, _category: detailCategory,_lendRecord: tempRecord)
+                    let temp1 = polyRecord()
+                        temp1.income = temp
+                        temp1.type = 1
+    //                    temp1.isChanged = true
+                    realm.add(temp1)
+                    userInfor?.records.append(temp1)
+            }
             var tempStr = locationTF.text ?? ""
             if tempStr.isEmpty == false && userInfor?.locations.contains(tempStr) == false
             {
@@ -259,6 +278,19 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
         dest.delegate = self
         self.navigationController?.pushViewController(dest, animated: false)
     }
+//    var documentsUrl: URL {
+//        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+//    }
+//    private func saveImg(image: UIImage) -> String? {
+//        let fileName = "Asim_recordImg"
+//        let fileURL = documentsUrl.appendingPathComponent(fileName)
+//        if let imageData = image.jpegData(compressionQuality: 1.0) {
+//           try? imageData.write(to: fileURL, options: .atomic)
+//           return fileName // ----> Save fileName
+//        }
+//        print("Error saving image")
+//        return nil
+//    }
     
     @IBAction func chooseType(_ sender: UIButton) {
         let dropDown = DropDown()
@@ -285,6 +317,8 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
                     self!.detailCategory = -1
                     self?.chooseCategoryBtn.setTitle("Select category", for: .normal)
                     self!.categoryLogo.image = UIImage(systemName: "archivebox")
+//                    self!.imgURL = nil
+//                    self!.imgView.image = UIImage(systemName: "film")
                     self?.descript.text = ""
                     self!.type = index
                     if index == 0
@@ -334,7 +368,25 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
         chooseTypeRecordBtn.semanticContentAttribute = .forceRightToLeft
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
+        let reviewImg = UITapGestureRecognizer(target: self, action: #selector(clickImg))
+        imgView.isUserInteractionEnabled = true
+        imgView.addGestureRecognizer(reviewImg)
         super.viewDidLoad()
+    }
+    @objc func clickImg() {
+        print("Imageview Clicked")
+        if imgURL == nil
+        {
+            return
+        }
+        let dest = self.storyboard?.instantiateViewController(identifier: "previewImgVC") as! previewImgVC
+        dest.delegate = self
+        self.present(dest, animated: true, completion: nil)
+        dest.img.image = imgView.image
+    }
+    func didDeletedImage() {
+        imgURL = nil
+        imgView.image = UIImage(systemName: "film")
     }
     @objc func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
@@ -353,4 +405,27 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
         return 10
     }
 
+}
+
+extension addExpenseOrIncomeVC: ImagePickerDelegate{
+    func imagePicker(_ imagePicker: ImagePicker, didSelect image: UIImage,url: NSURL) {
+        if url == imgURL
+        {
+            imagePicker.dismiss()
+            return
+        }
+        imgView.image = image
+        imgURL = url
+        print(url)
+        imagePicker.dismiss()
+        }
+
+        func cancelButtonDidClick(on imageView: ImagePicker) {
+            imagePicker.dismiss()
+        }
+        func imagePicker(_ imagePicker: ImagePicker, grantedAccess: Bool,
+                         to sourceType: UIImagePickerController.SourceType) {
+            guard grantedAccess else { return }
+            imagePicker.present(parent: self, sourceType: sourceType)
+        }
 }

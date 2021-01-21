@@ -49,7 +49,7 @@ class DepositView: UIViewController {
         //let accountBal
         let transfer = Transfer()
         try! realm.write {
-            transfer.getData(_amount: balance, _type: 4, _descript: "Deposit account", _srcAccount: obj!, _location: "", _srcImg: "", _date: Date(), _destAccount: rootAccount!, _transferFee: nil)
+            transfer.getData(_amount: balance, _type: 4, _descript: "Deposit account", _srcAccount: obj!, _location: "", _srcImg: nil, _date: Date(), _destAccount: rootAccount!, _transferFee: nil)
         }
         transfer.add()
         var accumulateBal:Float = (rootAccount?.accumulate!.addbalance)! + balance

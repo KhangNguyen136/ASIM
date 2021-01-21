@@ -10,6 +10,7 @@ import RealmSwift
 import SearchTextField
 import SCLAlertView
 import FirebaseDatabase
+import ProgressHUD
 
 class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategoryDelegate, settingDelegate {
     func didSelectRepayOrCollectDebt(_type: Int, temp: polyRecord) {
@@ -95,6 +96,8 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         return value * Float(currencyBase().valueBaseDolar[userInfor!.currency])
     }
     func loadData()  {
+        ProgressHUD.show()
+        
         userInfor = realm.objects(User.self)[0]
 
         setting = settingObserve(user: userInfor!)
@@ -151,6 +154,18 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
             categoryImg.image = UIImage(named: "income\(detailCategory)")
             chooseCategoryBtn.setTitle(categoryValues().income[0][detailCategory], for: .normal)
         }
+        if record!.adjustment!.img != nil
+        {
+            if let img = UIImage(data: record!.adjustment!.img!.data! as Data)
+            {
+                imgView.image = img
+                hasImg = true
+            }
+            else
+            {
+                SCLAlertView().showError("Image error", subTitle: "Location path had changed or file had been deleted!")
+            }
+        }
 
         
         var tempStr : [String] = []
@@ -164,12 +179,19 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         personTF.filterStrings(tempStr)
         personTF.theme.font = UIFont.systemFont(ofSize: 15)
         personTF.maxNumberOfResults = 5
+        
+        ProgressHUD.dismiss()
     }
 
     override func viewDidLoad() {
         typeReccord.clipsToBounds = true
         typeReccord.layer.cornerRadius = typeReccord.frame.width/8
         loadData()
+        
+        let reviewImg = UITapGestureRecognizer(target: self, action: #selector(clickImg))
+        imgView.isUserInteractionEnabled = true
+        imgView.addGestureRecognizer(reviewImg)
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         super.viewDidLoad()
@@ -308,13 +330,42 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
             return
         }
         try! realm.write{
+            var imgStored = record!.adjustment!.img
+            if imgChange == true
+            {
+                if imgStored == nil && hasImg == true
+                {
+                    if imgURL != nil{
+                        if let imgData = NSData(contentsOf: imgURL! as URL) {
+                            imgStored = imgClass()
+                            imgStored!.data = imgData
+                            realm.add(imgStored!)
+                        }
+                    }
+                }
+                else
+                {
+                    if hasImg == false
+                    {
+                        realm.delete(imgStored!)
+                        imgStored = nil
+                    }
+                    else
+                    {
+                        if let imgData = NSData(contentsOf: imgURL! as URL) {
+                            imgStored!.data = imgData
+                        }
+                    }
+                }
+            }
+
             record?.adjustment?.undoTransaction()
             if userInfor?.currency != 0
             {
                 _acttualBalance = _acttualBalance / Float(currencyBase().valueBaseDolar[userInfor!.currency])
                 _different = _different / Float(currencyBase().valueBaseDolar[userInfor!.currency])
             }
-            record?.adjustment?.getData(_amount: _acttualBalance, _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: "srcImage",_date: dateTime.date,_subType: subtype, _different: _different,_category: category,_detailCategory: detailCategory,_tempRecord: tempRecord,_person: personTF.text ?? "")
+            record?.adjustment?.getData(_amount: _acttualBalance, _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: imgStored,_date: dateTime.date,_subType: subtype, _different: _different,_category: category,_detailCategory: detailCategory,_tempRecord: tempRecord,_person: personTF.text ?? "")
             record?.isChanged = true
             userInfor = realm.objects(User.self)[0]
             var tempStr = locationTF.text ?? ""
@@ -334,6 +385,7 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         //pop after save
         self.navigationController?.popViewController(animated: false)
         
+    
     }
     
     @IBAction func clickDelte(_ sender: Any) {
@@ -346,10 +398,18 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
                 record?.adjustment?.undoTransaction()
                 if record?.isUploaded == true
                 {
+                    if record?.adjustment?.img != nil
+                    {
+                        record?.adjustment?.img?.isDeleted = true
+                    }
                     record?.isDeleted = true
                 }
                     else
                 {
+                    if record?.adjustment?.img != nil
+                    {
+                        realm.delete(record!.adjustment!.img!)
+                    }
                 realm.delete((record?.adjustment)!)
                 realm.delete(record!)
                 }
@@ -367,70 +427,68 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
     }
 
     // MARK: - Table view data source
-
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return 11
     }
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
+    private lazy var imagePicker: ImagePicker = {
+            let imagePicker = ImagePicker()
+            imagePicker.delegate = self
+            return imagePicker
+        }()
+    var hasImg = false
+    var imgChange = false
+    var imgURL: NSURL? = nil
+    @IBOutlet weak var imgView: UIImageView!
+    @IBAction func chooseImg(_ sender: Any) {
+        imagePicker.photoGalleryAsscessRequest()
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    @objc func clickImg() {
+        if hasImg == false
+        {
+            return
+        }
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        let dest = sb.instantiateViewController(identifier: "previewImgVC") as! previewImgVC
+        dest.delegate = self
+        self.present(dest, animated: true, completion: nil)
+        dest.img.image = imgView.image
     }
-    */
+    
+}
 
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+extension editAdjustmentVC: ImagePickerDelegate{
+    func imagePicker(_ imagePicker: ImagePicker, didSelect image: UIImage,url: NSURL) {
+        if url == imgURL
+        {
+            imagePicker.dismiss()
+            return
+        }
+        hasImg = true
+        imgChange = true
+        imgView.image = image
+        imgURL = url
+        print(url)
+        imagePicker.dismiss()
+        }
+        func cancelButtonDidClick(on imageView: ImagePicker) {
+            imagePicker.dismiss()
+        }
+        func imagePicker(_ imagePicker: ImagePicker, grantedAccess: Bool,
+                         to sourceType: UIImagePickerController.SourceType) {
+            guard grantedAccess else { return }
+            imagePicker.present(parent: self, sourceType: sourceType)
+        }
+}
+extension editAdjustmentVC: delteImageDelegate{
+    func didDeletedImage() {
+        imgURL = nil
+        imgView.image = UIImage(systemName: "film")
+        imgChange = true
+        hasImg = false
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

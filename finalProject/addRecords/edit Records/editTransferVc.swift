@@ -9,9 +9,7 @@ import UIKit
 import RealmSwift
 import SearchTextField
 import SCLAlertView
-import FirebaseDatabase
-
-
+import ProgressHUD
 
 class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestinationAccountDelegate, settingDelegate {
     func didSelectDestAccount(temp: polyAccount, name: String) {
@@ -48,6 +46,7 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
     @IBOutlet weak var unit1: UILabel!
     
     func loadData() {
+        ProgressHUD.show()
         userInfor = realm.objects(User.self)[0]
         
         setting = settingObserve(user: userInfor!)
@@ -79,16 +78,35 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
         destAccount = record?.destinationAccount
         chooseDestAccountBtn.setTitle(destAccount?.getname(), for: .normal)
         
+        if record?.img != nil
+        {
+            if let img = UIImage(data: record!.img!.data! as Data)
+            {
+                imgView.image = img
+                hasImg = true
+            }
+            else
+            {
+                SCLAlertView().showError("Image error", subTitle: "Location path had changed or file had been deleted!")
+            }
+        }
         
         var tempStr: [String] = []
         tempStr.append(contentsOf: userInfor!.locations)
         locationTF.filterStrings(tempStr)
         locationTF.theme.font = UIFont.systemFont(ofSize: 15)
         locationTF.maxNumberOfResults = 5
+        
+        ProgressHUD.dismiss()
     }
     
     override func viewDidLoad() {
         loadData()
+        
+        let reviewImg = UITapGestureRecognizer(target: self, action: #selector(clickImg))
+        imgView.isUserInteractionEnabled = true
+        imgView.addGestureRecognizer(reviewImg)
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         super.viewDidLoad()
@@ -153,6 +171,36 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
 
         //update object
         try! realm.write{
+            var imgStored = record?.img
+            
+            if imgChange == true
+            {
+                if imgStored == nil && hasImg == true
+                {
+                    if imgURL != nil{
+                        if let imgData = NSData(contentsOf: imgURL! as URL) {
+                            imgStored = imgClass()
+                            imgStored!.data = imgData
+                            realm.add(imgStored!)
+                        }
+                    }
+                }
+                else
+                {
+                    if hasImg == false
+                    {
+                        realm.delete(imgStored!)
+                        imgStored = nil
+                    }
+                    else
+                    {
+                        if let imgData = NSData(contentsOf: imgURL! as URL) {
+                            imgStored!.data = imgData
+                        }
+                    }
+                }
+            }
+
             if record?.transferFee != nil
             {
                 //delete transfer fee
@@ -193,7 +241,7 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
                     let tempTransferFee = Expense()
                     let tempStr = "Fee of transfer from \(srcAccount?.getname() ?? "srcAccount") to \(destAccount?.getname() ?? "destAccount")"
                     //get data and do transaction
-                    tempTransferFee.getData(_amount: temp, _type: 0, _descript: tempStr, _srcAccount: srcAccount!, _person: "", _location: locationTF.text ?? "", _event: "", _srcImg: "srcImage", _date: dateTime.date, _category: categoryValues().expense.count - 1, _detailCategory: 1, _borrowRecord: nil)
+                    tempTransferFee.getData(_amount: temp, _type: 0, _descript: tempStr, _srcAccount: srcAccount!, _person: "", _location: locationTF.text ?? "", _event: "", _srcImg: imgStored, _date: dateTime.date, _category: categoryValues().expense.count - 1, _detailCategory: 1, _borrowRecord: nil)
                     
                     let temp2 = polyRecord()
                     temp2.expense = tempTransferFee
@@ -220,7 +268,7 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
                 
                 _amount = _amount / Float(currencyBase().valueBaseDolar[userInfor!.currency])
             }
-            record?.getData(_amount: _amount , _type: 4, _descript: descript.text ?? "", _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: "", _date: dateTime.date, _destAccount: destAccount!, _transferFee: transferFee)
+            record?.getData(_amount: _amount , _type: 4, _descript: descript.text ?? "", _srcAccount: srcAccount!, _location: locationTF.text ?? "", _srcImg: imgStored, _date: dateTime.date, _destAccount: destAccount!, _transferFee: transferFee)
             src?.isChanged = true
 
         }
@@ -250,10 +298,15 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
                     }
                     else
                     {
+
                         realm.delete((record?.transferFee?.expense)!)
                         realm.delete((record?.transferFee)!)
                     }
                     record?.transferFee = nil
+                }
+                if src?.transfer?.img != nil
+                {
+                    src?.transfer?.img?.isDeleted = true
                 }
                 src?.transfer?.undoTransaction()
                 src?.isDeleted = true
@@ -266,6 +319,10 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
                     record?.transferFee?.expense?.undoTransaction()
                     realm.delete((record?.transferFee?.expense)!)
                     realm.delete((record?.transferFee)!)
+                }
+                if src?.transfer?.img != nil
+                {
+                    realm.delete(src!.transfer!.img!)
                 }
                 src?.transfer?.undoTransaction()
                 realm.delete((src?.transfer)!)
@@ -295,60 +352,61 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
         // #warning Incomplete implementation, return the number of rows
         return 9
     }
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
+    private lazy var imagePicker: ImagePicker = {
+            let imagePicker = ImagePicker()
+            imagePicker.delegate = self
+            return imagePicker
+        }()
+    var hasImg = false
+    var imgChange = false
+    var imgURL: NSURL? = nil
+    @IBOutlet weak var imgView: UIImageView!
+    @IBAction func chooseImg(_ sender: Any) {
+        imagePicker.photoGalleryAsscessRequest()
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    @objc func clickImg() {
+        if hasImg == false
+        {
+            return
+        }
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        let dest = sb.instantiateViewController(identifier: "previewImgVC") as! previewImgVC
+        dest.delegate = self
+        self.present(dest, animated: true, completion: nil)
+        dest.img.image = imgView.image
     }
-    */
+    
+}
 
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+extension editTransferVc: ImagePickerDelegate{
+    func imagePicker(_ imagePicker: ImagePicker, didSelect image: UIImage,url: NSURL) {
+        if imgURL == url
+        {
+            imagePicker.dismiss()
+            return
+        }
+        hasImg = true
+        imgChange = true
+        imgView.image = image
+        imgURL = url
+        print(url)
+        imagePicker.dismiss()
+        }
+
+        func cancelButtonDidClick(on imageView: ImagePicker) {
+            imagePicker.dismiss()
+        }
+        func imagePicker(_ imagePicker: ImagePicker, grantedAccess: Bool,
+                         to sourceType: UIImagePickerController.SourceType) {
+            guard grantedAccess else { return }
+            imagePicker.present(parent: self, sourceType: sourceType)
+        }
+}
+extension editTransferVc: delteImageDelegate{
+    func didDeletedImage() {
+        imgURL = nil
+        imgView.image = UIImage(systemName: "film")
+        imgChange = true
+        hasImg = false
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

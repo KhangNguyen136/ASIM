@@ -274,6 +274,10 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
+        
+        let reviewImg = UITapGestureRecognizer(target: self, action: #selector(clickImg))
+        imgView.isUserInteractionEnabled = true
+        imgView.addGestureRecognizer(reviewImg)
         super.viewDidLoad()
     }
     @objc func dismissKeyboard() {
@@ -321,10 +325,19 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
             _amount = _amount! / Float(currencyBase().valueBaseDolar[userInfor!.currency])
         }
         try! realm.write{
+            var imgStored: imgClass? = nil
+            if imgURL != nil{
+                if let imgData = NSData(contentsOf: imgURL! as URL) {
+                    imgStored = imgClass()
+//                    imgStored!.url = try! String(contentsOf: imgURL! as URL)
+                    imgStored!.data = imgData
+                    realm.add(imgStored!)
+                }
+            }
         if type == 2 {
             let temp = Lend()
                 //get data and do transaction
-                temp.getData(_amount: _amount!, _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _person: personTF.text!, _location: locationTF.text ?? "" , _srcImg: "srcImage",_date: dateTime.date, _collectionDate: reDate,_isCollected: doneValue.isOn)
+                temp.getData(_amount: _amount!, _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _person: personTF.text!, _location: locationTF.text ?? "" , _srcImg: imgStored,_date: dateTime.date, _collectionDate: reDate,_isCollected: doneValue.isOn)
             let temp1 = polyRecord()
                 temp1.lend = temp
                 temp1.type = 2
@@ -335,7 +348,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         else
         {
             let temp = Borrow()
-            temp.getData(_amount: _amount!, _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _person: personTF.text!, _location: locationTF.text ?? "", _srcImg: "srcImage",_date: dateTime.date, _repaymentDate: reDate, _isRepayed: doneValue.isOn)
+            temp.getData(_amount: _amount!, _type: type, _descript: descript.text!, _srcAccount: srcAccount!, _person: personTF.text!, _location: locationTF.text ?? "", _srcImg: imgStored,_date: dateTime.date, _repaymentDate: reDate, _isRepayed: doneValue.isOn)
                 
             let temp1 = polyRecord()
                 temp1.borrow = temp
@@ -374,13 +387,6 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
             self.navigationController?.popViewController(animated: true)
         }
     }
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
-
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -392,61 +398,56 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         // #warning Incomplete implementation, return the number of rows
         return 11
     }
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
+    private lazy var imagePicker: ImagePicker = {
+            let imagePicker = ImagePicker()
+            imagePicker.delegate = self
+            return imagePicker
+        }()
+    var imgURL: NSURL? = nil
+    @IBOutlet weak var imgView: UIImageView!
+    @IBAction func chooseImg(_ sender: Any) {
+        imagePicker.photoGalleryAsscessRequest()
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    @objc func clickImg() {
+        if imgURL == nil
+        {
+            return
         }
+        let dest = self.storyboard?.instantiateViewController(identifier: "previewImgVC") as! previewImgVC
+        dest.delegate = self
+        self.present(dest, animated: true, completion: nil)
+        dest.img.image = imgView.image
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    
 }
 
+extension addLendOrBorrowVC: ImagePickerDelegate{
+    func imagePicker(_ imagePicker: ImagePicker, didSelect image: UIImage,url: NSURL) {
+        if url == imgURL
+        {
+            imagePicker.dismiss()
+            return
+        }
+        imgView.image = image
+        imgURL = url
+        print(url)
+        imagePicker.dismiss()
+        }
+
+        func cancelButtonDidClick(on imageView: ImagePicker) {
+            imagePicker.dismiss()
+        }
+        func imagePicker(_ imagePicker: ImagePicker, grantedAccess: Bool,
+                         to sourceType: UIImagePickerController.SourceType) {
+            guard grantedAccess else { return }
+            imagePicker.present(parent: self, sourceType: sourceType)
+        }
+}
+extension addLendOrBorrowVC: delteImageDelegate{
+    func didDeletedImage() {
+        imgURL = nil
+        imgView.image = UIImage(systemName: "film")
+    }
+    
+    
+}
