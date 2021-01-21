@@ -394,9 +394,9 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
         )
         let msg = SCLAlertView(appearance: appearance)
         msg.addButton("Yes", action: { [self] in
-            try! realm.write{
-                record?.adjustment?.undoTransaction()
-                if record?.isUploaded == true
+            try! self.realm.write{
+                self.record?.adjustment?.undoTransaction()
+                if self.record?.isUploaded == true
                 {
                     if record?.adjustment?.img != nil
                     {
@@ -412,12 +412,13 @@ class editAdjustmentVC: UITableViewController,selectAccountDelegate,selectCatego
                     }
                 realm.delete((record?.adjustment)!)
                 realm.delete(record!)
+
                 }
         }
         
         print("Deleted a adjustment")
             SCLAlertView().showSuccess("Transaction deleted!", subTitle: "")
-        historyDelegate?.editedRecord()
+            self.historyDelegate?.editedRecord()
         self.navigationController?.popViewController(animated: false)
         })
         msg.addButton("No", action: {

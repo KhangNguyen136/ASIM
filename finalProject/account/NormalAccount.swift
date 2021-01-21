@@ -8,8 +8,10 @@
 import UIKit
 import RealmSwift
 import SCLAlertView
+import DPLocalization
 
 class NormalAccount: UIViewController, updateDataDelegate {
+    @IBOutlet weak var totalAmount: UILabel!
     func updateTable() {
         loadData()
         var balance: Float = 0.0
@@ -25,6 +27,10 @@ class NormalAccount: UIViewController, updateDataDelegate {
         lblBalance.text = String(balance)
         lblCurrency.text = ".$"
         tableView.reloadData()
+        setLanguage()
+    }
+    func setLanguage(){
+        totalAmount.setupAutolocalization(withKey: "totalAmount", keyPath: "text")
     }
     override func viewWillAppear(_ animated: Bool) {
         updateTable()

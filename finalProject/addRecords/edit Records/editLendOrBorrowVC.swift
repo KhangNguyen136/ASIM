@@ -338,17 +338,18 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
         )
         let msg = SCLAlertView(appearance: appearance)
         msg.addButton("Yes", action: { [self] in
-            try! realm.write{
-            if record?.isUploaded == true
+            try! self.realm.write{
+                if self.record?.isUploaded == true
             {
-                record?.isDeleted = true
-                if record?.type == 2
+                self.record?.isDeleted = true
+                if self.record?.type == 2
                 {
                     if record?.lend?.img != nil && record!.lend!.img!.isUploaded == true
                     {
                         record!.lend!.img!.isDeleted = true
                     }
                     record?.lend?.undoTransaction()
+
                     print("Mark a lend as deleted!")
                 }
                 else
@@ -358,12 +359,13 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
                         record!.borrow!.img!.isDeleted = true
                     }
                     record?.borrow?.undoTransaction()
+
                     print("Mark a borrow as deleted!")
                 }
             }
             else
             {
-                if record?.type == 2
+                if self.record?.type == 2
                 {
                     if record?.lend?.img != nil
                     {
@@ -371,6 +373,7 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
                     }
                     record?.lend?.undoTransaction()
                     realm.delete((record?.lend)!)
+
                     print("Delete a lend!")
 
                 }
@@ -382,16 +385,17 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
                     }
                     record?.borrow?.undoTransaction()
                     realm.delete((record?.borrow)!)
+
                     print("Delete a borrow!")
 
                 }
-                realm.delete(record!)
+                self.realm.delete(self.record!)
             }
         //delete data in database
         }
             print("Deleted a lend or borrow")
             SCLAlertView().showSuccess("Transaction deleted!", subTitle: "")
-            historyDelegate?.editedRecord()
+            self.historyDelegate?.editedRecord()
             self.navigationController?.popViewController(animated: true)
         })
         msg.addButton("No", action: {

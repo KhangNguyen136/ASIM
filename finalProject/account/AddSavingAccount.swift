@@ -10,6 +10,20 @@ import RealmSwift
 
 class AddSavingAccount: UIViewController, UITextFieldDelegate {
 
+    @IBOutlet weak var StartDate: UILabel!
+    @IBOutlet weak var FreeInterestRate: UILabel!
+    @IBOutlet weak var numOfDayForInterest: UILabel!
+    @IBOutlet weak var InterestRate: UILabel!
+    @IBOutlet weak var RateYear1: UILabel!
+    @IBOutlet weak var TransferMoneyFrom: UILabel!
+    @IBOutlet weak var Bank: UILabel!
+    @IBOutlet weak var Amount: UILabel!
+    @IBOutlet weak var RateYear: UILabel!
+    @IBOutlet weak var Day: UILabel!
+    @IBOutlet weak var InterestPaidTo: UILabel!
+    @IBOutlet weak var NotAddToRecord: UILabel!
+    @IBOutlet weak var TermEnded: UILabel!
+    @IBOutlet weak var InterestPaid: UILabel!
     @IBOutlet weak var lblCurr: UILabel!
     @IBOutlet weak var lblBalance: UITextField!
     @IBOutlet weak var lblStartDate: UILabel!
@@ -38,26 +52,48 @@ class AddSavingAccount: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var txtDescription: UITextField!
     @IBOutlet weak var imgAccount: UIImageView!
     @IBOutlet weak var swincludeRecord: UISwitch!
+    var isVietNamese = false
     var bank = 0
     var share: Int = 0
     var currency = 0
-    var interestPaid = ["Maturity","Up-front","Monthly"]
-    var termEnded = ["Rollover principal and interest", "Rollover principal", "Close account"]
+    var interestPaid: [String] = Interest().interestPaidEnglish
+    var termEnded: [String] = Interest().termEndedEnglish
     @IBOutlet weak var destAccHeight: NSLayoutConstraint!
     var objSource: polyAccount? = nil
     var objDest: polyAccount? = nil
     override func viewDidLoad() {
+        //Tiêu đề
+        self.navigationItem.title = "Add saving account"
+        //Kiểm tra language
+        let realm = try! Realm()
+        let lang = realm.objects(User.self).first?.isVietnamese
+        if lang == true{
+            interestPaid = Interest().interestPaidVietnamese
+            termEnded = Interest().termEndedVietnamese
+            lblCurrency.text = currencyBase().nameVietnamese[0]
+            lblTermEnded.text = Interest().termEndedVietnamese[0]
+            lblInterestPaid.text = Interest().interestPaidVietnamese[0]
+            self.navigationItem.title = "Thêm tài khoản tiết kiệm"
+            isVietNamese = true
+            lblStartDate.text == "Hôm nay"
+        }
+        else{
+            lblCurrency.text = currencyBase().nameEnglish[0]
+            lblTermEnded.text = Interest().termEndedEnglish[0]
+             lblInterestPaid.text = Interest().interestPaidEnglish[0]
+            
+        }
+        lblCurr.text = currencyBase().symbol[0]
+        setLanguage()
         txtFreeInterest.delegate = self
         txtInterestRate.delegate = self
         lblBalance.delegate = self
-        lblCurrency.text = "Vietnamese Dong (VND)"
         super.viewDidLoad()
         destAccountView.isHidden = true
         destAccHeight.constant = 0
         self.view.backgroundColor = UIColor(red: 71/255, green: 181/255, blue: 190/255, alpha: 1)
         mainview.backgroundColor = UIColor(red: 71/255, green: 181/255, blue: 190/255, alpha: 1)
         self.navigationController?.navigationBar.barTintColor = UIColor(red: 0/255, green: 123/255, blue: 164/255, alpha: 1)
-        self.navigationItem.title = "Add saving account"
         self.navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
             .font: UIFont(name: "MarkerFelt-Thin", size: 20)!
@@ -130,6 +166,28 @@ class AddSavingAccount: UIViewController, UITextFieldDelegate {
                        }
         }
         }
+    func setLanguage(){
+       
+        InterestRate.setupAutolocalization(withKey: "InterestRate", keyPath: "text")
+InterestPaid.setupAutolocalization(withKey: "InterestPaid", keyPath: "text")
+        InterestPaid.setupAutolocalization(withKey: "InterestPaid", keyPath: "text")
+        InterestPaidTo.setupAutolocalization(withKey: "InterestPaidTo", keyPath: "text")
+        FreeInterestRate.setupAutolocalization(withKey: "FreeInterestRate", keyPath: "text")
+         TermEnded.setupAutolocalization(withKey: "TermEnded", keyPath: "text")
+        numOfDayForInterest.setupAutolocalization(withKey: "numOfDayForInterest", keyPath: "text")
+        TransferMoneyFrom.setupAutolocalization(withKey: "TransferMoneyFrom", keyPath: "text")
+        NotAddToRecord.setupAutolocalization(withKey: "NotAddToRecord", keyPath: "text")
+        
+        RateYear.setupAutolocalization(withKey: "RateYear", keyPath: "text")
+        RateYear1.setupAutolocalization(withKey: "RateYear", keyPath: "text")
+        Day.setupAutolocalization(withKey: "Day", keyPath: "text")
+        Bank.setupAutolocalization(withKey: "Bank", keyPath: "text")
+        Amount.setupAutolocalization(withKey: "Amount", keyPath: "text")
+        StartDate.setupAutolocalization(withKey: "StartDate", keyPath: "text")
+        lblTerm.setupAutolocalization(withKey: "Term", keyPath: "text")
+        
+        
+    }
     @objc func chooseAccount(sender: UITapGestureRecognizer) {
            let scr=self.storyboard?.instantiateViewController(withIdentifier: "PickAccountView") as! PickAccountView
         scr.dest = false
@@ -161,12 +219,25 @@ class AddSavingAccount: UIViewController, UITextFieldDelegate {
     }
     @objc func chooseTermEnded(sender: UITapGestureRecognizer) {
         share = 1
-        if lblInterestPaid.text == "Maturity"{
-            termEnded = ["Rollover principal and interest", "Rollover principal", "Close account"]
+        if self.isVietNamese == true{
+            if lblInterestPaid.text == interestPaid[0]{
+           termEnded = Interest().termEndedVietnamese    }
+       else {
+           var temp = Interest().termEndedVietnamese
+           temp.removeFirst()
+           termEnded = temp
+       }
         }
-        else {
-            termEnded = [ "Rollover principal", "Close account"]
+        else{
+            if lblInterestPaid.text == interestPaid[0]{
+                termEnded = Interest().termEndedEnglish     }
+            else {
+                var temp = Interest().termEndedEnglish
+                temp.removeFirst()
+                termEnded = temp
+            }
         }
+        
         let alert = UIAlertController(title: "Term Ended Choices", message: "\n\n\n\n\n\n", preferredStyle: .alert)
               
               let pickerFrame = UIPickerView(frame: CGRect(x: 5, y: 20, width: 250, height: 140))
@@ -217,16 +288,7 @@ class AddSavingAccount: UIViewController, UITextFieldDelegate {
        // self.present(scr, animated: true, completion: nil)
     }
     override func viewWillAppear(_ animated: Bool) {
-        if lblTerm.text != "Term"{
-            let term = lblTerm.text!.components(separatedBy: " ")[1]
-            if term != "months"{
-                interestPaid = ["Maturity","Up-front"]
-        
-            }
-            else {
-                interestPaid = ["Maturity","Up-front","Monthly"]
-            }
-        }
+       
     }
     @objc func chooseDate(sender: UITapGestureRecognizer) {
        let alert = UIAlertController(title: "Choose Date", message: "", preferredStyle: .alert)
@@ -247,6 +309,10 @@ class AddSavingAccount: UIViewController, UITextFieldDelegate {
         let today: String =  dateFormatter.string(from: Date())
         if selectedDate == today{
             self.lblStartDate.text =  "Today"
+            if self.isVietNamese == true{
+                self.lblStartDate.text =  "Hôm nay"
+            }
+            
         }
         else{self.lblStartDate.text =  "\(selectedDate)"}
        
@@ -281,24 +347,29 @@ class AddSavingAccount: UIViewController, UITextFieldDelegate {
         if lblStartDate.text == "Today"{
              acc.startdate = Date()
         }
+        else if lblStartDate.text == "Hôm nay"{
+             acc.startdate = Date()
+        }
         else{
             acc.startdate = dateFormatter.date(from: lblStartDate.text!)!
         }
         acc.interestRate = Float(txtInterestRate.text!) as! Float
         acc.freeInterestRate = Float(txtFreeInterest.text!) as! Float
-        if lblInterestPaid.text == "Maturity"{
+        if lblInterestPaid.text == interestPaid[0]{
             acc.interestPaid = 0
         }
-        else if lblInterestPaid.text == "Up-front"{
+        else if lblInterestPaid.text == interestPaid[1]{
             acc.interestPaid = 1
         }
         else {
             acc.interestPaid = 2
         }
-        if lblTermEnded.text == "Rollover principal"{
+        print(lblTermEnded.text)
+        print(termEnded)
+        if lblTermEnded.text! == termEnded[1]{
             acc.termEnded = 1
         }
-        else if lblTermEnded.text == "Close account" {
+        else if lblTermEnded.text! == termEnded[2] {
             acc.termEnded = 2
         }
         else {
@@ -323,7 +394,7 @@ class AddSavingAccount: UIViewController, UITextFieldDelegate {
        else {
            acc.includeRecord = true
        }
-        if acc.interestPaid == 1 || acc.interestPaid == 2{
+        if acc.interestPaid == 1{
             if objDest == nil{
                 Notice().showAlert(content: "Please choose Dest Account")
                  return;
@@ -351,12 +422,16 @@ class AddSavingAccount: UIViewController, UITextFieldDelegate {
         if acc.interestPaid == 0 || acc.interestPaid == 2{
                 
                 var dateComponent = DateComponents()
+            var listTerm: [String] = infoChoice().termEnglish
+            if isVietNamese == true {
+                listTerm = infoChoice().termVietnamese
+            }
                 let term = acc.term
                 switch term{
-                case "1 week", "2 weeks", "3 weeks":
+                case listTerm[0], listTerm[1], listTerm[2]:
                     let addDays = Int(term.components(separatedBy: " ")[0]) as! Int
                     dateComponent.day = addDays*7
-                case "1 month", "3 months", "6 months", "12 months":
+                case listTerm[3], listTerm[4], listTerm[5], listTerm[6]:
                     let addMonths = Int( term.components(separatedBy: " ")[0]) as! Int
                     dateComponent.month = addMonths
                 default:
@@ -393,15 +468,6 @@ extension AddSavingAccount: UIPickerViewDelegate, UIPickerViewDataSource{
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if share == 0{
-            if lblTerm.text != "Term"{
-                let term = lblTerm.text!.components(separatedBy: " ")[1]
-                if term != "months"{
-                    interestPaid = ["Maturity","Up-front"]
-                }
-                else {
-                    interestPaid = ["Maturity","Up-front","Monthly"]
-                }
-            }
             return interestPaid.count
             
         }
@@ -413,7 +479,7 @@ extension AddSavingAccount: UIPickerViewDelegate, UIPickerViewDataSource{
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if share == 0 {lblInterestPaid.text = interestPaid[row]
-            if lblInterestPaid.text == "Up-front" || lblInterestPaid.text == "Monthly" {
+            if lblInterestPaid.text == interestPaid[1]{
                 destAccountView.isHidden = false
                 destAccHeight.constant = 60
             }
@@ -421,8 +487,13 @@ extension AddSavingAccount: UIPickerViewDelegate, UIPickerViewDataSource{
                 destAccountView.isHidden = true
                 destAccHeight.constant = 0
                 imgDestAcc.image = UIImage(named:"bank")
-                lblDestAccName.text = "Interest paid to"
-                
+                if isVietNamese == true{
+                    lblDestAccName.text = "Tiền lãi được chuyển đến TK"
+                }
+                else{
+                    lblDestAccName.text = "Interest paid to"
+                }
+                                
             }
         }
         lblTermEnded.text = termEnded[row]

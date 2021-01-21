@@ -39,14 +39,14 @@ class settingObserver: NSObject {
             options: [.old, .new]
         ) { [self] object, change in
             print("isHideAmount changed from: \(String(describing: change.oldValue!)), updated to: \(String(describing: change.newValue!))")
-            objectToObserve.updateHideAmount()
+            self.objectToObserve.updateHideAmount()
         }
         observation2 = observe(
             \.objectToObserve.userInfor?.currency,
             options: [.old, .new]
         ) { [self] object, change in
             print("Currency changed from: \(String(describing: change.oldValue!)), updated to: \(String(describing: change.newValue!))")
-            objectToObserve.updateCurrency()
+            self.objectToObserve.updateCurrency()
         }
     }
 }

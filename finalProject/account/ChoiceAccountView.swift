@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class ChoiceAccountView: UIViewController {
     var currencyMode:Bool = false
@@ -13,40 +14,63 @@ class ChoiceAccountView: UIViewController {
     var bankingMode:Bool = false
     var timeMode: Bool = false
     var termmMode: Bool = false
-    let currencyLabel = currencyBase().nameEnglish
-    let accountLabel = ["Cash", "Banking Account"]
-    let abbrName = infoChoice().abbrName
-    let bankName = infoChoice().bankName
-    let bankImg = infoChoice().abbrName
-    let howLong = infoChoice().howLong
-    let term = infoChoice().term
+    var currencyLabel = currencyBase().nameEnglish
+    var accountLabel = infoChoice().typeAccountEnglish
+    var abbrName = infoChoice().abbrName
+    var bankName = infoChoice().bankName
+    var bankImg = infoChoice().abbrName
+    var howLong = infoChoice().howLongEnglish
+    var  term = infoChoice().termEnglish
     //var backgroundImage: UIImageView!
     override func viewDidLoad() {
         
-           super.viewDidLoad()
+        super.viewDidLoad()
         self.view.backgroundColor = UIColor(red: 71/255, green: 181/255, blue: 190/255, alpha: 1)
-    self.navigationController?.navigationBar.barTintColor = UIColor(red: 0/255, green: 123/255, blue: 164/255, alpha: 1)
-    self.navigationController?.navigationBar.titleTextAttributes = [
+        self.navigationController?.navigationBar.barTintColor = UIColor(red: 0/255, green: 123/255, blue: 164/255, alpha: 1)
+        self.navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
             .font: UIFont(name: "MarkerFelt-Thin", size: 20)!]
-          // self.backgroundImage = UIImageView(image: UIImage(named: "background-1"))
-         //  self.backgroundImage.contentMode = .scaleAspectFill
-        //self.view.insertSubview(self.backgroundImage, at: 0)
-       if bankingMode == true {
-         self.navigationItem.title = "Choose Bank"
-        }
-        else if currencyMode == true {
-             self.navigationItem.title = "Choose Currency"
-        }
-        else if accountMode == true {
-             self.navigationItem.title = "Choose Account"
-        }
-        else if timeMode == true {
-             self.navigationItem.title = "For how long"
-        }
-        else if termmMode == true{
-             self.navigationItem.title = "Choose term"
-        }
+        let realm = try! Realm()
+               let lang = realm.objects(User.self).first?.isVietnamese
+               if lang == true{
+                   currencyLabel = currencyBase().nameVietnamese
+                   accountLabel = infoChoice().typeAccountVietnamese
+                   howLong = infoChoice().howLongVietnamses
+                   term = infoChoice().termVietnamese
+                   if bankingMode == true {
+                    self.navigationItem.title = "Chọn ngân hàng"
+                   }
+                   else if currencyMode == true {
+                        self.navigationItem.title = "Chọn đơn vị tiền tệ"
+                   }
+                   else if accountMode == true {
+                        self.navigationItem.title = "Chọn tài khoản"
+                   }
+                   else if timeMode == true {
+                        self.navigationItem.title = "Trong bao lâu"
+                   }
+                   else if termmMode == true{
+                        self.navigationItem.title = "Chọn kỳ hạn"
+                   }
+               }
+               else{
+                  if bankingMode == true {
+                   self.navigationItem.title = "Choose Bank"
+                  }
+                  else if currencyMode == true {
+                       self.navigationItem.title = "Choose Currency"
+                  }
+                  else if accountMode == true {
+                       self.navigationItem.title = "Choose Account"
+                  }
+                  else if timeMode == true {
+                       self.navigationItem.title = "For how long"
+                  }
+                  else if termmMode == true{
+                       self.navigationItem.title = "Choose term"
+                  }
+               }
+       
     }
         
 

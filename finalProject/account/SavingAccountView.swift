@@ -11,10 +11,17 @@ import SCLAlertView
 class SavingAccountView: UIViewController {
     var activeAcc: [polyAccount] = []
     var closeAcc: [polyAccount] = []
+    var isVietnamese = false
+    @IBOutlet weak var totalAmount: UILabel!
     @IBOutlet weak var lblamount: UILabel!
     @IBOutlet weak var lblNumAcc: UILabel!
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
+        let realm = try! Realm()
+        let lang = realm.objects(User.self).first?.isVietnamese
+        if lang == true{
+            isVietnamese = true
+        }
         super.viewDidLoad()
         savingAccount().updateInterest()
         self.view.backgroundColor = UIColor(red: 71/255, green: 181/255, blue: 190/255, alpha: 1)
@@ -50,14 +57,25 @@ class SavingAccountView: UIViewController {
        }
         lblamount.text = "\(total) $"
         lblNumAcc.text = "(\(self.activeAcc.count) account)"
+        if self.isVietnamese == true{
+            lblNumAcc.text = "(\(self.activeAcc.count) tài khoản)"
+        }
+        setLanguage()
+        
    }
+    func setLanguage(){
+           totalAmount.setupAutolocalization(withKey: "totalAmount", keyPath: "text")
+       }
 }
 extension SavingAccountView: UITableViewDelegate, UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let title = ["Active saving account", "Closed saving account"]
+        var title: [String] = ["Active saving account", "Closed saving account"]
+        if self.isVietnamese == true{
+            title = ["Đang sử dụng", "Ngừng sử dụng"]
+        }
         return title[section]
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

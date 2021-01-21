@@ -286,23 +286,23 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
         )
         let msg = SCLAlertView(appearance: appearance)
         msg.addButton("Yes", action: { [self] in
-            try! realm.write{
-            if src?.isUploaded == true
+            try! self.realm.write{
+                if self.src?.isUploaded == true
             {
-                if record?.transferFee != nil
+                if self.record?.transferFee != nil
                 {
-                    record?.transferFee?.expense?.undoTransaction()
-                    if record?.transferFee?.isUploaded == true
+                    self.record?.transferFee?.expense?.undoTransaction()
+                    if self.record?.transferFee?.isUploaded == true
                     {
-                        record?.transferFee?.isDeleted = true
+                        self.record?.transferFee?.isDeleted = true
                     }
                     else
                     {
 
-                        realm.delete((record?.transferFee?.expense)!)
-                        realm.delete((record?.transferFee)!)
+                        self.realm.delete((self.record?.transferFee?.expense)!)
+                        self.realm.delete((self.record?.transferFee)!)
                     }
-                    record?.transferFee = nil
+                    self.record?.transferFee = nil
                 }
                 if src?.transfer?.img != nil
                 {
@@ -310,15 +310,16 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
                 }
                 src?.transfer?.undoTransaction()
                 src?.isDeleted = true
+
                 print("Mark a transfer as deleted.")
             }
             else
             {
-                if record?.transferFee != nil
+                if self.record?.transferFee != nil
                 {
-                    record?.transferFee?.expense?.undoTransaction()
-                    realm.delete((record?.transferFee?.expense)!)
-                    realm.delete((record?.transferFee)!)
+                    self.record?.transferFee?.expense?.undoTransaction()
+                    self.realm.delete((self.record?.transferFee?.expense)!)
+                    self.realm.delete((self.record?.transferFee)!)
                 }
                 if src?.transfer?.img != nil
                 {
@@ -327,12 +328,13 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
                 src?.transfer?.undoTransaction()
                 realm.delete((src?.transfer)!)
                 realm.delete(src!)
+
                 print("Deleted a transfer.")
             }
         }
         
         SCLAlertView().showSuccess("Transaction deleted!", subTitle: "")
-        historyDelegate?.editedRecord()
+            self.historyDelegate?.editedRecord()
         self.navigationController?.popViewController(animated: false)
         })
         msg.addButton("No", action: {

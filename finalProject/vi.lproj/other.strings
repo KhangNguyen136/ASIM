@@ -1,0 +1,123 @@
+
+/* Class = "UINavigationItem"; title = "Change password"; ObjectID = "1al-RK-HXd"; */
+"1al-RK-HXd.title" = "Change password";
+
+/* Class = "UITextView"; text = "Sổ thu chi feeback, sent from "; ObjectID = "1vK-Zq-GSt"; */
+"1vK-Zq-GSt.text" = "Sổ thu chi feeback, sent from ";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "7wd-cj-m4N"; */
+"7wd-cj-m4N.text" = "Title";
+
+/* Class = "UINavigationItem"; title = "Your data"; ObjectID = "9J5-4M-aCM"; */
+"9J5-4M-aCM.title" = "Your data";
+
+/* Class = "UIButton"; normalTitle = "Date format"; ObjectID = "9UZ-wn-k2U"; */
+"9UZ-wn-k2U.normalTitle" = "Date format";
+
+/* Class = "UINavigationItem"; title = "Notifications"; ObjectID = "DKd-jO-2wA"; */
+"DKd-jO-2wA.title" = "Notifications";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "DMJ-Xe-4wv"; */
+"DMJ-Xe-4wv.text" = "Title";
+
+/* Class = "UIButton"; normalTitle = "Dashboard"; ObjectID = "EJq-ux-RkB"; */
+"EJq-ux-RkB.normalTitle" = "Dashboard";
+
+/* Class = "UIButton"; normalTitle = "Setting"; ObjectID = "Euh-aN-wwQ"; */
+"Euh-aN-wwQ.normalTitle" = "Setting";
+
+/* Class = "UITextView"; text = "This is infor of this notification"; ObjectID = "FnA-Lm-lXc"; */
+"FnA-Lm-lXc.text" = "This is infor of this notification";
+
+/* Class = "UIButton"; normalTitle = "Language"; ObjectID = "Lh2-rj-GKM"; */
+"Lh2-rj-GKM.normalTitle" = "Language";
+
+/* Class = "UILabel"; text = "Male:"; ObjectID = "M8H-Ne-ucQ"; */
+"M8H-Ne-ucQ.text" = "Male:";
+
+/* Class = "UIButton"; normalTitle = "Currency"; ObjectID = "MiG-Oo-Do9"; */
+"MiG-Oo-Do9.normalTitle" = "Currency";
+
+/* Class = "UIButton"; normalTitle = "$"; ObjectID = "NVf-Ea-eij"; */
+"NVf-Ea-eij.normalTitle" = "$";
+
+/* Class = "UIButton"; normalTitle = "Reload Data"; ObjectID = "Tuy-vQ-Yuu"; */
+"Tuy-vQ-Yuu.normalTitle" = "Reload Data";
+
+/* Class = "UINavigationItem"; title = "Setting"; ObjectID = "UGl-RH-xV8"; */
+"UGl-RH-xV8.title" = "Setting";
+
+/* Class = "UIButton"; normalTitle = "Hide amount"; ObjectID = "URq-tH-Fzk"; */
+"URq-tH-Fzk.normalTitle" = "Hide amount";
+
+/* Class = "UIButton"; normalTitle = "Update"; ObjectID = "Um2-yo-l5E"; */
+"Um2-yo-l5E.normalTitle" = "Update";
+
+/* Class = "UIButton"; normalTitle = "dd/MM/yyyy"; ObjectID = "W9U-KZ-eWT"; */
+"W9U-KZ-eWT.normalTitle" = "dd/MM/yyyy";
+
+/* Class = "UILabel"; text = "Facebook"; ObjectID = "WTY-T2-Vhu"; */
+"WTY-T2-Vhu.text" = "Facebook";
+
+/* Class = "UILabel"; text = "Date and time"; ObjectID = "WTr-ea-prD"; */
+"WTr-ea-prD.text" = "Date and time";
+
+/* Class = "UIButton"; normalTitle = "English"; ObjectID = "Ydi-d9-Evv"; */
+"Ydi-d9-Evv.normalTitle" = "English";
+
+/* Class = "UILabel"; text = "gmail"; ObjectID = "Z8f-Sh-9o6"; */
+"Z8f-Sh-9o6.text" = "gmail";
+
+/* Class = "UILabel"; text = "To"; ObjectID = "ZHi-sd-ZhL"; */
+"ZHi-sd-ZhL.text" = "To";
+
+/* Class = "UIButton"; normalTitle = "Default use screen"; ObjectID = "c6o-17-5WE"; */
+"c6o-17-5WE.normalTitle" = "Default use screen";
+
+/* Class = "UILabel"; text = "Google"; ObjectID = "cQr-DG-rCe"; */
+"cQr-DG-rCe.text" = "Google";
+
+/* Class = "UITextView"; text = "Pasword has at least 8 characters, must contain at least 1 uppercase letter, lowercase letter and number. Confirm new password must same with new password."; ObjectID = "dQ8-PX-HdO"; */
+"dQ8-PX-HdO.text" = "Pasword has at least 8 characters, must contain at least 1 uppercase letter, lowercase letter and number. Confirm new password must same with new password.";
+
+/* Class = "UINavigationItem"; title = "Other"; ObjectID = "e2R-Cz-oEh"; */
+"e2R-Cz-oEh.title" = "Other";
+
+/* Class = "UILabel"; text = "From"; ObjectID = "ei3-oB-zaO"; */
+"ei3-oB-zaO.text" = "From";
+
+/* Class = "UITabBarItem"; title = "Other"; ObjectID = "iUV-hs-eBh"; */
+"iUV-hs-eBh.title" = "Other";
+
+/* Class = "UIButton"; normalTitle = "Reset"; ObjectID = "jFS-GW-xHE"; */
+"jFS-GW-xHE.normalTitle" = "Reset";
+
+/* Class = "UILabel"; text = "User name"; ObjectID = "mtP-hV-JI8"; */
+"mtP-hV-JI8.text" = "User name";
+
+/* Class = "UILabel"; text = "Birthday:"; ObjectID = "oEK-Ow-hQr"; */
+"oEK-Ow-hQr.text" = "Birthday:";
+
+/* Class = "UIButton"; normalTitle = "Last sync"; ObjectID = "pJr-kJ-jim"; */
+"pJr-kJ-jim.normalTitle" = "Last sync";
+
+/* Class = "UILabel"; text = "facebook name"; ObjectID = "pfa-Td-8ji"; */
+"pfa-Td-8ji.text" = "facebook name";
+
+/* Class = "UINavigationItem"; title = "Account Link"; ObjectID = "qLP-3Z-iZq"; */
+"qLP-3Z-iZq.title" = "Account Link";
+
+/* Class = "UINavigationItem"; title = "Personal Information"; ObjectID = "qtq-Vv-oQd"; */
+"qtq-Vv-oQd.title" = "Personal Information";
+
+/* Class = "UITextView"; text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."; ObjectID = "rPV-ym-nRq"; */
+"rPV-ym-nRq.text" = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.";
+
+/* Class = "UIButton"; normalTitle = "Sync"; ObjectID = "vcn-L9-bRM"; */
+"vcn-L9-bRM.normalTitle" = "Sync";
+
+/* Class = "UIButton"; normalTitle = "Send mail"; ObjectID = "vfl-sU-S0g"; */
+"vfl-sU-S0g.normalTitle" = "Send mail";
+
+/* Class = "UIButton"; normalTitle = "Update"; ObjectID = "xg5-mG-Cwm"; */
+"xg5-mG-Cwm.normalTitle" = "Update";

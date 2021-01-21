@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0B3BA0F2F863C8081E50002B /* Pods_finalProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA01FDC3187D05B28034DA42 /* Pods_finalProject.framework */; };
+		DE06160025B7F9F2000885A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE0615FF25B7F9F2000885A9 /* Assets.xcassets */; };
+		DE06160825B7FDAB000885A9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DE06160A25B7FDAB000885A9 /* Localizable.strings */; };
 		DE19306F2590883C001B5D53 /* DepositView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE19306E2590883C001B5D53 /* DepositView.swift */; };
 		DE84DA1A2592303800E7D4D0 /* AllSavingAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE84DA192592303800E7D4D0 /* AllSavingAccountCell.swift */; };
 		DEAC0A692590C87A0000F378 /* PickAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAC0A682590C87A0000F378 /* PickAccountView.swift */; };
@@ -58,7 +60,6 @@
 		F15748822597FE4100DBF2F9 /* addLendOrBorrowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15748812597FE4100DBF2F9 /* addLendOrBorrowVC.swift */; };
 		F157582A2582C2C200FB0D13 /* lendOrBorrowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15758292582C2C200FB0D13 /* lendOrBorrowCell.swift */; };
 		F157582F2582C2DD00FB0D13 /* chooseLendOrBorrowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F157582E2582C2DD00FB0D13 /* chooseLendOrBorrowVC.swift */; };
-		F1588A0325B747490011351F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1588A0225B747490011351F /* Assets.xcassets */; };
 		F1588A0625B750C00011351F /* observeValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1588A0525B750C00011351F /* observeValue.swift */; };
 		F15ADE3025B82351007CB55B /* DetailAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15ADE2E25B82351007CB55B /* DetailAccountCell.swift */; };
 		F15ADE3125B82351007CB55B /* DetailAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15ADE2F25B82351007CB55B /* DetailAccount.swift */; };
@@ -78,6 +79,7 @@
 		F190DF5A25B8AE2900922536 /* previewImgVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F190DF5925B8AE2900922536 /* previewImgVC.swift */; };
 		F190DF5D25B8BE5000922536 /* imgClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F190DF5C25B8BE5000922536 /* imgClass.swift */; };
 		F190DF6125B90FA800922536 /* records.swift in Sources */ = {isa = PBXBuildFile; fileRef = F190DF6025B90FA700922536 /* records.swift */; };
+		F190DFB725B91BCA00922536 /* FeebackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F190DFB625B91BC900922536 /* FeebackView.swift */; };
 		F1D08F9E2598851700382264 /* editExOrInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D08F9D2598851700382264 /* editExOrInVC.swift */; };
 		F1D08FA32598852F00382264 /* editLendOrBorrowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D08FA22598852F00382264 /* editLendOrBorrowVC.swift */; };
 		F1D08FA82598854200382264 /* editTransferVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D08FA72598854200382264 /* editTransferVc.swift */; };
@@ -90,6 +92,14 @@
 		015714E02F9E8BB518DCA6AC /* Pods-finalProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-finalProject.debug.xcconfig"; path = "Target Support Files/Pods-finalProject/Pods-finalProject.debug.xcconfig"; sourceTree = "<group>"; };
 		6ABB78E823B75F5F6754EC6A /* Pods-finalProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-finalProject.release.xcconfig"; path = "Target Support Files/Pods-finalProject/Pods-finalProject.release.xcconfig"; sourceTree = "<group>"; };
 		AA01FDC3187D05B28034DA42 /* Pods_finalProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_finalProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE0615FF25B7F9F2000885A9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DE06160125B7FD49000885A9 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = ../vi.lproj/report.strings; sourceTree = "<group>"; };
+		DE06160225B7FD49000885A9 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = ../vi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		DE06160325B7FD49000885A9 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = ../vi.lproj/other.strings; sourceTree = "<group>"; };
+		DE06160425B7FD49000885A9 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = ../vi.lproj/Main.strings; sourceTree = "<group>"; };
+		DE06160525B7FD4A000885A9 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = ../vi.lproj/account.strings; sourceTree = "<group>"; };
+		DE06160925B7FDAB000885A9 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DE06160B25B7FDB2000885A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DE19306E2590883C001B5D53 /* DepositView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepositView.swift; sourceTree = "<group>"; };
 		DE84DA192592303800E7D4D0 /* AllSavingAccountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllSavingAccountCell.swift; sourceTree = "<group>"; };
 		DEAC0A682590C87A0000F378 /* PickAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickAccountView.swift; sourceTree = "<group>"; };
@@ -142,7 +152,6 @@
 		F15748812597FE4100DBF2F9 /* addLendOrBorrowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addLendOrBorrowVC.swift; sourceTree = "<group>"; };
 		F15758292582C2C200FB0D13 /* lendOrBorrowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lendOrBorrowCell.swift; sourceTree = "<group>"; };
 		F157582E2582C2DD00FB0D13 /* chooseLendOrBorrowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chooseLendOrBorrowVC.swift; sourceTree = "<group>"; };
-		F1588A0225B747490011351F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F1588A0525B750C00011351F /* observeValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = observeValue.swift; sourceTree = "<group>"; };
 		F15ADE2E25B82351007CB55B /* DetailAccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailAccountCell.swift; sourceTree = "<group>"; };
 		F15ADE2F25B82351007CB55B /* DetailAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailAccount.swift; sourceTree = "<group>"; };
@@ -162,6 +171,7 @@
 		F190DF5925B8AE2900922536 /* previewImgVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = previewImgVC.swift; sourceTree = "<group>"; };
 		F190DF5C25B8BE5000922536 /* imgClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imgClass.swift; sourceTree = "<group>"; };
 		F190DF6025B90FA700922536 /* records.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = records.swift; sourceTree = "<group>"; };
+		F190DFB625B91BC900922536 /* FeebackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeebackView.swift; sourceTree = "<group>"; };
 		F1D08F9D2598851700382264 /* editExOrInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = editExOrInVC.swift; sourceTree = "<group>"; };
 		F1D08FA22598852F00382264 /* editLendOrBorrowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = editLendOrBorrowVC.swift; sourceTree = "<group>"; };
 		F1D08FA72598854200382264 /* editTransferVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = editTransferVc.swift; sourceTree = "<group>"; };
@@ -242,6 +252,7 @@
 		F1538C36257DE79200531002 /* other */ = {
 			isa = PBXGroup;
 			children = (
+				F190DFB625B91BC900922536 /* FeebackView.swift */,
 				F1538C37257DE79200531002 /* otherVC.swift */,
 				F160D6F12597122B00ACB5AD /* personInforVC.swift */,
 				F160D6FB2597298900ACB5AD /* YourDataVC.swift */,
@@ -311,6 +322,7 @@
 		F1547C2B256B18B9001CD0AB = {
 			isa = PBXGroup;
 			children = (
+				DE06160A25B7FDAB000885A9 /* Localizable.strings */,
 				DE15178F25774ABC00231D1E /* Font */,
 				F1547C36256B18B9001CD0AB /* finalProject */,
 				F1547C35256B18B9001CD0AB /* Products */,
@@ -341,7 +353,7 @@
 				F15BE38825B39144009A7CE1 /* GoogleService-Info.plist */,
 				F1547C45256B18BB001CD0AB /* Info.plist */,
 				F1547C37256B18B9001CD0AB /* AppDelegate.swift */,
-				F1588A0225B747490011351F /* Assets.xcassets */,
+				DE0615FF25B7F9F2000885A9 /* Assets.xcassets */,
 				F1547C39256B18B9001CD0AB /* SceneDelegate.swift */,
 				F12EE6E225A8E43F00575456 /* loginVC.swift */,
 				F14C377925A0E7B900450D25 /* signUpVC.swift */,
@@ -425,6 +437,7 @@
 			knownRegions = (
 				en,
 				Base,
+				vi,
 			);
 			mainGroup = F1547C2B256B18B9001CD0AB;
 			productRefGroup = F1547C35256B18B9001CD0AB /* Products */;
@@ -443,9 +456,10 @@
 			files = (
 				F15BE38925B39144009A7CE1 /* GoogleService-Info.plist in Resources */,
 				F1716BBE257F538000BBB419 /* Main.storyboard in Resources */,
+				DE06160825B7FDAB000885A9 /* Localizable.strings in Resources */,
 				F1716BBB257F538000BBB419 /* report.storyboard in Resources */,
 				F1538C5D257DE79200531002 /* typeRecord.xib in Resources */,
-				F1588A0325B747490011351F /* Assets.xcassets in Resources */,
+				DE06160025B7F9F2000885A9 /* Assets.xcassets in Resources */,
 				F149F10D257EBAE700FBB2AB /* editRecord.storyboard in Resources */,
 				F1716BBD257F538000BBB419 /* other.storyboard in Resources */,
 				DEFDCC18258F822600A0FDDB /* CustomView.xib in Resources */,
@@ -520,6 +534,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F190DFB725B91BCA00922536 /* FeebackView.swift in Sources */,
 				F157008C25B7BCC600CBB259 /* reportVC.swift in Sources */,
 				DEFDCC19258F822600A0FDDB /* AddAccumulateView.swift in Sources */,
 				F15ADE3125B82351007CB55B /* DetailAccount.swift in Sources */,
@@ -592,10 +607,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		DE06160A25B7FDAB000885A9 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DE06160925B7FDAB000885A9 /* vi */,
+				DE06160B25B7FDB2000885A9 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		F1716BB1257F538000BBB419 /* report.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				F1716BB2257F538000BBB419 /* Base */,
+				DE06160125B7FD49000885A9 /* vi */,
 			);
 			name = report.storyboard;
 			sourceTree = "<group>";
@@ -604,6 +629,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				F1716BB4257F538000BBB419 /* Base */,
+				DE06160225B7FD49000885A9 /* vi */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -612,6 +638,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				F1716BB6257F538000BBB419 /* Base */,
+				DE06160325B7FD49000885A9 /* vi */,
 			);
 			name = other.storyboard;
 			sourceTree = "<group>";
@@ -620,6 +647,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				F1716BB8257F538000BBB419 /* Base */,
+				DE06160425B7FD49000885A9 /* vi */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -628,6 +656,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				F1716BBA257F538000BBB419 /* Base */,
+				DE06160525B7FD4A000885A9 /* vi */,
 			);
 			name = account.storyboard;
 			sourceTree = "<group>";
@@ -639,6 +668,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -700,6 +730,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

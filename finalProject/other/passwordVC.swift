@@ -116,7 +116,7 @@ class passwordVC: UITableViewController {
                 SCLAlertView().showError(error.localizedDescription , subTitle: "")
               } else {
                 // User re-authenticated.
-                currentUser?.updatePassword(to: newPass){ error in
+                    self.currentUser?.updatePassword(to: newPass){ error in
                     if let erroR = error as NSError?{
                         SCLAlertView().showError(erroR.localizedDescription , subTitle: "")
                     }
