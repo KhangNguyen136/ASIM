@@ -125,6 +125,7 @@ PODS:
     - GTMSessionFetcher/Core (= 1.5.0)
   - ImagePicker (3.2.0)
   - leveldb-library (1.22)
+  - LocalizationSystem (0.1.0)
   - nanopb (2.30906.0):
     - nanopb/decode (= 2.30906.0)
     - nanopb/encode (= 2.30906.0)
@@ -159,6 +160,7 @@ DEPENDENCIES:
   - FirebaseUI/Phone
   - GoogleSignIn
   - ImagePicker
+  - LocalizationSystem
   - NLocalizationManager
   - ProgressHUD
   - ReachabilitySwift
@@ -194,6 +196,7 @@ SPEC REPOS:
     - GTMSessionFetcher
     - ImagePicker
     - leveldb-library
+    - LocalizationSystem
     - nanopb
     - NLocalizationManager
     - ProgressHUD
@@ -231,6 +234,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
   ImagePicker: 1d950bbb2422548ed58791b4ec7f42fe42920511
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
+  LocalizationSystem: 9e7def91f7730cbdb5151556a811188e35597088
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   NLocalizationManager: 8d10a0b0368c84cdfc5da04b70cbb600cecdd0c5
   ProgressHUD: 137a7fc677487c5581668f4490563124fb35c232
@@ -241,6 +245,6 @@ SPEC CHECKSUMS:
   SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
   SearchTextField: 40dc3cc57def5a211f263cac263622c163bbc25a
 
-PODFILE CHECKSUM: ddb927f00cd1f8f6144cf8eaa44a83ac88c99886
+PODFILE CHECKSUM: dbf46d1634cdda3f39d1d2f03dfc2cce536949ba
 
 COCOAPODS: 1.10.0

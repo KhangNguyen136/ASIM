@@ -83,7 +83,14 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
             chooseCategoryBtn.setTitle(categoryValues().other[0][category], for: .normal)
         }
     }
+    func setLanguage(){
+        descript.setupAutolocalization(withKey: "Description", keyPath: "text")
+        locationTF.setupAutolocalization(withKey: "Location", keyPath: "text")
+        doneTitle.setupAutolocalization(withKey: "Repayed/Collected", keyPath: "text")
+        
+    }
     override func viewWillAppear(_ animated: Bool) {
+        setLanguage()
         userInfor = realm.objects(User.self)[0]
         
         selectTypeRecord.semanticContentAttribute = .forceRightToLeft
@@ -97,13 +104,15 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         chooseCategoryBtn.setTitle(categoryValues().other[0][category], for: .normal)
         if type == 2 {
             amount.textColor = UIColor.red
-            personTF.placeholder = "Borrower"
+            personTF.setupAutolocalization(withKey: "Borrower", keyPath: "placeholder")
+
             reDateBtn.setTitle("Collecting date", for: .normal)
         }
         else
         {
             amount.textColor = UIColor.green
-            personTF.placeholder = "Lender"
+            personTF.setupAutolocalization(withKey: "Lender", keyPath: "placeholder")
+
             reDateBtn.setTitle("Repayment date", for: .normal)
 
         }
@@ -203,7 +212,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
                     if index == 2
                     {
                         self!.amount.textColor = UIColor.red
-                        self!.personTF.placeholder = "Borrower"
+                        self!.personTF.setupAutolocalization(withKey: "Borrower", keyPath: "placeholder")
 
                         
                         self!.selectTypeRecord.setTitle("Lend", for: .normal)
@@ -215,7 +224,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
                     {
                         
                         self!.amount.textColor = UIColor.green
-                        self!.personTF.placeholder = "Lender"
+                        self!.personTF.setupAutolocalization(withKey: "Lender", keyPath: "placeholder")
 
                         self!.selectTypeRecord.setTitle("Borrow", for: .normal)
                         self!.categoryLogo.image = UIImage(named: "other1")

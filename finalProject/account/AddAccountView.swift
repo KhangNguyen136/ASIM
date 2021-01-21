@@ -291,8 +291,8 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
 
         else {
             delegate?.updateTable()}
-        //dismiss(animated: true, completion: nil)
-       self.navigationController?.popViewController(animated: true)
+        SCLAlertView().showSuccess("Account added!", subTitle: "")
+        self.navigationController?.popViewController(animated: true)
     }
     
     

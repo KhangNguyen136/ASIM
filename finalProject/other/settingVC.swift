@@ -9,6 +9,7 @@ import UIKit
 import RealmSwift
 import DropDown
 import DPLocalization
+import LocalizationSystem
 
 class settingVC: UITableViewController {
 
@@ -103,6 +104,7 @@ class settingVC: UITableViewController {
                     self!.userInfor.isVietnamese = true
                 }
                 dp_set_current_language("vi");
+                LocalizationSystem.sharedInstance().setLanguage("vi")
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateNotification"), object: nil, userInfo: nil)
             }
             else
@@ -111,8 +113,10 @@ class settingVC: UITableViewController {
                     self!.userInfor.isVietnamese = false
                 }
                         dp_set_current_language("en");
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateNotification"), object: nil, userInfo: nil)
+                LocalizationSystem.sharedInstance().setLanguage("en")
+                
             }
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateNotification"), object: nil, userInfo: nil)
         }
         dropDown.show()
         

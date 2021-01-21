@@ -10,13 +10,11 @@ import SearchTextField
 import DropDown
 import RealmSwift
 import SCLAlertView
-
+import LocalizationSystem
 
 class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectAccountDelegate,settingDelegate,delteImageDelegate {
     
-    
-    @IBOutlet weak var AmountL: UILabel!
-    
+        
     var type = 0
     var category = -1
     var detailCategory = -1
@@ -39,6 +37,7 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
     
     @IBOutlet weak var chooseTypeRecordBtn: UIButton!
     
+    @IBOutlet weak var AmountL: UILabel!
     @IBOutlet weak var categoryLogo: UIImageView!
     @IBOutlet weak var chooseCategoryBtn: UIButton!
     
@@ -80,6 +79,12 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
         unit.text = currencyBase().symbol[userInfor!.currency]
     }
     func setLanguage(){
+        AmountL.setupAutolocalization(withKey: "Amount", keyPath: "text")
+        descript.setupAutolocalization(withKey: "Description", keyPath: "placeholder")
+       personTF.setupAutolocalization(withKey: "Payee", keyPath: "placeholder")
+        locationTF.setupAutolocalization(withKey: "Location", keyPath: "placeholder")
+        eventTF.setupAutolocalization(withKey: "Event", keyPath: "placeholder")
+        //chooseCategoryBtn.setTitle(ChooseCategory, for: .normal)
      }
     func loadData() {
         chooseTypeRecordBtn.setTitle(categoryValues().typeRecord[type],for: .normal)
@@ -367,8 +372,8 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
         dropDown.show()
         }
     override func viewDidLoad() {
-       setLanguage()
         loadData()
+        setLanguage()
         chooseTypeRecordBtn.semanticContentAttribute = .forceRightToLeft
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)

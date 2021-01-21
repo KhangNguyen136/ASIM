@@ -47,7 +47,12 @@
 "HideAmount" = "Ẩn số tiền";
 "DefaultUseScreen" = "Màn hình sử dụng mặc định";
 "DateFormat" = "Định dạng thời gian";
-
+"ChooseCategory" = "Chọn lĩnh vực";
+"Payee" = "Chi cho ai";
+"Location" = "Địa điểm";
+"Event" = "Chuyến đi, sự kiện";
+"Borrower" = "Cho ai mượn";
+"Repayed/Collected" = "Đã trả/ thu nợ";
 
 
 

@@ -42,4 +42,9 @@
 "Balance" = "Balance";
 "All" = "All";
 "BankName" = "Bank name";
-
+"ChooseCategory" = "Choose category";
+"Payee" = "Payee";
+"Location" = "Location";
+"Event" = "Event, trip";
+"Borrower" = "Borrower";
+"Repayed/Collected" = "Repayed/Collected";

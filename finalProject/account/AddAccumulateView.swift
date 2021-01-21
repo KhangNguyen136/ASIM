@@ -299,7 +299,7 @@ class AddAccumulateView: UIViewController, UITextFieldDelegate {
         }
         acc.add()
         delegate?.loadTable()
-       //dismiss(animated: true, completion: nil)
+       SCLAlertView().showSuccess("Accumulate added!", subTitle: "")
         self.navigationController?.popViewController(animated: true)
         }
     }
