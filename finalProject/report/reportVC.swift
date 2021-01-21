@@ -16,19 +16,36 @@ class reportVC: UITableViewController {
     @IBOutlet weak var btn5: UIButton!
     @IBOutlet weak var btn6: UIButton!
     @IBAction func toChart1_0(_ sender: Any) {
-        
+        let dest = self.storyboard?.instantiateViewController(identifier: "chart1VC") as! chart1VC
+        dest.type = 0
+        self.navigationController?.pushViewController(dest, animated: true)
     }
     @IBAction func toChart1_1(_ sender: Any) {
+        let dest = self.storyboard?.instantiateViewController(identifier: "chart1VC") as! chart1VC
+        dest.type = 1
+        self.navigationController?.pushViewController(dest, animated: true)
     }
     
     @IBAction func toChart2_1(_ sender: Any) {
+        let dest = self.storyboard?.instantiateViewController(identifier: "chart2VC") as! chart2VC
+        dest.type = 1
+        self.navigationController?.pushViewController(dest, animated: true)
     }
     @IBAction func toChart2_0(_ sender: Any) {
+        let dest = self.storyboard?.instantiateViewController(identifier: "chart2VC") as! chart2VC
+        dest.type = 0
+        self.navigationController?.pushViewController(dest, animated: true)
     }
     
     @IBAction func toChart3_0(_ sender: Any) {
+        let dest = self.storyboard?.instantiateViewController(identifier: "chart3VC") as! chart3VC
+        dest.type = 0
+        self.navigationController?.pushViewController(dest, animated: true)
     }
     @IBAction func toChart3_1(_ sender: Any) {
+        let dest = self.storyboard?.instantiateViewController(identifier: "chart3VC") as! chart3VC
+        dest.type = 1
+        self.navigationController?.pushViewController(dest, animated: true)
     }
     func setLayout(view: UIView)
     {

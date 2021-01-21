@@ -15,6 +15,7 @@ target 'finalProject' do
 	pod 'ImagePicker'
 	pod 'ProgressHUD'
 	pod 'ReachabilitySwift'
+	pod 'Charts'
 
 	# add the Firebase pod for Google Analytics
 	pod 'Firebase/Core'

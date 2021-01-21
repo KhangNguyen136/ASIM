@@ -5,6 +5,9 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.4.0)
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
+  - Charts (3.6.0):
+    - Charts/Core (= 3.6.0)
+  - Charts/Core (3.6.0)
   - DatePicker (1.3.1):
     - Extended
   - DPLocalization (1.13)
@@ -141,6 +144,7 @@ PODS:
 
 DEPENDENCIES:
   - AlertsAndPickers
+  - Charts
   - DatePicker (~> 1.3.0)
   - DPLocalization
   - DropDown
@@ -166,6 +170,7 @@ SPEC REPOS:
   trunk:
     - AlertsAndPickers
     - AppAuth
+    - Charts
     - DatePicker
     - DPLocalization
     - DropDown
@@ -202,6 +207,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   AlertsAndPickers: 2a9cabfadaa2f4d52066bd842a7a1b1b2327a248
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
+  Charts: b1e3a1f5a1c9ba5394438ca3b91bd8c9076310af
   DatePicker: 05ddbd2b57d00ce6f44c1f0611ced32f948d33a6
   DPLocalization: 00b71b9c4043f8eaeb41bedcf2c90d847adcd4d8
   DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
@@ -235,6 +241,6 @@ SPEC CHECKSUMS:
   SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
   SearchTextField: 40dc3cc57def5a211f263cac263622c163bbc25a
 
-PODFILE CHECKSUM: 3bf482ad021a125a0cddbf25f768398af1e3ddea
+PODFILE CHECKSUM: ddb927f00cd1f8f6144cf8eaa44a83ac88c99886
 
 COCOAPODS: 1.10.0

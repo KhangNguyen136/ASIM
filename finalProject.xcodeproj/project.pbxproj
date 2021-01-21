@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0B3BA0F2F863C8081E50002B /* Pods_finalProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA01FDC3187D05B28034DA42 /* Pods_finalProject.framework */; };
+		1C6FF95B25B8F3D600537A6B /* chart3VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6FF95A25B8F3D600537A6B /* chart3VC.swift */; };
+		1CFC07CB25B8C04B0018A7F2 /* chart2VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CFC07CA25B8C04B0018A7F2 /* chart2VC.swift */; };
 		DE06160025B7F9F2000885A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE0615FF25B7F9F2000885A9 /* Assets.xcassets */; };
 		DE06160825B7FDAB000885A9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DE06160A25B7FDAB000885A9 /* Localizable.strings */; };
 		DE19306F2590883C001B5D53 /* DepositView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE19306E2590883C001B5D53 /* DepositView.swift */; };
@@ -90,6 +92,8 @@
 
 /* Begin PBXFileReference section */
 		015714E02F9E8BB518DCA6AC /* Pods-finalProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-finalProject.debug.xcconfig"; path = "Target Support Files/Pods-finalProject/Pods-finalProject.debug.xcconfig"; sourceTree = "<group>"; };
+		1C6FF95A25B8F3D600537A6B /* chart3VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chart3VC.swift; sourceTree = "<group>"; };
+		1CFC07CA25B8C04B0018A7F2 /* chart2VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chart2VC.swift; sourceTree = "<group>"; };
 		6ABB78E823B75F5F6754EC6A /* Pods-finalProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-finalProject.release.xcconfig"; path = "Target Support Files/Pods-finalProject/Pods-finalProject.release.xcconfig"; sourceTree = "<group>"; };
 		AA01FDC3187D05B28034DA42 /* Pods_finalProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_finalProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE0615FF25B7F9F2000885A9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -245,6 +249,8 @@
 			children = (
 				F157008B25B7BCC600CBB259 /* reportVC.swift */,
 				F157009125B7DDC100CBB259 /* chart1VC.swift */,
+				1CFC07CA25B8C04B0018A7F2 /* chart2VC.swift */,
+				1C6FF95A25B8F3D600537A6B /* chart3VC.swift */,
 			);
 			path = report;
 			sourceTree = "<group>";
@@ -540,6 +546,7 @@
 				F15ADE3125B82351007CB55B /* DetailAccount.swift in Sources */,
 				F14E951325A035160078EE00 /* accountLinkVC.swift in Sources */,
 				F15ADE3025B82351007CB55B /* DetailAccountCell.swift in Sources */,
+				1CFC07CB25B8C04B0018A7F2 /* chart2VC.swift in Sources */,
 				DEFDCC1E258F822600A0FDDB /* AccumulateAccountView.swift in Sources */,
 				F14EB7D6259FCCCA00FCFDEF /* settingVC.swift in Sources */,
 				DEAC0A6B2590C89A0000F378 /* PickAccountCell.swift in Sources */,
@@ -575,6 +582,7 @@
 				F157582F2582C2DD00FB0D13 /* chooseLendOrBorrowVC.swift in Sources */,
 				F1547C38256B18B9001CD0AB /* AppDelegate.swift in Sources */,
 				F190DF5A25B8AE2900922536 /* previewImgVC.swift in Sources */,
+				1C6FF95B25B8F3D600537A6B /* chart3VC.swift in Sources */,
 				F1538C61257DE79200531002 /* typeRecord.swift in Sources */,
 				F165515C25AA1F7F00B2E54D /* launchVC.swift in Sources */,
 				DEFDCC08258F81EB00A0FDDB /* AllNormalAccountCell.swift in Sources */,
