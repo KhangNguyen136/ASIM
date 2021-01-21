@@ -28,6 +28,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
     
     @IBOutlet weak var locationTF: SearchTextField!
     
+    @IBOutlet weak var Description: UITextField!
     @IBOutlet weak var categoryLogo: UIImageView!
     @IBOutlet weak var chooseCategoryBtn: UIButton!
     @IBOutlet weak var selectTypeRecord: UIButton!
@@ -77,7 +78,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         {
             type = 3
             amount.textColor = UIColor.green
-            personTF.placeholder = "Lender"
+            personTF.setupAutolocalization(withKey: "Lender", keyPath: "placeholder")
             descript.text = "Borrowed money from " + personTF.text!
             selectTypeRecord.setTitle("Borrow", for: .normal)
             categoryLogo.image = UIImage(named: "other1")
@@ -85,7 +86,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         }
     }
     func setLanguage(){
-        descript.setupAutolocalization(withKey: "Description", keyPath: "text")
+        descript.setupAutolocalization(withKey: "Description", keyPath: "placeholder");
         locationTF.setupAutolocalization(withKey: "Location", keyPath: "text")
         doneTitle.setupAutolocalization(withKey: "Repayed/Collected", keyPath: "text")
         AmountL.setupAutolocalization(withKey: "Amount", keyPath: "text")

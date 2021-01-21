@@ -20,11 +20,20 @@ class personInforVC: UIViewController {
         let lang = self.realm.objects(User.self).first?.isVietnamese
                if lang == true{
                   _title = ["Tên hiển thị: ","Số điện thoại: ","","Địa chỉ: ","Công việc: ","Email: "]
+              self.navigationItem.title = "Thông tin cá nhân "
+
                }
+               else{
+                self.navigationItem.title = "Personal information"
+
+        }
         listTV.register(inforTextFieldCell.self, forCellReuseIdentifier: "inforTextFieldCell")
         listTV.register(dobInforCell.self, forCellReuseIdentifier: "dobInforCell")
         listTV.register(submitInforCell.self, forCellReuseIdentifier: "submitInforCell")
         loadData()
+            
+        self.navigationController?.navigationBar.barTintColor = UIColor(red: 0/255, green: 123/255, blue: 164/255, alpha: 1)
+        
         super.viewDidLoad()
 
     }

@@ -53,7 +53,11 @@
 "Event" = "Chuyến đi, sự kiện";
 "Borrower" = "Cho ai mượn";
 "Repayed/Collected" = "Đã trả/ thu nợ";
-
+"Payer" = "Thu từ ai";
+"BalanceInAccount" = "Số dư trên tài khoản";
+"Difference" = "Chênh lệch";
+"ActualBalance" = "Số dư thực tế";
+"Lender" = "Người cho mượn";
 
 
 

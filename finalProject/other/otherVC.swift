@@ -87,15 +87,26 @@ class otherVC: UIViewController {
         loadLang()
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: .updateNotification, object: nil)
+        
+        self.navigationController?.navigationBar.barTintColor = UIColor(red: 0/255, green: 123/255, blue: 164/255, alpha: 1)
+        self.navigationController!.navigationBar.tintColor = UIColor.white;
+       
+        
+        self.navigationController?.navigationBar.titleTextAttributes = [
+                   .foregroundColor: UIColor.white,
+                   .font: UIFont(name: "MarkerFelt-Thin", size: 20)!]
     }
     func loadLang(){
         let lang = self.realm.objects(User.self).first?.isVietnamese
                if lang == true{
                   titleRow = ["Thông tin cá nhân","Cài đặt chung","Dữ liệu của bạn","Đường dẫn tài khoản","Đổi mật khẩu","Chia sẻ ứng dụng","Đánh giá ứng dụng","Góp ý với nhà phát triển","Trợ giúp và thông tin","Đăng xuất"]
+                self.navigationItem.title = "Khác"
                }
                else{
               titleRow = ["Personal information","Setting","Your data","Account link","Change password","Share app","Rate app","Your feedback","Help and information","Log out"]
+                self.navigationItem.title = "Other"
         }
+       
     }
     @objc func updateView(notification: Notification){
         loadLang()

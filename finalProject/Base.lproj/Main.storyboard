@@ -2064,7 +2064,7 @@
                             </connections>
                         </barButtonItem>
                         <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Omt-aK-Jjj">
-                            <rect key="frame" x="142" y="10" width="130" height="25"/>
+                            <rect key="frame" x="142" y="9.6666666666666643" width="130" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                             <color key="backgroundColor" red="1" green="0.93855834540000005" blue="0.85426690770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
@@ -2088,6 +2088,7 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="AmountL" destination="0cv-Y3-PpC" id="G6c-BY-h2c"/>
+                        <outlet property="Description" destination="ssS-wg-rYB" id="IJX-fb-1I4"/>
                         <outlet property="amount" destination="Mfn-wj-8Jr" id="aMv-O1-cCm"/>
                         <outlet property="categoryLogo" destination="yPV-Yd-q1j" id="dyx-Tg-bgq"/>
                         <outlet property="chooseAccountBtn" destination="jce-rh-WGV" id="1zU-9I-Xys"/>
@@ -2585,7 +2586,7 @@
                             </connections>
                         </barButtonItem>
                         <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZZe-Ys-qJw">
-                            <rect key="frame" x="142" y="9.6666666666666643" width="130" height="25"/>
+                            <rect key="frame" x="142" y="10" width="130" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                             <color key="backgroundColor" red="1" green="0.93855834540000005" blue="0.85426690770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
@@ -3183,7 +3184,7 @@
                             </connections>
                         </barButtonItem>
                         <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="W9z-XO-FtY">
-                            <rect key="frame" x="142" y="10" width="130" height="25"/>
+                            <rect key="frame" x="142" y="9.6666666666666643" width="130" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                             <color key="backgroundColor" red="1" green="0.93855834540000005" blue="0.85426690770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
@@ -3206,6 +3207,12 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="ActualBalance" destination="P9O-Fz-x9G" id="skg-pl-Xe0"/>
+                        <outlet property="BalanceInAccount" destination="Z4I-HK-Yjy" id="UDU-Hq-nuN"/>
+                        <outlet property="Description" destination="OkN-hH-wDA" id="Cdf-0Z-wuT"/>
+                        <outlet property="Difference" destination="DaI-kI-ZwM" id="CSB-Uy-LL7"/>
+                        <outlet property="Location" destination="KVY-GI-BD7" id="2K8-Zw-bdk"/>
+                        <outlet property="Payee" destination="Bep-FW-w6v" id="TrE-eT-Q7T"/>
                         <outlet property="acctualBalance" destination="9V1-67-xHz" id="XaU-lZ-buz"/>
                         <outlet property="categoryLogo" destination="YGq-Bf-59Y" id="Flt-zK-0jq"/>
                         <outlet property="chooseAccountBtn" destination="eWH-WM-9ml" id="4uh-KL-Mkd"/>
@@ -3725,6 +3732,6 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="OFp-iF-Jl5"/>
+        <segue reference="XTa-52-eYb"/>
     </inferredMetricsTieBreakers>
 </document>

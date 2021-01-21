@@ -48,3 +48,7 @@
 "Event" = "Event, trip";
 "Borrower" = "Borrower";
 "Repayed/Collected" = "Repayed/Collected";
+"BalanceInAccount" = "Balance in account";
+"Difference" = "Difference";
+"ActualBalance" = "ActualBalance";
+"Lender" = "Lender";

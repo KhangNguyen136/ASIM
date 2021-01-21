@@ -59,6 +59,9 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
         setLanguage()
         txtNameAcc.placeholder = "Name account"
         txtDescription.placeholder = "Description"
+        //Format textfield currency
+        
+        //
         let realm = try! Realm()
                let lang = realm.objects(User.self).first?.isVietnamese
                if lang == true{
@@ -107,6 +110,8 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(updateBankName), name: .bankNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateAccountType), name: .accountNotification, object: nil)
        }
+   
+
    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
           let isNumber = CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: string))
           let withDecimal = (
@@ -306,3 +311,5 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
     
     
 }
+
+

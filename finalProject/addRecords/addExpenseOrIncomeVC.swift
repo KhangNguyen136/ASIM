@@ -95,12 +95,12 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
         if(type == 0)
         {
             self.amount.textColor = UIColor.red
-            personTF.placeholder = "Payee"
+            personTF.setupAutolocalization(withKey: "Payee", keyPath: "placeholder")
         }
         else
         {
             self.amount.textColor = UIColor.green
-            personTF.placeholder = "Payer"
+           personTF.setupAutolocalization(withKey: "Payer", keyPath: "placeholder")
         }
         userInfor = realm.objects(User.self)[0]
         setting = settingObserve(user: userInfor!)
@@ -335,12 +335,12 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
                     if index == 0
                     {
                         self?.amount.textColor = UIColor.red
-                        self?.personTF.placeholder = "Payee"
+                        self!.personTF.setupAutolocalization(withKey: "Payee", keyPath: "placeholder")
                     }
                     else
                     {
                         self?.amount.textColor = UIColor.green
-                        self?.personTF.placeholder = "Payer"
+                        self!.personTF.setupAutolocalization(withKey: "Payer", keyPath: "placeholder")
                     }
                     
                 case 2,3:
