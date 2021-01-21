@@ -789,7 +789,7 @@
                             <color key="backgroundColor" red="1" green="0.93855834538732563" blue="0.85426690772938896" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                             <state key="normal" title="Expense" image="chevron.down" catalog="system">
-                                <color key="titleColor" name="AccentColor"/>
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
                             <connections>
                                 <action selector="chooseType:" destination="cnE-L8-MuQ" eventType="touchUpInside" id="w1H-T3-XvQ"/>
@@ -1114,14 +1114,14 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="filterHistoryCell" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="filterHistoryRow" id="9OD-Zb-JPT" customClass="filterHistoryCell" customModule="finalProject" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="78.333332061767578" width="414" height="42.666667938232422"/>
+                                        <rect key="frame" x="0.0" y="78.333332061767578" width="414" height="42.333332061767578"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9OD-Zb-JPT" id="mxC-C8-aG2">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="42.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="42.333332061767578"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="detial filter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="85" translatesAutoresizingMaskIntoConstraints="NO" id="5mM-Su-R9o">
-                                                    <rect key="frame" x="60" y="10.000000000000002" width="85" height="22.666666666666671"/>
+                                                    <rect key="frame" x="60" y="9.9999999999999982" width="85" height="22.333333333333329"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1138,20 +1138,20 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="seclectDateFilterHistoryCell" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="seclectDateFilterHistoryRow" id="ytb-Zl-h9O" customClass="seclectDateFilterHistoryCell" customModule="finalProject" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="121" width="414" height="42.666667938232422"/>
+                                        <rect key="frame" x="0.0" y="120.66666412353516" width="414" height="42.333332061767578"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ytb-Zl-h9O" id="TOA-pi-UHr">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="42.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="42.333332061767578"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="43.666666666666657" translatesAutoresizingMaskIntoConstraints="NO" id="qmU-T3-3Ef">
-                                                    <rect key="frame" x="60" y="10.000000000000002" width="91" height="22.666666666666671"/>
+                                                    <rect key="frame" x="60" y="9.9999999999999982" width="91" height="22.333333333333329"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GqO-bx-hy4">
-                                                    <rect key="frame" x="312" y="-1.3333333333333339" width="92" height="34"/>
+                                                    <rect key="frame" x="312" y="-1.6666666666666661" width="92" height="34"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <state key="normal" title="Select date"/>
                                                     <connections>
@@ -2069,7 +2069,7 @@
                             <color key="backgroundColor" red="1" green="0.93855834540000005" blue="0.85426690770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                             <state key="normal" title="Borrow" image="chevron.down" catalog="system">
-                                <color key="titleColor" name="AccentColor"/>
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
                             <connections>
                                 <action selector="chooseTypeRecord:" destination="5l0-8j-AlD" eventType="touchUpInside" id="NRo-Uq-Kq4"/>
@@ -2087,6 +2087,7 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="AmountL" destination="0cv-Y3-PpC" id="G6c-BY-h2c"/>
                         <outlet property="amount" destination="Mfn-wj-8Jr" id="aMv-O1-cCm"/>
                         <outlet property="categoryLogo" destination="yPV-Yd-q1j" id="dyx-Tg-bgq"/>
                         <outlet property="chooseAccountBtn" destination="jce-rh-WGV" id="1zU-9I-Xys"/>
@@ -2584,12 +2585,12 @@
                             </connections>
                         </barButtonItem>
                         <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZZe-Ys-qJw">
-                            <rect key="frame" x="142" y="10" width="130" height="25"/>
+                            <rect key="frame" x="142" y="9.6666666666666643" width="130" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                             <color key="backgroundColor" red="1" green="0.93855834540000005" blue="0.85426690770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                             <state key="normal" title="Transfer" image="chevron.down" catalog="system">
-                                <color key="titleColor" name="AccentColor"/>
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
                             <connections>
                                 <action selector="chooseTypeRecord:" destination="yeX-14-OEJ" eventType="touchUpInside" id="nza-fL-ze8"/>
@@ -2607,6 +2608,10 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="AmountL" destination="pBL-55-SSG" id="CGZ-6r-VYt"/>
+                        <outlet property="FromAccount" destination="aX4-Ae-xEA" id="eNg-N4-6Ah"/>
+                        <outlet property="ToAccount" destination="cGC-CM-N2F" id="tVx-9Z-AV0"/>
+                        <outlet property="TransferFee" destination="RP7-qt-Z64" id="fvo-0E-Ewa"/>
                         <outlet property="amount" destination="pVm-7x-jDC" id="nF8-9z-yT0"/>
                         <outlet property="chooseDestAccountBtn" destination="KeT-00-Ieb" id="T9v-2r-ZoY"/>
                         <outlet property="chooseSourceAccountBtn" destination="M2Y-39-NAM" id="zIC-Se-KHQ"/>
@@ -3183,7 +3188,7 @@
                             <color key="backgroundColor" red="1" green="0.93855834540000005" blue="0.85426690770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                             <state key="normal" title="Adjustment" image="chevron.down" catalog="system">
-                                <color key="titleColor" name="AccentColor"/>
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
                             <connections>
                                 <action selector="chooseTypeRecord:" destination="wNE-MI-gJr" eventType="touchUpInside" id="7GQ-1c-Dxq"/>
@@ -3720,6 +3725,6 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="XTa-52-eYb"/>
+        <segue reference="OFp-iF-Jl5"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -20,6 +20,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
     var userInfor: User? = nil
     var srcAccount: polyAccount? = nil
 
+    @IBOutlet weak var AmountL: UILabel!
     @IBOutlet weak var unit: UILabel!
     @IBOutlet weak var amount: UITextField!
 
@@ -87,6 +88,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         descript.setupAutolocalization(withKey: "Description", keyPath: "text")
         locationTF.setupAutolocalization(withKey: "Location", keyPath: "text")
         doneTitle.setupAutolocalization(withKey: "Repayed/Collected", keyPath: "text")
+        AmountL.setupAutolocalization(withKey: "Amount", keyPath: "text")
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -94,9 +96,18 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         userInfor = realm.objects(User.self)[0]
         
         selectTypeRecord.semanticContentAttribute = .forceRightToLeft
-        selectTypeRecord.setTitle(categoryValues().typeRecord[type],for: .normal)
+        let lang = realm.objects(User.self).first?.isVietnamese
+         
+        if lang == true{
+            selectTypeRecord.setTitle(categoryValues().typeRecordVietnamese[type],for: .normal)
+        }
+        else{
+            selectTypeRecord.setTitle(categoryValues().typeRecord[type],for: .normal)
+        }
+
         selectTypeRecord.clipsToBounds = true
-        selectTypeRecord.layer.cornerRadius = selectTypeRecord.frame.width/8
+        selectTypeRecord.backgroundColor = .white
+        selectTypeRecord.layer.cornerRadius = selectTypeRecord.frame.width/10
 
         category = type - 2
 
@@ -179,7 +190,14 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         dropDown.anchorView = sender // UIView or UIBarButtonItem
 
         // The list of items to display. Can be changed dynamically
-        dropDown.dataSource = categoryValues().typeRecord
+        let lang = realm.objects(User.self).first?.isVietnamese
+        if lang == true{
+            dropDown.dataSource = categoryValues().typeRecordVietnamese
+        }
+        else{
+             dropDown.dataSource = categoryValues().typeRecord
+        }
+       
 
         /*** IMPORTANT PART FOR CUSTOM CELLS ***/
         dropDown.cellNib = UINib(nibName: "typeRecord", bundle: nil)

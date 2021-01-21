@@ -53,6 +53,7 @@ struct categoryValues {
     let income = [["Bonus","Interest","Salary","Savings interesst","Collecting debts","Other"]]
     let other = [["Lend","Borrow","Repayment","Collecting debts"]]
     let typeRecord = ["Expense", "Income", "Lend","Borrow","Transfer","Adjustment"]
+    let typeRecordVietnamese = ["Khoản chi", "Thu nhập", "Mượn tiền","Cho mượn tiền","Chuyển khoản","Điều chỉnh số dư"]
     
 }
 class Notify: Object{

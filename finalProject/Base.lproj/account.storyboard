@@ -17,20 +17,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="dTq-Gc-2Bc">
-                                <rect key="frame" x="-158" y="108" width="730" height="730"/>
+                                <rect key="frame" x="22" y="108" width="370" height="370"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="n0d-ga-I9I">
-                                        <rect key="frame" x="0.0" y="0.0" width="730" height="360"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="370" height="180"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Ux-s9-S81">
-                                                <rect key="frame" x="0.0" y="0.0" width="360" height="360"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="180" height="180"/>
                                                 <state key="normal" image="account-1"/>
                                                 <connections>
                                                     <segue destination="nwV-Sb-y6v" kind="show" id="MKp-Wv-Pfo"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aUv-UG-7lF">
-                                                <rect key="frame" x="370" y="0.0" width="360" height="360"/>
+                                                <rect key="frame" x="190" y="0.0" width="180" height="180"/>
                                                 <state key="normal" image="saving-account-1"/>
                                                 <connections>
                                                     <segue destination="CNo-St-GvT" kind="show" id="IzT-hD-mUA"/>
@@ -39,7 +39,7 @@
                                         </subviews>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kJV-eH-TYe">
-                                        <rect key="frame" x="0.0" y="370" width="730" height="360"/>
+                                        <rect key="frame" x="0.0" y="190" width="370" height="180"/>
                                         <state key="normal" image="accumulation-account-1"/>
                                         <connections>
                                             <segue destination="L9e-nC-u8X" kind="show" id="zKb-c2-L7E"/>
@@ -442,6 +442,13 @@
                                     <action selector="savebtn:" destination="HfE-6A-Eii" eventType="touchUpInside" id="Pzg-fs-ueN"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yqb-Md-uEu">
+                                <rect key="frame" x="34" y="64" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -466,12 +473,13 @@
                             <constraint firstItem="Wi2-6P-rw2" firstAttribute="trailing" secondItem="2oO-EW-LxT" secondAttribute="trailing" id="p6L-Mj-vQR"/>
                             <constraint firstItem="2oO-EW-LxT" firstAttribute="leading" secondItem="Wi2-6P-rw2" secondAttribute="leading" id="t6v-O3-RhT"/>
                             <constraint firstItem="KnN-ks-idL" firstAttribute="leading" secondItem="Wi2-6P-rw2" secondAttribute="leading" id="tyA-B3-3Zb"/>
-                            <constraint firstItem="tRg-zj-V7V" firstAttribute="top" secondItem="Wi2-6P-rw2" secondAttribute="top" constant="5" id="u8X-oy-yb3"/>
+                            <constraint firstItem="tRg-zj-V7V" firstAttribute="top" secondItem="Wi2-6P-rw2" secondAttribute="top" constant="30" id="u8X-oy-yb3"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Wi2-6P-rw2"/>
                     </view>
                     <navigationItem key="navigationItem" id="y0X-p4-Pa0"/>
                     <connections>
+                        <outlet property="Amount" destination="yqb-Md-uEu" id="gUE-sv-pqc"/>
                         <outlet property="accountView" destination="hD0-AF-Efb" id="u8c-E4-fdc"/>
                         <outlet property="bankView" destination="So0-Zu-PeB" id="bae-eM-mXf"/>
                         <outlet property="bankViewHeight" destination="yoy-Yr-HjZ" id="Kf0-nI-dK5"/>
@@ -930,13 +938,13 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="354" height="21.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Complete" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ON4-89-FgV">
-                                                        <rect key="frame" x="0.0" y="0.0" width="274.5" height="21.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="78.5" height="21.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                         <color key="textColor" systemColor="systemGreenColor" red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="1000000đ" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ife-2H-r8G">
-                                                        <rect key="frame" x="274.5" y="0.0" width="79.5" height="21.5"/>
+                                                        <rect key="frame" x="78.5" y="0.0" width="275.5" height="21.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -950,19 +958,19 @@
                                                 <rect key="frame" x="0.0" y="39.5" width="354" height="20.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="5000đ" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OWQ-WI-uJa">
-                                                        <rect key="frame" x="0.0" y="0.0" width="196.5" height="20.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="51.5" height="20.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Need more" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7cu-Og-1aF">
-                                                        <rect key="frame" x="196.5" y="0.0" width="85" height="20.5"/>
+                                                        <rect key="frame" x="51.5" y="0.0" width="85" height="20.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="995000đ" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C14-LA-yy6">
-                                                        <rect key="frame" x="281.5" y="0.0" width="72.5" height="20.5"/>
+                                                        <rect key="frame" x="136.5" y="0.0" width="217.5" height="20.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>

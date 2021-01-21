@@ -22,6 +22,7 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var lblBankName: UILabel!
     @IBOutlet weak var txtNameAcc: UITextField!
     @IBOutlet weak var bankView: UIView!
+    @IBOutlet weak var Amount: UILabel!
     var editMode = false
     var editAcc: polyAccount = polyAccount()
     var delegate: updateDataDelegate?
@@ -44,6 +45,14 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
     var typeAccList: [String] = infoChoice().typeAccountEnglish
     var typeCurrency = 0
     override func viewDidLoad() {
+        typeAccountView.layer.borderWidth = 1
+        typeAccountView.layer.borderColor = UIColor.lightGray.cgColor
+        accountView.layer.borderWidth = 1
+        accountView.layer.borderColor = UIColor.lightGray.cgColor
+        currView.layer.borderWidth = 1
+        currView.layer.borderColor = UIColor.lightGray.cgColor
+        descripView.layer.borderWidth = 1
+        descripView.layer.borderColor = UIColor.lightGray.cgColor
         txtMoney.delegate = self
         bankView.isHidden = true
         bankViewHeight.constant = 0
@@ -108,7 +117,7 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
       }
     func setLanguage(){
         lblBankName.setupAutolocalization(withKey: "BankName", keyPath: "text")
-       
+        Amount.setupAutolocalization(withKey: "Amount", keyPath: "text")
         }
      @objc func chooseAccType(sender: UITapGestureRecognizer) {
            let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView

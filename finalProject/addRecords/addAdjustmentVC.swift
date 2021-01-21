@@ -163,7 +163,8 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
         
         selectTypeRecord.semanticContentAttribute = .forceRightToLeft
         selectTypeRecord.clipsToBounds = true
-        selectTypeRecord.layer.cornerRadius = selectTypeRecord.frame.width/8
+        selectTypeRecord.backgroundColor = .white
+        selectTypeRecord.layer.cornerRadius = selectTypeRecord.frame.width/10
         
         let reviewImg = UITapGestureRecognizer(target: self, action: #selector(clickImg))
         imgView.isUserInteractionEnabled = true
@@ -194,7 +195,13 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
         dropDown.anchorView = sender // UIView or UIBarButtonItem
 
         // The list of items to display. Can be changed dynamically
-        dropDown.dataSource = categoryValues().typeRecord
+        let lang = realm.objects(User.self).first?.isVietnamese
+        if lang == true{
+            dropDown.dataSource = categoryValues().typeRecordVietnamese
+        }
+        else{
+             dropDown.dataSource = categoryValues().typeRecord
+        }
 
         /*** IMPORTANT PART FOR CUSTOM CELLS ***/
         dropDown.cellNib = UINib(nibName: "typeRecord", bundle: nil)

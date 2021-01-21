@@ -87,9 +87,11 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
         //chooseCategoryBtn.setTitle(ChooseCategory, for: .normal)
      }
     func loadData() {
+
         chooseTypeRecordBtn.setTitle(categoryValues().typeRecord[type],for: .normal)
+        chooseTypeRecordBtn.backgroundColor = .white
         chooseTypeRecordBtn.clipsToBounds = true
-        chooseTypeRecordBtn.layer.cornerRadius = chooseTypeRecordBtn.frame.width/8
+        chooseTypeRecordBtn.layer.cornerRadius = chooseTypeRecordBtn.frame.width/10
         if(type == 0)
         {
             self.amount.textColor = UIColor.red
@@ -302,11 +304,12 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
     
     @IBAction func chooseType(_ sender: UIButton) {
         let dropDown = DropDown()
-        // The view to which the drop down will appear on
         dropDown.anchorView = sender // UIView or UIBarButtonItem
-        // The list of items to display. Can be changed dynamically
         dropDown.dataSource = categoryValues().typeRecord
-        /*** IMPORTANT PART FOR CUSTOM CELLS ***/
+        let lang = realm.objects(User.self).first?.isVietnamese
+        if lang == true{
+            dropDown.dataSource = categoryValues().typeRecordVietnamese
+        }
         dropDown.cellNib = UINib(nibName: "typeRecord", bundle: nil)
 
         dropDown.customCellConfiguration = { (index: Index, item: String, cell: DropDownCell) -> Void in
@@ -372,6 +375,13 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
         dropDown.show()
         }
     override func viewDidLoad() {
+
+        self.navigationController?.navigationBar.barTintColor = UIColor(red: 0/255, green: 123/255, blue: 164/255, alpha: 1)
+                             // Do any additional setup after loading the view.
+               
+        self.navigationController?.navigationBar.titleTextAttributes = [
+                                 .foregroundColor: UIColor.white,
+                                 .font: UIFont(name: "MarkerFelt-Thin", size: 20)!]
         loadData()
         setLanguage()
         chooseTypeRecordBtn.semanticContentAttribute = .forceRightToLeft

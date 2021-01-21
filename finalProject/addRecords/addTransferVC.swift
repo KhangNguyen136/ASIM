@@ -26,8 +26,12 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
     
     @IBOutlet weak var selectTypeRecord: UIButton!
     @IBOutlet weak var chooseSourceAccountBtn: UIButton!
+    @IBOutlet weak var FromAccount: UILabel!
+    @IBOutlet weak var AmountL: UILabel!
+    @IBOutlet weak var TransferFee: UILabel!
     @IBOutlet weak var chooseDestAccountBtn: UIButton!
     @IBOutlet weak var amount: UITextField!
+    @IBOutlet weak var ToAccount: UILabel!
     @IBOutlet weak var descript: UITextField!
     @IBOutlet weak var locationTF: SearchTextField!
     @IBOutlet weak var dateTime: UIDatePicker!
@@ -45,7 +49,14 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
         unit1.text = currencyBase().symbol[value]
 
     }
+    func setLanguage(){
+        AmountL.setupAutolocalization(withKey: "Amount", keyPath: "text")
+        TransferFee.setupAutolocalization(withKey:"TransferFee", keyPath: "text")
+        FromAccount.setupAutolocalization(withKey: "FromAccount", keyPath: "text")
+        ToAccount.setupAutolocalization(withKey: "ToAccount", keyPath: "text")
+    }
     override func viewDidLoad() {
+        setLanguage()
         userInfor = realm.objects(User.self)[0]
         var tempStr: [String] = []
         tempStr.append(contentsOf: userInfor!.locations)
@@ -55,7 +66,8 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
         
         selectTypeRecord.semanticContentAttribute = .forceRightToLeft
         selectTypeRecord.clipsToBounds = true
-        selectTypeRecord.layer.cornerRadius = selectTypeRecord.frame.width/8
+        selectTypeRecord.backgroundColor = .white
+        selectTypeRecord.layer.cornerRadius = selectTypeRecord.frame.width/10
         
         setting = settingObserve(user: userInfor!)
         settingObser = settingObserver(object: setting!)
@@ -99,7 +111,13 @@ class addTransferVc: UITableViewController ,selectAccountDelegate,selectDestinat
         dropDown.anchorView = sender // UIView or UIBarButtonItem
 
         // The list of items to display. Can be changed dynamically
-        dropDown.dataSource = categoryValues().typeRecord
+        let lang = realm.objects(User.self).first?.isVietnamese
+        if lang == true{
+            dropDown.dataSource = categoryValues().typeRecordVietnamese
+        }
+        else{
+             dropDown.dataSource = categoryValues().typeRecord
+        }
 
         /*** IMPORTANT PART FOR CUSTOM CELLS ***/
         dropDown.cellNib = UINib(nibName: "typeRecord", bundle: nil)
