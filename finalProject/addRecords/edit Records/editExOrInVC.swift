@@ -296,6 +296,7 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
                     {
                         if let imgData = NSData(contentsOf: imgURL! as URL) {
                             imgStored!.data = imgData
+                            imgStored?.isChanged = true
                         }
                     }
                 }

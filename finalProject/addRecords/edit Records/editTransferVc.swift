@@ -196,6 +196,7 @@ class editTransferVc: UITableViewController ,selectAccountDelegate,selectDestina
                     {
                         if let imgData = NSData(contentsOf: imgURL! as URL) {
                             imgStored!.data = imgData
+                            imgStored?.isChanged = true
                         }
                     }
                 }

@@ -39,8 +39,6 @@ class User: Object{
     
     @objc dynamic var lastSync: Date? = nil
 
-    
-
     var records = List<polyRecord>()
     var accounts = List<polyAccount>()
     
@@ -87,10 +85,10 @@ class User: Object{
         var result = 0
         for i in records
         {
-            if i.getImgID() > result
-            {
-                result = i.getImgID() + 1
-            }
+//            if i.getImgID() > result
+//            {
+//                result = i.getImgID() + 1
+//            }
         }
         return result
     }
@@ -122,10 +120,10 @@ class User: Object{
                 print("Synced a deleted account.")
                 continue
             }
-            if i.isChanged == false{
-                print("Ignored an unchanged account.")
-                continue
-            }
+//            if i.isChanged == false{
+//                print("Ignored an unchanged account.")
+//                continue
+//            }
             let tempRef = accountRef.child(String(i.id))
             switch i.type
             {
@@ -173,7 +171,6 @@ class User: Object{
                 tempRef.child("nextTermDate").setValue(tempAcc?.nextTermDate.timeIntervalSince1970)
                 tempRef.child("state").setValue(tempAcc?.state)
                 print("Synced an saving account.")
-                
             default:
                 print("Ignore accummulate")
                 continue
@@ -193,6 +190,10 @@ class User: Object{
             if i.isDeleted == true
             {
                 recordRef.child(i.id).removeValue()
+                if i.getImg() != nil
+                {
+                    deleteImg(img: i.getImg()!)
+                }
                 try! realm!.write{
                 switch i.type {
                 case 0:
@@ -261,7 +262,6 @@ class User: Object{
                 {
                     tempRef.child("borrowRecord").setValue("")
                 }
-                
             case 1:
                 let tempRecord = i.income
                 tempRef.child("type").setValue(tempRecord?.type)
@@ -373,6 +373,14 @@ class User: Object{
                     tempRef.child("tempRecord").setValue("")
                 }
             }
+//            if i.getImg() != nil
+//            {
+//                tempRef.child("img").setValue(true)
+//            }
+//            else
+//            {
+//                tempRef.child("img").setValue(false)
+//            }
             try! realm!.write
                 {
                 i.isUploaded = true
@@ -396,6 +404,9 @@ class User: Object{
                 continue
             }
         }
+        
+//        syncImage()
+        
         let personsRef = ref.child("users").child(username).child("persons")
         personsRef.removeValue()
         for i in persons
@@ -458,6 +469,56 @@ class User: Object{
             lastSync = Date()
         }
     }
+    func deleteImg(img: imgClass)
+    {
+        let storage = Storage.storage()
+        let storageRef = storage.reference().child(username).child(img.id)
+        storageRef.delete(completion: nil)
+        img.del()
+    }
+    func syncAnIamge(ref: StorageReference,imgData: Data,completionHandler: @escaping (_ result : Bool)-> Void)
+    {
+            let uploadTask = ref.putData(imgData as Data, metadata: nil) { (metadata, error) in
+                guard metadata != nil else {
+                    print(error?.localizedDescription as Any)
+                    completionHandler(false)
+                    return
+              }
+            }
+            uploadTask.resume()
+            uploadTask.observe(.success) { snapshot in
+              // Upload completed successfully
+                completionHandler(true)
+                print("Upload a file success.")
+            }
+    }
+    func syncImage()
+    {
+        let storage = Storage.storage()
+        let storageRef = storage.reference().child(username)
+        for i in records
+        {
+            let imgStore = i.getImg()
+            if i.isUploaded == false || imgStore == nil || imgStore!.isChanged == false{
+                continue
+            }
+            let tempRef = storageRef.child(i.id)
+            try! realm?.write{
+                i.getImg()?.id = i.id
+            }
+                //set new data
+            syncAnIamge(ref: tempRef, imgData: imgStore!.data! as Data){ result in
+                if result == true
+                {
+                    try! self.realm?.write{
+                    imgStore?.isUploaded = true
+                    imgStore?.isChanged = false
+                    }
+                }
+            }
+        }
+        print("Sync image succesfully.")
+    }
     func deleteLocalData(){
         print("Begin delete local data...")
         try! realm!.write {
@@ -475,6 +536,10 @@ class User: Object{
             }
             for i in records
             {
+                if i.getImg() != nil
+                {
+                    i.getImg()!.del()
+                }
                 switch i.type {
                 case 0:
                     realm!.delete(i.expense!)
@@ -496,6 +561,59 @@ class User: Object{
             events.removeAll()
         }
         print("Deleted local data.")
+    }
+    func downloadImg(ref: StorageReference, completionHandler: @escaping (_ result: Bool, _ data: Data?)-> Void)
+    {
+        let downTask = ref.getData(maxSize: 1 * 1024 * 1024) { data, error in
+        if let error = error {
+          // Uh-oh, an error occurred!
+            completionHandler(false,nil)
+            print(error.localizedDescription)
+        } else {
+          // Data is returned
+            completionHandler(true,data)
+            }
+        }
+        downTask.resume()
+    }
+    func reloadImg(completionHandler: @escaping (_ result: Bool)-> Void)
+    {
+        if records.isEmpty == true
+        {
+            completionHandler(false)
+            print("No record -> no img.")
+        }
+        print("Begin reload img...")
+        let storage = Storage.storage()
+        for i in records
+        {
+            if i.getImg() == nil
+            {
+                continue
+            }
+            print("Begin reload an img")
+            let imgStore = i.getImg()
+            let storageRef = storage.reference().child(username).child(username).child(i.id)
+            downloadImg(ref: storageRef){ result, data in
+                if result == true
+                {
+                    try! self.realm?.write{
+                        imgStore!.data = data as NSData?
+                        imgStore?.isChanged = false
+                        imgStore?.isUploaded = true
+                    }
+                }
+                else
+                {
+                    print("Reload an image failed!")
+                    try! self.realm?.write{
+                        self.realm?.delete(imgStore!)
+                        i.setImg(img: nil)
+                    }
+                }
+            }
+        }
+        completionHandler(true)
     }
     func reloadData(completionHandler: @escaping (_ result: Bool, _ currency: Int, _ isHide: Bool) -> Void)
     {
@@ -609,6 +727,8 @@ class User: Object{
                 tempRecord.id = i.key
                 tempRecord.isUploaded = true
                 tempRecord.type = temp["type"] as! Int
+                
+
                 switch tempRecord.type {
                 case 0:
                     let tempExpense = Expense()
@@ -789,6 +909,17 @@ class User: Object{
                     tempRecord.adjustment = tempAdjustment
                     recordsResult.append(tempRecord)
                 }
+//                let hasImg = temp["img"] as! Bool
+//                print(hasImg)
+//                if hasImg == true
+//                {
+//                    let imgStore = imgClass()
+//                    imgStore.id = tempRecord.id
+//                    try! realm?.write{
+//                        realm?.add(imgStore)
+//                    }
+//                    tempRecord.setImg(img: imgStore)
+//                }
             }
             if parentIndex.isEmpty == false
             {

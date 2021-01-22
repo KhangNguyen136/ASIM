@@ -9,8 +9,8 @@ import Foundation
 import RealmSwift
 
 class Record : Object {
+    
     @objc dynamic var id: Int = 0
-
     @objc dynamic var amount: Float = 0
     @objc dynamic var type: Int = 0
     @objc dynamic var descript: String = ""
@@ -505,10 +505,18 @@ class polyRecord: Object{
         if isUploaded == true
         {
             isDeleted = true
+            if getImg() != nil
+            {
+                getImg()?.isDeleted = true
+            }
             //delete infor with this account
             return
         }
         let realm = try! Realm()
+        if getImg() != nil
+        {
+            realm.delete(getImg()!)
+        }
         switch self.type {
         case 0:
             try! realm.write{
@@ -610,22 +618,38 @@ class polyRecord: Object{
             return "adjustment"
         }
     }
-    func getImgID() -> Int {
+    func getImg() -> imgClass? {
         switch type {
         case 0:
-            return expense!.img?.id ?? -1
+            return expense!.img
         case 1:
-            return income!.img?.id ?? -1
+            return income!.img
         case 2:
-            return lend!.img?.id ?? -1
+            return lend!.img
         case 3:
-            return borrow!.img?.id ?? -1
+            return borrow!.img
         case 4:
-            return transfer!.img?.id ?? -1
+            return transfer!.img
         default:
-            return adjustment!.img?.id ?? -1
+            return adjustment!.img
         }
-        return 0
+    }
+    func setImg(img: imgClass?)
+    {
+        switch type {
+        case 0:
+             expense!.img = img
+        case 1:
+             income!.img = img
+        case 2:
+             lend!.img = img
+        case 3:
+             borrow!.img = img
+        case 4:
+             transfer!.img = img
+        default:
+             adjustment!.img = img
+        }
     }
     func getPerson() -> String {
         switch type {

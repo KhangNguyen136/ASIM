@@ -198,6 +198,8 @@ class polyAccount: Object{
             return cashAcc!.balance
         case 1:
             return bankingAcc!.balance
+        case 2:
+            return savingAcc!.ammount
         default:
             return 0
         }

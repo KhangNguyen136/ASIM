@@ -33,40 +33,45 @@ class historyCell: UITableViewCell {
         case 0:
             let temp = record!.expense
             let tempStr = categoryValues().expense[temp!.category][temp!.detailCategory]
-            loadData(_category: tempStr, describe: temp!.descript, _amount: temp!.amount, _type: temp!.type, srcAccount: (temp?.srcAccount?.getname())!, typeAcc: (temp?.srcAccount!.type)!)
+            loadData(_category: tempStr, describe: temp!.descript, _amount: temp!.amount, _type: temp!.type, srcAccount: (temp?.srcAccount?.getname())!, typeAcc: (temp?.srcAccount!.type)!, imgName: "category\(temp!.category)\(temp!.detailCategory)")
         case 1:
             let temp = record!.income
             let tempStr = categoryValues().income[0][temp!.category]
-            loadData(_category: tempStr, describe: temp!.descript, _amount: temp!.amount, _type: temp!.type, srcAccount: (temp?.srcAccount?.getname())!, typeAcc: (temp?.srcAccount!.type)!)
+            loadData(_category: tempStr, describe: temp!.descript, _amount: temp!.amount, _type: temp!.type, srcAccount: (temp?.srcAccount?.getname())!, typeAcc: (temp?.srcAccount!.type)!, imgName: "income\(temp!.category)")
 //            totalIncome = totalIncome + temp!.amount
         case 2:
             let temp = record?.lend
             let tempStr = categoryValues().other[0][record!.type-2]
-            loadData(_category: tempStr, describe: temp!.descript, _amount: temp!.amount, _type: temp!.type, srcAccount: (temp?.srcAccount?.getname())!, typeAcc: (temp?.srcAccount!.type)!)
+            loadData(_category: tempStr, describe: temp!.descript, _amount: temp!.amount, _type: temp!.type, srcAccount: (temp?.srcAccount?.getname())!, typeAcc: (temp?.srcAccount!.type)!, imgName: "typeRecord2")
             
         case 3:
             let temp = record?.borrow
             let tempStr = categoryValues().other[0][record!.type-2]
-            loadData(_category: tempStr, describe: temp!.descript, _amount: temp!.amount, _type: temp!.type, srcAccount: (temp?.srcAccount?.getname())!, typeAcc: (temp?.srcAccount!.type)!)
+            loadData(_category: tempStr, describe: temp!.descript, _amount: temp!.amount, _type: temp!.type, srcAccount: (temp?.srcAccount?.getname())!, typeAcc: (temp?.srcAccount!.type)!, imgName: "typeRecord3")
         case 4:
             let temp = record?.transfer
             let tempStr = "Transfer"
-            loadData(_category: tempStr, describe: temp!.descript, _amount: temp!.amount, _type: temp!.type, srcAccount: (temp?.srcAccount?.getname())!, typeAcc: (temp?.srcAccount!.type)!)
+            loadData(_category: tempStr, describe: temp!.descript, _amount: temp!.amount, _type: temp!.type, srcAccount: (temp?.srcAccount?.getname())!, typeAcc: (temp?.srcAccount!.type)!, imgName: "typeRecord4")
         default:
             let temp = record?.adjustment
             let tempStr = "Adjustment"
-            loadData(_category: tempStr, describe: temp!.descript, _amount: temp!.different, _type: temp!.type, srcAccount: (temp?.srcAccount?.getname())!, typeAcc: (temp?.srcAccount!.type)!)
+            var imgName = ""
             if temp?.subType == 1
             {
                 amount.textColor = UIColor.green
+                imgName = "income\(temp!.detailCategory)"
             }
             else
             {
                 amount.textColor = UIColor.red
+                imgName = "category\(temp!.category)\(temp!.detailCategory)"
+
             }
+            loadData(_category: tempStr, describe: temp!.descript, _amount: temp!.different, _type: temp!.type, srcAccount: (temp?.srcAccount?.getname())!, typeAcc: (temp?.srcAccount!.type)!,imgName: imgName)
+            
         }
     }
-    func loadData(_category: String, describe: String, _amount: Float, _type: Int,srcAccount: String,typeAcc: Int) {
+    func loadData(_category: String, describe: String, _amount: Float, _type: Int,srcAccount: String,typeAcc: Int, imgName: String) {
         descri.text = describe
         amount.text = String(loadAmountByCurrency(value: _amount))
         category.text = _category
@@ -75,6 +80,7 @@ class historyCell: UITableViewCell {
         {
             accImg.image = UIImage(named: "bank")
         }
+        img.image = UIImage(named: imgName)
         switch _type {
         case 0,2:
             amount.textColor = UIColor.red

@@ -288,6 +288,7 @@ class editLendOrBorrowVC: UITableViewController,selectAccountDelegate, settingDe
                     {
                     if let imgData = NSData(contentsOf: imgURL! as URL) {
                         imgStored!.data = imgData
+                        imgStored?.isChanged = true
                     }
                     }
                 }
