@@ -94,7 +94,7 @@ class Notify: Object{
         for obj in lend{
             if obj.lend!.collectionDate != nil{
                 if obj.lend!.collectionDate! <= Date(){
-                    SCLAlertView().showInfo("Thu nợ", subTitle: "Chỗ nãy tui hông biết nó thông báo gì, có gì ông sửa hộ")
+                    SCLAlertView().showInfo("Thu nợ", subTitle: obj.lend!.descript)
                 }
             }
         }
@@ -102,7 +102,7 @@ class Notify: Object{
         for obj in borrow{
             if obj.borrow?.repaymentDate != nil{
                 if obj.borrow!.repaymentDate! <= Date(){
-                    SCLAlertView().showInfo("Trả nợ", subTitle: "Chỗ nãy tui hông biết nó thông báo gì, có gì ông sửa hộ")
+                    SCLAlertView().showInfo("Trả nợ", subTitle: obj.borrow?.descript ?? "")
                 }
             }
         }

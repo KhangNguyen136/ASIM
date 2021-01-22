@@ -203,7 +203,7 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
         var Acc = realm.objects(polyAccount.self).filter("type != 2")
         Acc = Acc.filter("type != 3")
         for a in Acc{
-            if name == a.getname(){
+            if name == a.getname() && editMode == false{
                 Notice().showAlert(content: "Name existed")
                 return
             }
@@ -309,7 +309,12 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
 
         else {
             delegate?.updateTable()}
-        SCLAlertView().showSuccess("Account added!", subTitle: "")
+        if editMode == false{
+            SCLAlertView().showSuccess("Account added!", subTitle: "")
+        }
+        else{
+            SCLAlertView().showSuccess("Saved edit!", subTitle: "")
+        }
         self.navigationController?.popViewController(animated: true)
     }
     
