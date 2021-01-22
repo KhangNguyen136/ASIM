@@ -32,6 +32,7 @@ target 'finalProject' do
 	pod 'Firebase/Storage'
 	pod 'NLocalizationManager'
 	pod "DPLocalization"
+	pod "LocalizationSystem"
 	
 	
 	# add pods for any other desired Firebase products

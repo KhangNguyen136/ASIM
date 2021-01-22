@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import SCLAlertView
 
 class AddSavingAccount: UIViewController, UITextFieldDelegate {
 
@@ -457,6 +458,8 @@ InterestPaid.setupAutolocalization(withKey: "InterestPaid", keyPath: "text")
                 transfer.add()
             }
         }
+        SCLAlertView().showSuccess("Saving account added!", subTitle: "")
+
        self.navigationController?.popViewController(animated: true)
        }
     }

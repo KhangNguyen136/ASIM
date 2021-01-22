@@ -1,8 +1,8 @@
 {
   "images" : [
     {
-      "filename" : "800px-Flag_of_South_Korea.png",
       "idiom" : "universal",
+      "filename" : "currency5.png",
       "scale" : "1x"
     },
     {
@@ -15,7 +15,7 @@
     }
   ],
   "info" : {
-    "author" : "xcode",
-    "version" : 1
+    "version" : 1,
+    "author" : "xcode"
   }
 }

@@ -52,6 +52,7 @@ struct categoryValues {
     let income = [["Bonus","Interest","Salary","Savings interesst","Collecting debts","Other"]]
     let other = [["Lend","Borrow","Repayment","Collecting debts"]]
     let typeRecord = ["Expense", "Income", "Lend","Borrow","Transfer","Adjustment"]
+    let typeRecordVietnamese = ["Khoản chi", "Thu nhập", "Mượn tiền","Cho mượn tiền","Chuyển khoản","Điều chỉnh số dư"]
     
 }
 class Notify: Object{
@@ -275,7 +276,7 @@ class Accumulate: Object{
     @objc dynamic var balance: Float = 0
     @objc dynamic var addbalance: Float = 0
     @objc dynamic var includeReport: Bool = true
-    @objc dynamic var currency: String = ""
+    @objc dynamic var currency: Int = 0
     @objc dynamic var startdate: Date = Date()
     @objc dynamic var enddate: Date = Date()
     func add(){

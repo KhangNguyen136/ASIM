@@ -9,11 +9,17 @@ import UIKit
 import RealmSwift
 import SCLAlertView
 import DPLocalization
+import DropDown
 
 class NormalAccount: UIViewController, updateDataDelegate {
     @IBOutlet weak var totalAmount: UILabel!
+    var isVietnamese = false
+    var currencyList: [String] = currencyBase().nameEnglish
+    var currencySymbol: [String] = currencyBase().symbol
+    var typeCurrency = 0
     func updateTable() {
         loadData()
+        
         var balance: Float = 0.0
         for obj in activeAccount{
             if obj.type == 0{
@@ -43,11 +49,20 @@ class NormalAccount: UIViewController, updateDataDelegate {
     var activeAccount: [polyAccount] = []
     var blockedAccount: [polyAccount] = []
        override func viewDidLoad() {
+        self.navigationItem.title = "Account"
+        let realm = try! Realm()
+        let lang = realm.objects(User.self).first?.isVietnamese
+        if lang == true{
+            isVietnamese = true
+            self.navigationItem.title = "Tài khoản"
+            titleLbl = ["Đang sử dụng", "Ngừng sử dụng"]
+            currencyList = currencyBase().nameVietnamese
+        }
            super.viewDidLoad()
        self.view.backgroundColor = UIColor(red: 71/255, green: 181/255, blue: 190/255, alpha: 1)
         self.navigationController?.navigationBar.barTintColor = UIColor(red: 0/255, green: 123/255, blue: 164/255, alpha: 1)
                // Do any additional setup after loading the view.
-        self.navigationItem.title = "Account"
+        
         self.navigationController?.navigationBar.titleTextAttributes = [
                    .foregroundColor: UIColor.white,
                    .font: UIFont(name: "MarkerFelt-Thin", size: 20)!]
@@ -62,7 +77,7 @@ class NormalAccount: UIViewController, updateDataDelegate {
              }
         }
         lblBalance.text = "\(balance)"
-        lblCurrency.text = ".đ"
+        lblCurrency.text = currencySymbol[0]
         //NavBar background color
         navigationController?.navigationBar.barTintColor = UIColor(red: 0, green: 123/255, blue: 164/255, alpha: 1)
        }
@@ -153,6 +168,203 @@ extension NormalAccount: UITableViewDelegate, UITableViewDataSource {
                 cell.imgIcon.image = UIImage(named: obj1.bankingAcc!.name)
            }
         }
+        cell.btnOption.addAction {
+            let dropDown = DropDown()
+            dropDown.anchorView = cell.btnOption
+            if indexPath.section == 0{
+                if self.isVietnamese == true{
+                    dropDown.dataSource = ["Chỉnh sửa", "Ngừng sử dụng", "Xoá"]
+                }
+                else{
+                    dropDown.dataSource = ["Edit", "Inactive", "Delete"]
+
+                }
+            }
+            else{
+                if self.isVietnamese == true{
+                    dropDown.dataSource = ["Chỉnh sửa", "Sử dụng lại", "Xoá"]
+                }
+                else{
+                    dropDown.dataSource = ["Edit", "Active", "Delete"]
+                }
+            }
+            dropDown.cellNib = UINib(nibName: "typeRecord", bundle: nil)
+            dropDown.customCellConfiguration = { (index: Index, item: String, cell: DropDownCell) -> Void in
+               guard let cell = cell as? typeRecord else { return }
+
+                if index == 0
+                {
+                    cell.logo.image = UIImage(named: "edit")
+                }
+                else if index == 1
+                {
+                    if indexPath.section == 0{
+                        cell.logo.image = UIImage(named: "stop")
+                    }
+                    else{
+                        cell.logo.image = UIImage(named: "play")
+                    }
+                    
+                }
+                else{
+                     cell.logo.image = UIImage(named: "delete")
+                }
+            }
+            dropDown.selectionAction = { [weak self] (index: Int, item: String) in
+               if index == 0
+               {
+                let scr = self?.storyboard?.instantiateViewController(withIdentifier: "AddAccountView") as! AddAccountView
+                if indexPath.section == 0{
+                    scr.editAcc = self!.activeAccount[indexPath.row]
+                }
+                else{
+                    scr.editAcc = self!.blockedAccount[indexPath.row]
+                }
+                scr.editMode = true
+                      //self.present(scr, animated: true, completion: nil)
+                self?.navigationController!.pushViewController(scr, animated: true)
+               }
+               else if index == 1
+               {
+                let realm = try! Realm()
+                if indexPath.section == 0{
+                    let obj = self!.activeAccount[indexPath.row]
+                    if obj.type == 0{
+                        try! realm.write{
+                            obj.cashAcc?.active = !obj.cashAcc!.active
+                        }
+                        
+                    }
+                    else{
+                        try! realm.write{
+                            obj.bankingAcc?.active = !obj.bankingAcc!.active
+                        }
+                    }
+                    
+                }
+                else if indexPath.section == 1{
+                    let obj = self!.blockedAccount[indexPath.row]
+                    if obj.type == 0{
+                        try! realm.write{
+                            obj.cashAcc?.active = !obj.cashAcc!.active
+                        }
+                        
+                    }
+                    else{
+                        try! realm.write{
+                            obj.bankingAcc?.active = !obj.bankingAcc!.active
+                        }
+                    }
+                }
+                self!.loadData()
+                self?.tableView.reloadData()
+                
+               }
+                    
+               else{
+                //
+                let appearance = SCLAlertView.SCLAppearance(
+                             showCloseButton: false
+                         )
+                         let alertView = SCLAlertView(appearance: appearance)
+                         alertView.addButton("OK") {
+                             let realm = try! Realm()
+                             var obj: polyAccount
+                
+                             if indexPath.section == 0{
+                               let account = Array(realm.objects(polyAccount.self).filter("type == 2"))
+                             //Xoa account, xoá record liên quan
+                             let record = Array(realm.objects(polyRecord.self))
+                             for tempRecord in record{
+                                 let srcAcc = tempRecord.srcAccount()
+                                if srcAcc.getname() == self!.activeAccount[indexPath.row].cashAcc!.name{
+                                     tempRecord.del()
+                                 }
+                                 else if srcAcc.getname() == self!.activeAccount[indexPath.row].bankingAcc!.name{
+                                     tempRecord.del()
+                                 }
+                             }
+                            
+                             //Xoá account, xoá saving account liên quan
+                               for acc in account{
+                                   let sav = acc.savingAcc
+                                   if sav!.state == false{
+                                       if sav?.srcAccount?.type == 0{
+                                        if sav?.srcAccount?.cashAcc?.id == self!.activeAccount[indexPath.row].cashAcc?.id{
+                                               acc.del()
+                                           }
+                                       }
+                                       else{
+                                        if sav?.srcAccount?.bankingAcc?.id == self!.activeAccount[indexPath.row].bankingAcc?.id{
+                                               acc.del()
+                                           }
+                                       }
+                                   }
+                               }
+                                obj = self!.activeAccount[indexPath.row]
+                                 obj.del()
+                             
+                             }
+                             else if indexPath.section == 1{
+                                let account = Array(realm.objects(polyAccount.self).filter("type == 2"))
+                                 //Xoa account, xoá record liên quan
+                                 let record = Array(realm.objects(polyRecord.self))
+                                 for tempRecord in record{
+                                     let srcAcc = tempRecord.srcAccount()
+                                    if srcAcc.getname() == self!.blockedAccount[indexPath.row].cashAcc!.name{
+                                         tempRecord.del()
+                                     }
+                                    else if srcAcc.getname() == self!.blockedAccount[indexPath.row].bankingAcc!.name{
+                                         tempRecord.del()
+                                     }
+                                 }
+                                
+                                 //Xoá account, xoá saving account liên quan
+                                   for acc in account{
+                                       let sav = acc.savingAcc
+                                       if sav!.state == false{
+                                           if sav?.srcAccount?.type == 0{
+                                            if sav?.srcAccount?.cashAcc?.id == self!.blockedAccount[indexPath.row].cashAcc?.id{
+                                                   acc.del()
+                                               }
+                                           }
+                                           else{
+                                            if sav?.srcAccount?.bankingAcc?.id == self!.blockedAccount[indexPath.row].bankingAcc?.id{
+                                                   acc.del()
+                                               }
+                                           }
+                                       }
+                                   }
+                                obj = self!.blockedAccount[indexPath.row]
+                                     obj.del()
+                             }
+
+                             
+                            self!.loadData()
+                             var balance: Float = 0.0
+                            for obj in self!.activeAccount{
+                                 if obj.type == 0{
+                                     balance += obj.cashAcc!.balance
+                                 }
+                                 else{
+                                     balance += obj.bankingAcc!.balance
+                                 }
+                             }
+                            self!.lblBalance.text = "\(balance)"
+                             tableView.reloadData()
+
+                         }
+                         alertView.addButton("Exit") {
+                             print("Exit")
+                                    }
+                         alertView.showError("Warning", subTitle: "If you delete this Acocunt, all Record in this Account will also be removed and cannot be restored ")
+                         
+                
+                //
+               }
+            }
+            dropDown.show()
+        }
         cell.backgroundView = UIImageView(image: UIImage(named: "row"))
         cell.layer.borderWidth = 5
         cell.layer.borderColor = UIColor.white.cgColor
@@ -162,18 +374,7 @@ extension NormalAccount: UITableViewDelegate, UITableViewDataSource {
         return 60
     }
 
-   /* func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = UIColor(red: 65/255, green: 146/255, blue: 96/255, alpha: 0.5)
-        let image = UIImageView(image: UIImage(named: iconImg[section]))
-        image.frame = CGRect(x: 5, y: 5, width: 35, height: 35)
-        view.addSubview(image)
-        let label = UILabel()
-        label.text = titleLbl[section]
-        label.frame = CGRect(x: 70, y: 5, width: 150, height: 50)
-        view.addSubview(label)
-        return view
-    }*/
+  
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 5
     }

@@ -8,74 +8,141 @@
 import UIKit
 import RealmSwift
 import SCLAlertView
+import DPLocalization
 protocol updateDataDelegate {
     func updateTable()
 }
 class AddAccountView: UIViewController, UITextFieldDelegate {
+    @IBOutlet weak var txtDescription: UITextField!
+    @IBOutlet weak var accountView: UIView!
+    @IBOutlet weak var bankViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var lblCurrency: UILabel!
+    @IBOutlet weak var lblAccType: UILabel!
+    @IBOutlet weak var imgBank: UIImageView!
+    @IBOutlet weak var lblBankName: UILabel!
+    @IBOutlet weak var txtNameAcc: UITextField!
+    @IBOutlet weak var bankView: UIView!
+    @IBOutlet weak var Amount: UILabel!
     var editMode = false
     var editAcc: polyAccount = polyAccount()
     var delegate: updateDataDelegate?
-    var nameAccount: String = "Account name"
-    var descAccount: String = "Description"
-    var currency: String = "Vietnamese Dong (VND)"
-    var account: String = "Cash"
-    var bankName = "Bank Name"
+    @IBOutlet weak var typeAccountView: UIView!
+    @IBOutlet weak var descripView: UIView!
+    @IBOutlet weak var currView: UIView!
+    var currency: String = currencyBase().nameEnglish[0]
     var imgName = "bank"
+    let currencyFormatter = NumberFormatter()
+    
     //Edit mode
     var active = true
     var balance: String = "0"
-    var bank = 0
-    @IBOutlet weak var lblTitle: UILabel!
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var lblCurrency: UILabel!
+    var bank = -1
+    var isVietnamese = false
+    var curr = 0
+    var accType = 0
+    @IBOutlet weak var lblCurr: UILabel!
     @IBOutlet weak var txtMoney: UITextField!
-    var backgroundImage: UIImageView!
+    var currencyList: [String] = currencyBase().nameEnglish
+    var currencySymbol: [String] = currencyBase().symbol
+    var typeAccList: [String] = infoChoice().typeAccountEnglish
+    var typeCurrency = 0
     override func viewDidLoad() {
+      
+        typeAccountView.layer.borderWidth = 1
+        typeAccountView.layer.borderColor = UIColor.lightGray.cgColor
+        accountView.layer.borderWidth = 1
+        accountView.layer.borderColor = UIColor.lightGray.cgColor
+        currView.layer.borderWidth = 1
+        currView.layer.borderColor = UIColor.lightGray.cgColor
+        descripView.layer.borderWidth = 1
+        descripView.layer.borderColor = UIColor.lightGray.cgColor
+        txtMoney.delegate = self
+        bankView.isHidden = true
+        bankViewHeight.constant = 0
+        setLanguage()
+        txtNameAcc.placeholder = "Name account"
+        txtDescription.placeholder = "Description"
+        //Format textfield currency
         
+        //
+        let realm = try! Realm()
+               let lang = realm.objects(User.self).first?.isVietnamese
+               if lang == true{
+                   isVietnamese = true
+                   currencyList = currencyBase().nameVietnamese
+                lblCurr.text = currencyBase().nameVietnamese[0]
+                txtNameAcc.placeholder = "Tên tài khoản"
+                txtDescription.placeholder = "Diễn giải"
+                typeAccList = infoChoice().typeAccountVietnamese
+               }
+        lblCurr.text = currencyList[0]
+        lblAccType.text = typeAccList[0]
+       lblCurrency.text = currencySymbol[0]
         super.viewDidLoad()
         if editMode == true {
-            let currencybase = currencyBase().nameEnglish
-            
             if editAcc.type == 0{
                 currency = currencyBase().nameEnglish[editAcc.cashAcc!.currency]
                 lblCurrency.text = currencyBase().symbol[editAcc.cashAcc!.currency]
-                account = "Cash"
                 balance = "\(round((editAcc.cashAcc?.balance as! Float)*Float(currencyBase().valueBaseDolar[editAcc.cashAcc!.currency])))"
-                nameAccount = editAcc.cashAcc!.name
                 active = editAcc.cashAcc!.active
+                txtNameAcc.text = editAcc.cashAcc?.name
+                txtDescription.text = editAcc.cashAcc?.descrip
                 
             }
             else{
                 currency = currencyBase().nameEnglish[editAcc.bankingAcc!.currency]
                 lblCurrency.text = currencyBase().symbol[editAcc.bankingAcc!.currency]
-                account = "Banking Account"
-                bankName = infoChoice().bankName[editAcc.bankingAcc!.bank]
                 balance = "\(round((editAcc.bankingAcc?.balance as! Float)*Float(currencyBase().valueBaseDolar[editAcc.bankingAcc!.currency])))"
-                nameAccount = editAcc.bankingAcc!.name
                 active = editAcc.bankingAcc!.active
+                txtNameAcc.text = editAcc.bankingAcc?.name
+                txtDescription.text = editAcc.bankingAcc?.descrip
             }
             
             
         }
+        let pickAccType = UITapGestureRecognizer(target: self, action: #selector(chooseAccType(sender:)))
+               typeAccountView.addGestureRecognizer(pickAccType)
+        let pickBank = UITapGestureRecognizer(target: self, action: #selector(chooseBank(sender:)))
+        bankView.addGestureRecognizer(pickBank)
+        let pickCurrency = UITapGestureRecognizer(target: self, action: #selector(chooseCurrency (sender:)))
+        currView.addGestureRecognizer(pickCurrency)
         txtMoney.text = balance
-        txtMoney.delegate = self
-           self.view.backgroundColor = UIColor(red: 71/255, green: 181/255, blue: 190/255, alpha: 1)
-        tableView.backgroundColor = UIColor(red: 153/255, green: 219/255, blue: 221/255, alpha: 1)
-      
-        //lblCurrency.backgroundColor = UIColor(red: 99, green: 0, blue: 102, alpha: 0.1)
+        
+           //self.view.backgroundColor = UIColor(red: 71/255, green: 181/255, blue: 190/255, alpha: 1)
+        self.navigationController!.navigationBar.tintColor = UIColor.white;
         NotificationCenter.default.addObserver(self, selector: #selector(updateCurrency), name: .currNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateBankName), name: .bankNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateAccountType), name: .accountNotification, object: nil)
        }
-    //Chỉ nhập số cho Số tiền
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let isNumber = CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: string))
-        let withDecimal = (
-            string == NumberFormatter().decimalSeparator &&
-            textField.text?.contains(string) == false
-        )
-        return isNumber || withDecimal
+   
+
+   func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+          let isNumber = CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: string))
+          let withDecimal = (
+              string == NumberFormatter().decimalSeparator &&
+              textField.text?.contains(string) == false
+          )
+          return isNumber || withDecimal
+      }
+    func setLanguage(){
+        lblBankName.setupAutolocalization(withKey: "BankName", keyPath: "text")
+        Amount.setupAutolocalization(withKey: "Amount", keyPath: "text")
+        }
+     @objc func chooseAccType(sender: UITapGestureRecognizer) {
+           let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView
+                      scr.accountMode = true
+                      self.navigationController?.pushViewController(scr, animated: true)
+       }
+    @objc func chooseBank(sender: UITapGestureRecognizer) {
+        let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView
+                   scr.bankingMode = true
+                   self.navigationController?.pushViewController(scr, animated: true)
     }
+    @objc func chooseCurrency(sender: UITapGestureRecognizer) {
+              let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView
+              scr.currencyMode = true
+              self.navigationController?.pushViewController(scr, animated: true)
+          }
     @IBAction func deleteBtn(_ sender: Any) {
          let realm = try! Realm()
         let appearance = SCLAlertView.SCLAppearance(
@@ -83,18 +150,7 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
         )
         let alertView = SCLAlertView(appearance: appearance)
         alertView.addButton("OK") {
-            if self.account == "Cash"{
-                let obj = realm.objects(Account.self).filter("name == '\(self.nameAccount)'")
-            try! realm.write {
-                realm.delete(obj)
-            }
-        }
-        else {
-            let obj = realm.objects(BankingAccount.self).filter("name == '\(self.nameAccount)'")
-            try! realm.write {
-                realm.delete(obj)
-            }
-            }
+            self.editAcc.del()
             self.navigationController?.popViewController(animated: true)
         }
         alertView.addButton("Exit") {
@@ -108,77 +164,72 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
         let index = notification.userInfo!["currency"] as! String
 
         lblCurrency.text = currencyBase().symbol[Int(index)!]
-        currency = currencyBase().nameEnglish[Int(index)!]
+        lblCurr.text = currencyList[Int(index)!]
+        curr = Int(index)!
+        
        
         
         self.view.layoutIfNeeded()
-        tableView.reloadData()
     }
     @objc func updateBankName (notification: Notification){
         let index = notification.userInfo?["bank"] as! String
         self.bank = Int(index)!
-        bankName = infoChoice().bankName[Int(index)!]
-        imgName = infoChoice().bankImg[Int(index)!]
-        tableView.reloadData()
+        lblBankName.text = infoChoice().bankName[Int(index)!]
+        imgBank.image = UIImage(named: infoChoice().bankImg[Int(index)!] )
     }
     @objc func updateAccountType(notification: Notification){
-           account =  notification.userInfo?["accountType"] as! String
-           tableView.reloadData()
-       }
+        let index =  (notification.userInfo?["accountType"] as! String)
+        accType = Int(index)!
+        lblAccType.text = typeAccList[accType]
+        if accType == 1{
+            bankView.isHidden = false
+            bankViewHeight.constant = 50
+        }
+        else{
+            bankView.isHidden = true
+            bankViewHeight.constant = 0
+        }
+    }
 
 
     @IBAction func savebtn(_ sender: Any) {
         let realm = try! Realm()
-        let indexName = IndexPath(row: 0, section: 0)
-        let indexDes = IndexPath(row: 3, section: 0)
-        let cellName: NameAccountViewCell = self.tableView.cellForRow(at: indexName) as! NameAccountViewCell
-        let cellDes: NameAccountViewCell = self.tableView.cellForRow(at: indexDes) as! NameAccountViewCell
-        let name = cellName.txtNameAcocunt.text!
+
+        let name = txtNameAcc.text!
         if name == ""{
             Notice().showAlert(content: "Please input Name Account")
             return
         }
-        let Acc = realm.objects(polyAccount.self).filter("type != 2")
+        var Acc = realm.objects(polyAccount.self).filter("type != 2")
+        Acc = Acc.filter("type != 3")
         for a in Acc{
             if name == a.getname(){
                 Notice().showAlert(content: "Name existed")
                 return
             }
         }
-        let des = cellDes.txtNameAcocunt.text!
+        let des = txtDescription.text!
         if txtMoney.text! == "0"{
             Notice().showAlert(content: "Please input balance")
             return
         }
-        if account == "Cash"{
+        //Tiền mặt
+        if accType == 0{
             let acc = Account()
             
-            let currencybase = currencyBase().nameEnglish
-            print(self.currency)
-            switch self.currency {
-            case currencybase[0]:
-                acc.currency = 0
-            case currencybase[1]:
-                acc.currency = 1
-            case currencybase[2]:
-            acc.currency = 2
-            case currencybase[3]:
-            acc.currency = 3
-            case currencybase[4]:
-            acc.currency = 4
-            
-            default:
-                acc.currency = 5
-            }
+            acc.currency = self.curr
             acc.balance = (Float(txtMoney.text!)!) / Float( currencyBase().valueBaseDolar[acc.currency])
             acc.name = name
             acc.descrip = des
             acc.includeReport = false
             let realm = try! Realm()
+            //Nếu không phải chế độ edit thì thêm
             if editMode == false{
                 acc.add()
             }
-            else{
+                //Nếu là chế độ edit
+            else if editMode == true{
+                //Tài khoản cũ là tiền mặt thì edit
                 if editAcc.type == 0{
 
                 try! realm.write {
@@ -191,77 +242,43 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
                     editAcc.isChanged = true
                     }
                 }
+                    //Tài khoản cũ là ngân hàng thì xoá tk cũ, thêm tk mới là tk tiền mặt
                 else{
                     editAcc.del()
-                    let index = IndexPath(row: 4, section: 0)
-                    let cellbankName: AddAcountViewCell = self.tableView.cellForRow(at: index) as! AddAcountViewCell
-                    let bankName = cellbankName.lblType.text!
-                    let acc = BankingAccount()
-                    acc.balance = Float(txtMoney.text!)!
-                    let currencybase = currencyBase().nameEnglish
-                    switch self.currency {
-                    case currencybase[0]:
-                        acc.currency = 0
-                    case currencybase[1]:
-                        acc.currency = 1
-                    case currencybase[2]:
-                    acc.currency = 2
-                    case currencybase[3]:
-                    acc.currency = 3
-                    case currencybase[4]:
-                    acc.currency = 4
-                    
-                    default:
-                        acc.currency = 5
-                    }
+                    let acc = Account()
+                    acc.currency = self.curr
+                    acc.balance = (Float(txtMoney.text!)!) / Float( currencyBase().valueBaseDolar[acc.currency])
                     acc.name = name
                     acc.descrip = des
                     acc.includeReport = false
-                    acc.bank = bank
                     acc.add()
                 }
-                    //let updAccount = 
                 }
                 
                 
                 }
-            
-        else if account == "Banking Account"{
-            if bankName == "Bank Name"{
+        // Tài khoản sau edit là tk ngân hàng
+        else if accType == 1{
+            if lblBankName.text == "Bank Name" || lblBankName.text == "Tên ngân hàng"{
                 Notice().showAlert(content: "Please select bank")
                 return
             }
-            let index = IndexPath(row: 4, section: 0)
-            let cellbankName: AddAcountViewCell = self.tableView.cellForRow(at: index) as! AddAcountViewCell
-            let bankName = cellbankName.lblType.text!
+
             let acc = BankingAccount()
             let currencybase = currencyBase().nameEnglish
-            switch self.currency {
-            case currencybase[0]:
-                acc.currency = 0
-            case currencybase[1]:
-                acc.currency = 1
-            case currencybase[2]:
-            acc.currency = 2
-            case currencybase[3]:
-            acc.currency = 3
-            case currencybase[4]:
-            acc.currency = 4
-            default:
-                acc.currency = 5
-            }
+            acc.currency = self.curr
             acc.balance = (Float(txtMoney.text!)!) / Float( currencyBase().valueBaseDolar[acc.currency])
             
             
             acc.name = name
             acc.descrip = des
             acc.includeReport = false
-            acc.bank = bank
+            acc.bank = self.bank
             if editMode == false{
                 acc.add()
                 
             }
-            else{
+            else if editMode == true{
                 if editAcc.type == 1{
                     try! realm.write {
                         editAcc.bankingAcc?.name = acc.name
@@ -276,27 +293,14 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
                 }
                 else{
                     editAcc.del()
-                    let acc = Account()
+                    let acc = BankingAccount()
                     acc.balance = Float(txtMoney.text!)!
-                    let currencybase = currencyBase().nameEnglish
-                    switch self.currency {
-                    case currencybase[0]:
-                        acc.currency = 0
-                    case currencybase[1]:
-                        acc.currency = 1
-                    case currencybase[2]:
-                    acc.currency = 2
-                    case currencybase[3]:
-                    acc.currency = 3
-                    case currencybase[4]:
-                    acc.currency = 4
-                    
-                    default:
-                        acc.currency = 5
-                    }
+                    acc.currency = self.curr
+                    let currencybase = (Float(txtMoney.text!)!) / Float( currencyBase().valueBaseDolar[acc.currency])
                     acc.name = name
                     acc.descrip = des
                     acc.includeReport = false
+                    acc.bank = self.bank
                     acc.add()
                 }
             }
@@ -305,92 +309,11 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
 
         else {
             delegate?.updateTable()}
-        //dismiss(animated: true, completion: nil)
-       self.navigationController?.popViewController(animated: true)
+        SCLAlertView().showSuccess("Account added!", subTitle: "")
+        self.navigationController?.popViewController(animated: true)
     }
+    
     
 }
-extension AddAccountView: UITableViewDelegate, UITableViewDataSource{
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       if account == "Banking Account" {
-           return 5
-        }
-        return 4
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "NameAccountCell", for: indexPath) as! NameAccountViewCell
-            cell.txtNameAcocunt.placeholder = nameAccount
-           // cell.txtNameAcocunt.text = nameAccount
-            cell.imgIcon.image = UIImage(named: "nameAccount")
-            cell.backgroundView = UIImageView(image: UIImage(named: "row"))
-            cell.layer.borderColor = UIColor(red: 153/255, green: 219/255, blue: 221/255, alpha: 1).cgColor
-            cell.layer.borderWidth = 2
-            return cell
-        }
-        else if indexPath.row == 1{
-                let cell = tableView.dequeueReusableCell(withIdentifier: "AddAccountCell", for: indexPath) as! AddAcountViewCell
-                cell.lblType.text = account
-                cell.imgIcon.image = UIImage(named: "accountType")
-            cell.backgroundView = UIImageView(image: UIImage(named: "row"))
-                cell.layer.borderColor = UIColor(red: 153/255, green: 219/255, blue: 221/255, alpha: 1).cgColor
-            cell.layer.borderWidth = 2
-                return cell
-            }
-        else if indexPath.row == 2{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "AddAccountCell", for: indexPath) as! AddAcountViewCell
-            cell.lblType.text = currency
-            cell.imgIcon.image = UIImage(named: "moneyType")
-            cell.backgroundView = UIImageView(image: UIImage(named: "row"))
-            cell.layer.borderColor = UIColor(red: 153/255, green: 219/255, blue: 221/255, alpha: 1).cgColor
-            cell.layer.borderWidth = 2
-            return cell
-        }
-        else if indexPath.row == 3{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "NameAccountCell", for: indexPath) as! NameAccountViewCell
-            cell.txtNameAcocunt.placeholder = descAccount
-     //       cell.txtNameAcocunt.text = descAccount
-            cell.imgIcon.image = UIImage(named: "detailDescribe")
-            cell.backgroundView = UIImageView(image: UIImage(named: "row"))
-            cell.layer.borderColor = UIColor(red: 153/255, green: 219/255, blue: 221/255, alpha: 1).cgColor
-            cell.layer.borderWidth = 2
-            return cell
-        }
-        else if indexPath.row == 4 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "AddAccountCell", for: indexPath) as! AddAcountViewCell
-            cell.lblType.text = bankName
-            cell.imgIcon.image = UIImage(named: imgName)
-            cell.backgroundView = UIImageView(image: UIImage(named: "row"))
-            cell.layer.borderColor = UIColor(red: 153/255, green: 219/255, blue: 221/255, alpha: 1).cgColor
-            cell.layer.borderWidth = 2
-            return cell
-        }
-          return UITableViewCell()
-    }
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 1{
-            let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView
-            scr.accountMode = true
-                  // self.present(scr, animated: true, completion: nil)
-            self.navigationController?.pushViewController(scr, animated: true)
-        }
-        else if indexPath.row == 2{
-            let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView
-            scr.currencyMode = true
-            //self.present(scr, animated: true, completion: nil)
-            self.navigationController?.pushViewController(scr, animated: true)
-        }
-         else if indexPath.row == 4{
-                   let scr=self.storyboard?.instantiateViewController(withIdentifier: "ChoiceAccountView") as! ChoiceAccountView
-                   scr.bankingMode = true
-                    //self.present(scr, animated: true, completion: nil)
-            self.navigationController?.pushViewController(scr, animated: true)
-               }
-       
-    }
-    
-}
+
+

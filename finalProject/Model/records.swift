@@ -499,7 +499,22 @@ class polyRecord: Object{
     @objc dynamic var isUploaded : Bool = false
     @objc dynamic var isChanged : Bool = true
     @objc dynamic var isDeleted : Bool = false
-
+    func getAmount() -> Float{
+        switch type {
+        case 0:
+            return expense!.amount
+        case 1:
+            return income!.amount
+        case 2:
+            return lend!.amount
+        case 3:
+            return borrow!.amount
+        case 4:
+            return transfer!.amount
+        default:
+            return adjustment!.amount
+        }
+    }
     func del(){
         //marked if account had been uploaded
         if isUploaded == true

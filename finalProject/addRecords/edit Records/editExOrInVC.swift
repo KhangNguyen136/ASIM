@@ -370,21 +370,21 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
                 self.record?.isDeleted = true
                 if self.record?.type == 0
                 {
-                    if record?.expense?.img != nil && record!.expense!.img!.isUploaded == true
+                    if self.record?.expense?.img != nil && self.record!.expense!.img!.isUploaded == true
                     {
-                        record!.expense!.img!.isDeleted = true
+                        self.record!.expense!.img!.isDeleted = true
                     }
-                    record?.expense?.undoTransaction()
+                    self.record?.expense?.undoTransaction()
 
                     print("Mark an expense as deleted!")
                 }
                 else
                 {
-                    if record?.income?.img != nil && record!.income!.img!.isUploaded == true
+                    if self.record?.income?.img != nil && self.record!.income!.img!.isUploaded == true
                     {
-                        record!.income!.img!.isDeleted = true
+                        self.record!.income!.img!.isDeleted = true
                     }
-                    record?.income?.undoTransaction()
+                    self.record?.income?.undoTransaction()
 
                     print("Deleted ab income as deleted!")
                 }
@@ -393,23 +393,23 @@ class editExOrInVC: UITableViewController,selectCategoryDelegate,selectAccountDe
             {
                 if self.record?.type == 0
                 {
-                    if record?.expense?.img != nil
+                    if self.record?.expense?.img != nil
                     {
-                        realm.delete(record!.expense!.img!)
+                        self.realm.delete(self.record!.expense!.img!)
                     }
-                    record?.expense?.undoTransaction()
-                    realm.delete((record?.expense)!)
+                    self.record?.expense?.undoTransaction()
+                    self.realm.delete((self.record?.expense)!)
 
                     print("Deleted a expense!")
                 }
                 else
                 {
-                    if record?.income?.img != nil
+                    if self.record?.income?.img != nil
                     {
-                        realm.delete(record!.income!.img!)
+                        self.realm.delete(self.record!.income!.img!)
                     }
-                    record?.income?.undoTransaction()
-                    realm.delete((record?.income)!)
+                    self.record?.income?.undoTransaction()
+                    self.realm.delete((self.record?.income)!)
 
                     print("Deleted a income!")
                 }

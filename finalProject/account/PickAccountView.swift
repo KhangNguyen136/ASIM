@@ -14,7 +14,6 @@ class PickAccountView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadAccount()
-        print("dest",dest)
 
     }
     func loadAccount(){
