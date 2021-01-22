@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -1125,14 +1125,14 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="filterHistoryCell" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="filterHistoryRow" id="9OD-Zb-JPT" customClass="filterHistoryCell" customModule="finalProject" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="78.333332061767578" width="414" height="42.666667938232422"/>
+                                        <rect key="frame" x="0.0" y="78.333332061767578" width="414" height="42"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9OD-Zb-JPT" id="mxC-C8-aG2">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="42.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="42"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="detial filter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="85" translatesAutoresizingMaskIntoConstraints="NO" id="5mM-Su-R9o">
-                                                    <rect key="frame" x="60" y="10.000000000000002" width="85" height="22.666666666666671"/>
+                                                    <rect key="frame" x="60" y="10" width="85" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1149,20 +1149,20 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="seclectDateFilterHistoryCell" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="seclectDateFilterHistoryRow" id="ytb-Zl-h9O" customClass="seclectDateFilterHistoryCell" customModule="finalProject" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="121" width="414" height="42.666667938232422"/>
+                                        <rect key="frame" x="0.0" y="120.33333206176758" width="414" height="42"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ytb-Zl-h9O" id="TOA-pi-UHr">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="42.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="42"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="43.666666666666657" translatesAutoresizingMaskIntoConstraints="NO" id="qmU-T3-3Ef">
-                                                    <rect key="frame" x="60" y="10.000000000000002" width="91" height="22.666666666666671"/>
+                                                    <rect key="frame" x="60" y="10" width="91" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GqO-bx-hy4">
-                                                    <rect key="frame" x="313" y="-1.3333333333333339" width="91" height="34"/>
+                                                    <rect key="frame" x="313" y="-2" width="91" height="34"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <state key="normal" title="Select date"/>
                                                     <connections>
@@ -2648,7 +2648,7 @@
         <scene sceneID="N1c-d3-2F6">
             <objects>
                 <tableViewController storyboardIdentifier="addAdjustmentVC" id="wNE-MI-gJr" customClass="addAdjustmentVC" customModule="finalProject" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceVertical="YES" dataMode="static" style="plain" sectionIndexMinimumDisplayRowCount="1" allowsSelection="NO" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Oed-Gy-H9M">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="static" style="plain" sectionIndexMinimumDisplayRowCount="1" allowsSelection="NO" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Oed-Gy-H9M">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemGray5Color"/>
@@ -3490,7 +3490,7 @@
         <scene sceneID="db6-w0-pjL">
             <objects>
                 <tableViewController storyboardIdentifier="loginVC" id="Kc4-2W-UVx" customClass="loginVC" customModule="finalProject" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="4ON-EC-aXC">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="4ON-EC-aXC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -3665,13 +3665,6 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aLb-bb-ur9">
-                                                    <rect key="frame" x="217" y="36" width="120" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="120" id="ZWP-sM-DjW"/>
-                                                    </constraints>
-                                                    <state key="normal" title="Facebook Login"/>
-                                                </button>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7yo-ZN-pYM" customClass="GIDSignInButton">
                                                     <rect key="frame" x="77" y="36" width="120" height="30"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -3684,14 +3677,26 @@
                                                         <constraint firstAttribute="height" constant="30" id="laC-AA-4Jq"/>
                                                     </constraints>
                                                 </view>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qqD-1M-ZU9" customClass="GIDSignInButton">
+                                                    <rect key="frame" x="217" y="36" width="120" height="30"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <accessibility key="accessibilityConfiguration">
+                                                        <accessibilityTraits key="traits" button="YES"/>
+                                                        <bool key="isElement" value="YES"/>
+                                                    </accessibility>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="40Q-LE-DM9"/>
+                                                        <constraint firstAttribute="width" constant="120" id="Bxc-d4-Fe6"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="LjP-ZH-NZN" firstAttribute="top" secondItem="x6W-zl-ePS" secondAttribute="top" constant="5" id="3Dd-Ro-hau"/>
-                                                <constraint firstItem="aLb-bb-ur9" firstAttribute="leading" secondItem="x6W-zl-ePS" secondAttribute="centerX" constant="10" id="Bom-x1-zhv"/>
+                                                <constraint firstItem="qqD-1M-ZU9" firstAttribute="bottom" secondItem="7yo-ZN-pYM" secondAttribute="bottom" id="IIK-16-qsh"/>
                                                 <constraint firstItem="7yo-ZN-pYM" firstAttribute="trailing" secondItem="x6W-zl-ePS" secondAttribute="centerX" constant="-10" id="K08-6M-TSJ"/>
                                                 <constraint firstItem="7yo-ZN-pYM" firstAttribute="top" secondItem="LjP-ZH-NZN" secondAttribute="bottom" constant="10" id="RqR-UI-vcD"/>
-                                                <constraint firstItem="aLb-bb-ur9" firstAttribute="top" secondItem="LjP-ZH-NZN" secondAttribute="bottom" constant="10" id="af1-et-ke2"/>
                                                 <constraint firstItem="LjP-ZH-NZN" firstAttribute="centerX" secondItem="x6W-zl-ePS" secondAttribute="centerX" id="nUp-rn-XPa"/>
+                                                <constraint firstItem="qqD-1M-ZU9" firstAttribute="leading" secondItem="x6W-zl-ePS" secondAttribute="centerX" constant="10" id="tzH-37-7TM"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>

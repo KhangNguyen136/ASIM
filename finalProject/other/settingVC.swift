@@ -28,7 +28,6 @@ class settingVC: UITableViewController {
         currencyBtn.semanticContentAttribute = .forceRightToLeft
         dateFormatBtn.semanticContentAttribute = .forceRightToLeft
         defaultScreenBtn.semanticContentAttribute = .forceRightToLeft
-        
         let temp = realm.objects(User.self)
         if temp.isEmpty{
             return
@@ -143,7 +142,6 @@ class settingVC: UITableViewController {
 
         /*** IMPORTANT PART FOR CUSTOM CELLS ***/
 
-
         dropDown.selectionAction = { [self] (index: Int, item: String) in
             self.dateFormatBtn.setTitle(item, for: .normal)
             try! self.realm.write{
@@ -167,7 +165,6 @@ class settingVC: UITableViewController {
 
         dropDown.customCellConfiguration = { (index: Index, item: String, cell: DropDownCell) -> Void in
            guard let cell = cell as? typeRecord else { return }
-
            // Setup your custom UI components
             if index == 2
             {
