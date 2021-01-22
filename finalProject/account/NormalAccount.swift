@@ -275,16 +275,22 @@ extension NormalAccount: UITableViewDelegate, UITableViewDataSource {
                                let account = Array(realm.objects(polyAccount.self).filter("type == 2"))
                              //Xoa account, xoá record liên quan
                              let record = Array(realm.objects(polyRecord.self))
-                             for tempRecord in record{
-                                 let srcAcc = tempRecord.srcAccount()
-                                if srcAcc.getname() == self!.activeAccount[indexPath.row].cashAcc!.name{
-                                     tempRecord.del()
-                                 }
-                                 else if srcAcc.getname() == self!.activeAccount[indexPath.row].bankingAcc!.name{
-                                     tempRecord.del()
-                                 }
-                             }
                             
+                             for tempRecord in record{
+            
+                                 let srcAcc = tempRecord.srcAccount()
+                                if srcAcc.type == 0{
+
+                                   if srcAcc.getname() == self!.activeAccount[indexPath.row].cashAcc!.name{
+                                        tempRecord.del()
+                                    }
+                                }
+                                else if srcAcc.type == 1{
+                                    if srcAcc.getname() == self!.activeAccount[indexPath.row].bankingAcc!.name{
+                                        tempRecord.del()
+                                    }
+                                }}
+
                              //Xoá account, xoá saving account liên quan
                                for acc in account{
                                    let sav = acc.savingAcc

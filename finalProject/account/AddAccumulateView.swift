@@ -35,7 +35,6 @@ class AddAccumulateView: UIViewController, UITextFieldDelegate {
     var endTimeMode = false
     @IBOutlet weak var saveEditBtn: UIButton!
     @IBOutlet weak var saveBtn: UIButton!
-    @IBOutlet weak var deleteBtn: UIButton!
     @IBOutlet weak var Amount: UILabel!
     var currencyList: [String] = currencyBase().nameEnglish
     var currencySymbol: [String] = currencyBase().symbol
@@ -66,7 +65,6 @@ class AddAccumulateView: UIViewController, UITextFieldDelegate {
                 self.navigationItem.title = "Thêm tích luỹ"
             }
             saveEditBtn.isHidden = true
-            deleteBtn.isHidden = true
             
         }
         else {
@@ -248,6 +246,16 @@ class AddAccumulateView: UIViewController, UITextFieldDelegate {
         let alertView = SCLAlertView(appearance: appearance)
         alertView.addButton("OK") {
             let realm = try! Realm()
+            let transfer = realm.objects(polyRecord.self).filter("type == 4")
+           for i in transfer{
+            print (i.transfer?.srcAccount?.getname(),self.editGoal)
+            if i.transfer?.srcAccount?.getname() == self.editGoal{
+                   i.del()
+               }
+            else if i.transfer?.destinationAccount?.getname() == self.editGoal{
+                   i.del()
+               }
+           }
             let obj = realm.objects(Accumulate.self).filter("goal == \(self.editGoal)")
             try! realm.write {
                         realm.delete(obj)

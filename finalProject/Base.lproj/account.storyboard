@@ -940,7 +940,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Complete" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ON4-89-FgV">
                                                         <rect key="frame" x="0.0" y="0.0" width="274.5" height="21.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                        <color key="textColor" systemColor="systemGreenColor" red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="1000000đ" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ife-2H-r8G">
@@ -1213,7 +1213,7 @@
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Complete" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DW2-yy-aPT">
                                                                             <rect key="frame" x="138.5" y="0.0" width="74.5" height="20"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                            <color key="textColor" systemColor="systemGreenColor" red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                            <color key="textColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oNR-ZB-qfJ">
@@ -1239,7 +1239,7 @@
                                                                                 <constraint firstAttribute="height" constant="20" id="40O-gS-EqR"/>
                                                                             </constraints>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                            <color key="textColor" systemColor="systemGreenColor" red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                            <color key="textColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6uS-gy-hC6">
@@ -1558,22 +1558,6 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GjI-lS-Y24">
-                                <rect key="frame" x="83" y="639" width="45" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Delete"/>
-                                <connections>
-                                    <action selector="deleteAccumulate:" destination="m3O-62-lCP" eventType="touchUpInside" id="war-VI-CqH"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bjD-H2-YdJ">
-                                <rect key="frame" x="261" y="639" width="34" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Save"/>
-                                <connections>
-                                    <action selector="saveEditedAccumulate:" destination="m3O-62-lCP" eventType="touchUpInside" id="fYN-hr-MjA"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Amount" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="okD-7Z-WwO">
                                 <rect key="frame" x="30" y="89" width="60" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1581,6 +1565,17 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bjD-H2-YdJ">
+                                <rect key="frame" x="123" y="461" width="152" height="42"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <state key="normal" title="Save">
+                                    <color key="titleColor" name="AccentColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="saveEditedAccumulate:" destination="m3O-62-lCP" eventType="touchUpInside" id="fYN-hr-MjA"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -1590,6 +1585,7 @@
                             <constraint firstItem="2UW-WQ-7If" firstAttribute="centerX" secondItem="zmE-pV-32q" secondAttribute="centerX" id="Azm-qm-twv"/>
                             <constraint firstItem="hHw-Lg-a5D" firstAttribute="leading" secondItem="c1C-cw-YKJ" secondAttribute="leading" id="BNa-n7-I7F"/>
                             <constraint firstItem="hHw-Lg-a5D" firstAttribute="top" secondItem="c1C-cw-YKJ" secondAttribute="top" constant="100" id="BPI-XN-6vO"/>
+                            <constraint firstItem="c1C-cw-YKJ" firstAttribute="trailing" secondItem="bjD-H2-YdJ" secondAttribute="trailing" constant="139" id="BTn-7o-pts"/>
                             <constraint firstItem="c1C-cw-YKJ" firstAttribute="trailing" secondItem="Tqo-Od-StS" secondAttribute="trailing" id="CT2-Ul-Lqf"/>
                             <constraint firstItem="hdw-yK-CjK" firstAttribute="top" secondItem="hHw-Lg-a5D" secondAttribute="bottom" constant="1" id="GCi-aS-Niv"/>
                             <constraint firstItem="nUt-jl-Gw7" firstAttribute="top" secondItem="Tqo-Od-StS" secondAttribute="bottom" constant="1" id="GNR-7H-TvU"/>
@@ -1602,6 +1598,8 @@
                             <constraint firstItem="hdw-yK-CjK" firstAttribute="leading" secondItem="c1C-cw-YKJ" secondAttribute="leading" id="h9k-Xp-oA3"/>
                             <constraint firstItem="c1C-cw-YKJ" firstAttribute="bottom" secondItem="R8p-Yn-RyL" secondAttribute="bottom" constant="50" id="hJw-ua-OdZ"/>
                             <constraint firstItem="2UW-WQ-7If" firstAttribute="top" secondItem="c1C-cw-YKJ" secondAttribute="top" constant="30" id="hd8-OJ-eEW"/>
+                            <constraint firstItem="bjD-H2-YdJ" firstAttribute="top" secondItem="lRb-44-BnI" secondAttribute="bottom" constant="20" id="hzV-r9-msd"/>
+                            <constraint firstItem="bjD-H2-YdJ" firstAttribute="leading" secondItem="c1C-cw-YKJ" secondAttribute="leading" constant="123" id="k69-O0-obG"/>
                             <constraint firstItem="c1C-cw-YKJ" firstAttribute="trailing" secondItem="2UW-WQ-7If" secondAttribute="trailing" constant="20" id="mNZ-CV-iCc"/>
                             <constraint firstItem="2UW-WQ-7If" firstAttribute="top" secondItem="c1C-cw-YKJ" secondAttribute="top" constant="30" id="mhw-W6-6vg"/>
                             <constraint firstItem="c1C-cw-YKJ" firstAttribute="trailing" secondItem="hdw-yK-CjK" secondAttribute="trailing" id="p16-E4-Lpk"/>
@@ -1614,7 +1612,6 @@
                         <outlet property="Amount" destination="okD-7Z-WwO" id="htS-Y0-D3P"/>
                         <outlet property="currencyView" destination="hdw-yK-CjK" id="jsh-pV-UUw"/>
                         <outlet property="dateView" destination="T59-ie-L6N" id="Egh-EU-JRv"/>
-                        <outlet property="deleteBtn" destination="GjI-lS-Y24" id="huD-sF-Zol"/>
                         <outlet property="goalView" destination="hHw-Lg-a5D" id="7dS-dA-mon"/>
                         <outlet property="howLongView" destination="nUt-jl-Gw7" id="DPZ-jc-Zzk"/>
                         <outlet property="includeSw" destination="UCL-JX-bXg" id="4WG-2t-eZW"/>
@@ -1633,7 +1630,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AFX-yL-kek" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1930" y="-1412"/>
+            <point key="canvasLocation" x="1928.985507246377" y="-1412.2767857142856"/>
         </scene>
         <!--Detail Account-->
         <scene sceneID="zW3-cR-Ku9">

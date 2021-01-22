@@ -127,6 +127,15 @@ extension SavingAccountView: UITableViewDelegate, UITableViewDataSource{
                     let obj = self.activeAcc[indexPath.row]
                     let realm = try! Realm()
                     let records = realm.objects(Income.self).filter("id == \(obj.savingAcc!.id)")
+                    let transfer = realm.objects(polyRecord.self).filter("type == 4")
+                    for i in transfer{
+                        if i.transfer?.srcAccount?.getname() == obj.savingAcc?.name{
+                            i.del()
+                        }
+                        else if i.transfer?.destinationAccount?.getname() == obj.savingAcc?.name{
+                            i.del()
+                        }
+                    }
                     try! realm.write{
                         realm.delete(records)
                     }

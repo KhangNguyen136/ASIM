@@ -109,9 +109,9 @@ extension AccumulateAccountView: UITableViewDelegate, UITableViewDataSource{
             dropDown.dataSource = ["Edit", "Deposit", "Delete"]
             dropDown.cellNib = UINib(nibName: "typeRecord", bundle: nil)
             dropDown.customCellConfiguration = { (index: Index, item: String, cell: DropDownCell) -> Void in
-               guard let cell = cell as? typeRecord else { return }
-
-               // Setup your custom UI components
+                guard let cell = cell as? typeRecord else { return }
+                
+                // Setup your custom UI components
                 if index == 0
                 {
                     cell.logo.image = UIImage(named: "edit")
@@ -121,26 +121,26 @@ extension AccumulateAccountView: UITableViewDelegate, UITableViewDataSource{
                     cell.logo.image = UIImage(named: "deposit")
                 }
                 else{
-                     cell.logo.image = UIImage(named: "delete")
+                    cell.logo.image = UIImage(named: "delete")
                 }
             }
             dropDown.selectionAction = { [weak self] (index: Int, item: String) in
-               if index == 0
-               {
-                let scr=self?.storyboard?.instantiateViewController(withIdentifier: "AddAccumulateView") as! AddAccumulateView
-                              scr.editMode = true
-                scr.editGoal = (self?.allAccumulate[indexPath.row].accumulate!.goal)!
-                self?.navigationController?.pushViewController(scr, animated: true)
-               }
-               else if index == 1
-               {
-                let scr = self?.storyboard?.instantiateViewController(withIdentifier: "DepositView") as! DepositView
-                                                
-                scr.rootAccName = (self?.allAccumulate[indexPath.row].accumulate!.goal)!
-                scr.rootAccount = self!.allAccumulate[indexPath.row]
-                self?.navigationController?.pushViewController(scr, animated: true )
-               }
-               else{
+                if index == 0
+                {
+                    let scr=self?.storyboard?.instantiateViewController(withIdentifier: "AddAccumulateView") as! AddAccumulateView
+                    scr.editMode = true
+                    scr.editGoal = (self?.allAccumulate[indexPath.row].accumulate!.goal)!
+                    self?.navigationController?.pushViewController(scr, animated: true)
+                }
+                else if index == 1
+                {
+                    let scr = self?.storyboard?.instantiateViewController(withIdentifier: "DepositView") as! DepositView
+                    
+                    scr.rootAccName = (self?.allAccumulate[indexPath.row].accumulate!.goal)!
+                    scr.rootAccount = self!.allAccumulate[indexPath.row]
+                    self?.navigationController?.pushViewController(scr, animated: true )
+                }
+                else{
                     let appearance = SCLAlertView.SCLAppearance(
                         showCloseButton: false
                     )
@@ -148,7 +148,16 @@ extension AccumulateAccountView: UITableViewDelegate, UITableViewDataSource{
                     alertView.addButton("OK") {
                         let realm = try! Realm()
                         let obj = realm.objects(polyAccount.self).filter("type  == 3")
-                        
+                        let transfer = realm.objects(polyRecord.self).filter("type == 4")
+                        for i in transfer{
+                         
+                         if i.transfer?.srcAccount?.getname() == self!.allAccumulate[indexPath.row].accumulate?.goal{
+                                i.del()
+                            }
+                         else if i.transfer?.destinationAccount?.getname() == self!.allAccumulate[indexPath.row].accumulate?.goal{
+                                i.del()
+                            }
+                        }
                         for del in obj{
                             del.accumulate?.goal == self!.allAccumulate[indexPath.row].accumulate?.goal
                             del.del()

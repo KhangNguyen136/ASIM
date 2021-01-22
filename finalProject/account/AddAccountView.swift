@@ -90,12 +90,16 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
                 
             }
             else{
+                bankView.isHidden = false
+                bankViewHeight.constant = 50
                 currency = currencyBase().nameEnglish[editAcc.bankingAcc!.currency]
                 lblCurrency.text = currencyBase().symbol[editAcc.bankingAcc!.currency]
                 balance = "\(round((editAcc.bankingAcc?.balance as! Float)*Float(currencyBase().valueBaseDolar[editAcc.bankingAcc!.currency])))"
                 active = editAcc.bankingAcc!.active
                 txtNameAcc.text = editAcc.bankingAcc?.name
                 txtDescription.text = editAcc.bankingAcc?.descrip
+                lblBankName.text = infoChoice().bankName[editAcc.bankingAcc!.bank]
+                
             }
             
             
@@ -244,6 +248,7 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
                 }
                     //Tài khoản cũ là ngân hàng thì xoá tk cũ, thêm tk mới là tk tiền mặt
                 else{
+                    
                     editAcc.del()
                     let acc = Account()
                     acc.currency = self.curr
@@ -253,13 +258,15 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
                     acc.includeReport = false
                     acc.add()
                 }
+               
+                    
                 }
-                
+               
                 
                 }
         // Tài khoản sau edit là tk ngân hàng
         else if accType == 1{
-            if lblBankName.text == "Bank Name" || lblBankName.text == "Tên ngân hàng"{
+            if self.bank == -1{
                 Notice().showAlert(content: "Please select bank")
                 return
             }
