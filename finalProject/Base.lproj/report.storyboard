@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="NZN-m1-L99">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="NZN-m1-L99">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -450,8 +450,16 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PBw-MH-wz6">
+                                                    <rect key="frame" x="332" y="21" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="PBw-MH-wz6" firstAttribute="centerY" secondItem="Tyy-GR-9nk" secondAttribute="centerY" id="Bki-Ym-yEz"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="PBw-MH-wz6" secondAttribute="trailing" constant="20" id="R65-p7-WVX"/>
                                                 <constraint firstItem="Tyy-GR-9nk" firstAttribute="leading" secondItem="wrW-Hg-xvv" secondAttribute="leadingMargin" constant="20" id="lpW-cK-jpg"/>
                                                 <constraint firstItem="Tyy-GR-9nk" firstAttribute="top" secondItem="wrW-Hg-xvv" secondAttribute="topMargin" constant="10" id="tIZ-fd-WWp"/>
                                             </constraints>
@@ -493,7 +501,9 @@
                     <connections>
                         <outlet property="chooseTypeBtn" destination="Tuo-3G-sic" id="vnu-U7-zAV"/>
                         <outlet property="filterBtn" destination="blz-f3-lbX" id="Yoy-Qc-4HK"/>
+                        <outlet property="filterLabel" destination="Tyy-GR-9nk" id="tbw-CM-EQc"/>
                         <outlet property="pieChartView" destination="iik-LV-tJi" id="a1S-WQ-XYd"/>
+                        <outlet property="totalLabel" destination="PBw-MH-wz6" id="V5r-Ar-Dae"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oaf-zj-aDy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

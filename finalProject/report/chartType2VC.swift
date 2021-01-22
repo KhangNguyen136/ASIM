@@ -20,13 +20,24 @@ class chartType2VC: UITableViewController,settingDelegate {
         drawChart()
         
     }
+    func loadAmountByCurrency(value: Float) -> Float
+    {
+        if userInfor?.currency == 0
+        {
+            return value
+        }
+        return value * Float(currencyBase().valueBaseDolar[userInfor!.currency])
+    }
     
 
     
     
+    @IBOutlet weak var totalLabel: UILabel!
+    @IBOutlet weak var filterLabel: UILabel!
     @IBOutlet weak var filterBtn: UIButton!
     var filterBy = 1
-@IBAction func chooseOptionFilter(_ sender: Any) {
+    let filterLabels = ["This year","This month","This week","Today"]
+    @IBAction func chooseOptionFilter(_ sender: Any) {
     let dropDown = DropDown()
     // The view to which the drop down will appear on
     dropDown.anchorView = sender as! AnchorView // UIView or UIBarButtonItem
@@ -39,7 +50,7 @@ class chartType2VC: UITableViewController,settingDelegate {
         {
             self?.filterBtn.setTitle(item, for: .normal)
             self!.filterBy = index
-            self!.loadData()
+            self!.drawChart()
         }
     }
     dropDown.show()
@@ -89,6 +100,8 @@ var type = -1
     var currency:Int = 0
 var userInfor: User? = nil
 let realm = try! Realm()
+var setting: settingObserve? = nil
+var settingObser: settingObserver? = nil
 var categorieNames = ["Food and Dining","Utilities","Auto and Transport","Home"
     ,"Clothing",
     "Kids",
@@ -110,15 +123,17 @@ func loadData()
 func drawChart(){
     if (type == 1)
     {
+        var total:Float = 0
         chooseTypeBtn.setTitle("Income", for: .normal)
         var incomeList:[Income] = []
         for record in recordList{
-            if((record.income) != nil){
+            if((record.income) != nil && filterReportByDate(date: record.getDate(), by: filterBy)){
                 incomeList.append(Income(value:record.income!))
             }
         }
         for income in incomeList{
-            income.amount = 
+            income.amount = loadAmountByCurrency(value: income.amount)
+            total += income.amount
         }
         let categories = totalOfCategory(incomeList: incomeList)
         var categoryEntries:[PieChartDataEntry] = []
@@ -143,18 +158,31 @@ func drawChart(){
         let chartData = PieChartData(dataSet: PieDataSet)
         chartData.setValueTextColor(.black)
         pieChartView.data = chartData;
+        //load Label
+        let currencyFormatter = NumberFormatter()
+        currencyFormatter.usesGroupingSeparator = true
+        currencyFormatter.numberStyle = .currency
+        currencyFormatter.locale = .none
+        let currencyType = currencyBase().symbol[currency]
+        filterLabel.text = filterLabels[filterBy]
+        totalLabel.text = currencyFormatter.string(from: NSNumber(value: total))! + currencyType
     }
     else{
         chooseTypeBtn.setTitle("Expense", for: .normal)
-
+        var total:Float = 0
         var expenseList:[Expense] = []
         for record in recordList{
-            if((record.expense) != nil){
-                expenseList.append(record.expense!)
+            if((record.expense) != nil && filterReportByDate(date: record.getDate(), by: filterBy) ){
+                expenseList.append(Expense(value:record.expense!))
             }
+        }
+        for expense in expenseList{
+            expense.amount = loadAmountByCurrency(value: expense.amount)
+            total += expense.amount
         }
         let categories = totalOfCategory(expenseList: expenseList)
         var categoryEntries:[PieChartDataEntry] = []
+
         for category in categories{
             let entry = PieChartDataEntry(value: Double(category.amount), label: categorieNames[category.label])
             categoryEntries.append(entry)
@@ -176,6 +204,18 @@ func drawChart(){
         let chartData = PieChartData(dataSet: PieDataSet)
         chartData.setValueTextColor(.black)
         pieChartView.data = chartData;
+        
+        //load Label
+        let currencyFormatter = NumberFormatter()
+        currencyFormatter.usesGroupingSeparator = true
+        currencyFormatter.numberStyle = .currency
+        currencyFormatter.locale = .none
+        let currencyType = currencyBase().symbol[currency]
+        filterLabel.text = "Total Expense " + filterLabels[filterBy]
+        totalLabel.text = currencyFormatter.string(from: NSNumber(value: total))! + currencyType
+        
+        
+        
     }
     
     
@@ -185,6 +225,9 @@ override func viewDidLoad() {
     chooseTypeBtn.clipsToBounds = true
     chooseTypeBtn.layer.cornerRadius = chooseTypeBtn.frame.width/8
     loadData()
+    setting = settingObserve(user: userInfor!)
+    settingObser = settingObserver(object: setting!)
+    setting?.delegate = self
     pieChartView.setExtraOffsets(left: 20, top: 0, right: 20, bottom: 0)
     pieChartView.entryLabelColor = .black
     pieChartView.entryLabelFont = .systemFont(ofSize: 12, weight: .light)

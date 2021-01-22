@@ -36,6 +36,11 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
     
     @IBOutlet weak var amount: UITextField!
     
+    let currencyFormatter = NumberFormatter()
+    @IBAction func changeAmount(_ sender: UITextField) {
+         
+    }
+    
     @IBOutlet weak var chooseTypeRecordBtn: UIButton!
     
     @IBOutlet weak var categoryLogo: UIImageView!
@@ -364,6 +369,9 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
         dropDown.show()
         }
     override func viewDidLoad() {
+        currencyFormatter.usesGroupingSeparator = true
+        currencyFormatter.numberStyle = .currency
+        currencyFormatter.locale = .none
         loadData()
         chooseTypeRecordBtn.semanticContentAttribute = .forceRightToLeft
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))

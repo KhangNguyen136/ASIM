@@ -55,8 +55,6 @@
 		F157008C25B7BCC600CBB259 /* reportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F157008B25B7BCC600CBB259 /* reportVC.swift */; };
 		F157008F25B7C6AE00CBB259 /* protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F157008E25B7C6AE00CBB259 /* protocol.swift */; };
 		F157009625B7EBF500CBB259 /* dashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F157009525B7EBF500CBB259 /* dashboardVC.swift */; };
-		F15714FA25BA641200A629B1 /* reportInforCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15714F925BA641100A629B1 /* reportInforCell.swift */; };
-		F15714FE25BA652E00A629B1 /* settingReportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15714FD25BA652E00A629B1 /* settingReportVC.swift */; };
 		F157487D2597E7A400DBF2F9 /* addExpenseOrIncomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F157487C2597E7A400DBF2F9 /* addExpenseOrIncomeVC.swift */; };
 		F15748822597FE4100DBF2F9 /* addLendOrBorrowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15748812597FE4100DBF2F9 /* addLendOrBorrowVC.swift */; };
 		F157582A2582C2C200FB0D13 /* lendOrBorrowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15758292582C2C200FB0D13 /* lendOrBorrowCell.swift */; };
@@ -151,8 +149,6 @@
 		F157008B25B7BCC600CBB259 /* reportVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reportVC.swift; sourceTree = "<group>"; };
 		F157008E25B7C6AE00CBB259 /* protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = protocol.swift; sourceTree = "<group>"; };
 		F157009525B7EBF500CBB259 /* dashboardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dashboardVC.swift; sourceTree = "<group>"; };
-		F15714F925BA641100A629B1 /* reportInforCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reportInforCell.swift; sourceTree = "<group>"; };
-		F15714FD25BA652E00A629B1 /* settingReportVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settingReportVC.swift; sourceTree = "<group>"; };
 		F157487C2597E7A400DBF2F9 /* addExpenseOrIncomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addExpenseOrIncomeVC.swift; sourceTree = "<group>"; };
 		F15748812597FE4100DBF2F9 /* addLendOrBorrowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addLendOrBorrowVC.swift; sourceTree = "<group>"; };
 		F15758292582C2C200FB0D13 /* lendOrBorrowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lendOrBorrowCell.swift; sourceTree = "<group>"; };
@@ -252,8 +248,6 @@
 			isa = PBXGroup;
 			children = (
 				F157008B25B7BCC600CBB259 /* reportVC.swift */,
-				F15714F925BA641100A629B1 /* reportInforCell.swift */,
-				F15714FD25BA652E00A629B1 /* settingReportVC.swift */,
 				F15F142425BA944600491E42 /* chartType1VC.swift */,
 				F15F142725BA946100491E42 /* chartType2VC.swift */,
 				F15F142A25BA947100491E42 /* chartType3.swift */,
@@ -578,7 +572,6 @@
 				F156B53B25A839FE0022DCF2 /* DetailSavingAccount.swift in Sources */,
 				DE84DA1A2592303800E7D4D0 /* AllSavingAccountCell.swift in Sources */,
 				F16655A92570168A007B8D80 /* Data.swift in Sources */,
-				F15714FA25BA641200A629B1 /* reportInforCell.swift in Sources */,
 				F1D08F9E2598851700382264 /* editExOrInVC.swift in Sources */,
 				DEFDCC1A258F822600A0FDDB /* AddAccumulateCell.swift in Sources */,
 				F15F142525BA944600491E42 /* chartType1VC.swift in Sources */,
@@ -615,7 +608,6 @@
 				F14C377A25A0E7B900450D25 /* signUpVC.swift in Sources */,
 				F1D851FA25985D6C001C6440 /* addTransferVC.swift in Sources */,
 				DEFDCC0F258F81EB00A0FDDB /* accountVC.swift in Sources */,
-				F15714FE25BA652E00A629B1 /* settingReportVC.swift in Sources */,
 				DEAC0A692590C87A0000F378 /* PickAccountView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

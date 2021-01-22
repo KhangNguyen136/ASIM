@@ -191,6 +191,7 @@ class chartType1VC: UITableViewController, settingDelegate {
             let currencyFormatter = NumberFormatter()
             currencyFormatter.usesGroupingSeparator = true
             currencyFormatter.numberStyle = .currency
+            currencyFormatter.locale = .none
             let currencyType = currencyBase().symbol[currency]
             filterTitle.text = filterLabels[filterBy]
             totalIncome.text = currencyFormatter.string(from: NSNumber(value: chartIncomeList[0].amount))! + currencyType
@@ -267,6 +268,7 @@ class chartType1VC: UITableViewController, settingDelegate {
             let currencyFormatter = NumberFormatter()
             currencyFormatter.usesGroupingSeparator = true
             currencyFormatter.numberStyle = .currency
+            currencyFormatter.locale = .none
             let currencyType = currencyBase().symbol[currency]
             filterTitle.text = filterLabels[filterBy]
             totalIncome.text = currencyFormatter.string(from: NSNumber(value: chartLendList[0].amount))! + currencyType
@@ -280,7 +282,6 @@ class chartType1VC: UITableViewController, settingDelegate {
                 total.textColor = .red
             }
             total.text = String(chartLendList[0].amount - chartBorrowList[0].amount) + currencyType
-            print("currencyType\(currencyType)")
         }
         
     }

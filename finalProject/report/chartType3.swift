@@ -17,7 +17,11 @@ struct locationRecord{
     var transfer:Float=0
     var adjust:Float=0
 }
-class chartType3VC: UITableViewController {
+struct PeopleRecord{
+    var income:Float=0
+    var expense:Float=0
+}
+class chartType3VC: UITableViewController, settingDelegate {
 
     var filterBy = 1
     @IBOutlet weak var filterBtn: UIButton!
@@ -34,7 +38,7 @@ class chartType3VC: UITableViewController {
             {
                 self?.filterBtn.setTitle(item, for: .normal)
                 self!.filterBy = index
-                self!.loadData()
+                self!.drawChart()
             }
         }
         dropDown.show()
@@ -82,52 +86,60 @@ class chartType3VC: UITableViewController {
     }
     @IBOutlet weak var barChartView: BarChartView!
     var type = -1
+    var currency:Int = 1
     var userInfor: User? = nil
     let realm = try! Realm()
     var recordList: [polyRecord] = []
+    var setting: settingObserve? = nil
+    var settingObser: settingObserver? = nil
     func loadData()
     {
         userInfor = realm.objects(User.self)[0]
+        currency = userInfor!.currency
         recordList.append(contentsOf: userInfor!.records)
     }
-    var locationDict:[String:locationRecord]=[:]
-    var locationStrings:[String]=[]
-    var incomeEntries:[BarChartDataEntry]=[]
-    var expenseEntries:[BarChartDataEntry]=[]
-    var transferEntries:[BarChartDataEntry]=[]
-    var adjustEntries:[BarChartDataEntry]=[]
+   
+
+
     func drawChart(){
+        if(type==0){
+        var locationDict:[String:locationRecord]=[:]
+        var incomeEntries:[BarChartDataEntry]=[]
+        var expenseEntries:[BarChartDataEntry]=[]
+        var transferEntries:[BarChartDataEntry]=[]
+        var adjustEntries:[BarChartDataEntry]=[]
+        var locationStrings:[String]=[]
         for record in recordList{
-            if(record.income?.location != nil && record.income?.location != "")
+            if(record.income?.location != nil && record.income?.location != "" && filterReportByDate(date: record.getDate(), by: filterBy))
             {
                 if(locationDict[record.income!.location] == nil){
                     locationDict[record.income!.location] = locationRecord()
                 }
-                locationDict[record.income!.location]!.income += record.income!.amount
+                locationDict[record.income!.location]!.income += loadAmountByCurrency(value:record.income!.amount)
             }
-            else if(record.expense?.location != nil && record.expense?.location != "")
+            else if(record.expense?.location != nil && record.expense?.location != "" && filterReportByDate(date: record.getDate(), by: filterBy))
             {
                 if(locationDict[record.expense!.location] == nil){
                     locationDict[record.expense!.location] = locationRecord()
 
                 }
-                locationDict[record.expense!.location]?.expense += record.expense!.amount
+                locationDict[record.expense!.location]?.expense += loadAmountByCurrency(value: record.expense!.amount)
             
             }
-            else if(record.transfer?.location != nil && record.transfer?.location != "")
+            else if(record.transfer?.location != nil && record.transfer?.location != "" && filterReportByDate(date: record.getDate(), by: filterBy))
             {
                 if(locationDict[record.transfer!.location] == nil){
                     locationDict[record.transfer!.location] = locationRecord()
 
                 }
-                locationDict[record.transfer!.location]?.transfer += record.transfer!.amount
+                locationDict[record.transfer!.location]?.transfer += loadAmountByCurrency(value: record.transfer!.amount)
             }
-            else if(record.adjustment?.location != nil && record.adjustment?.location != "")
+            else if(record.adjustment?.location != nil && record.adjustment?.location != "" && filterReportByDate(date: record.getDate(), by: filterBy))
             {
                 if(locationDict[record.adjustment!.location] == nil){
                     locationDict[record.adjustment!.location] = locationRecord()
                 }
-                locationDict[record.adjustment!.location]?.adjust += record.adjustment!.amount
+                locationDict[record.adjustment!.location]?.adjust += loadAmountByCurrency(value: record.adjustment!.different)
 
             }
         }
@@ -141,7 +153,6 @@ class chartType3VC: UITableViewController {
             i += 1
             
         }
-        print(locationDict)
         let incomeDataSet = BarChartDataSet(entries: incomeEntries, label: "income")
         incomeDataSet.colors = [UIColor.green]
         let expenseDataSet = BarChartDataSet(entries: expenseEntries, label: "expense")
@@ -170,11 +181,71 @@ class chartType3VC: UITableViewController {
         barChartView.xAxis.labelCount = groupCount
         barChartView.chartDescription?.text = "location"
         barChartView.data = chartData
+        }
+        else
+        {
+            var peopleDict:[String:PeopleRecord]=[:]
+            var peopleString:[String]=[]
+            var incomeEntries:[BarChartDataEntry]=[]
+            var expenseEntries:[BarChartDataEntry]=[]
+            for record in recordList{
+                if(record.getPerson() != "" && filterReportByDate(date: record.getDate(), by: filterBy) && record.income != nil)
+                {
+                    if(peopleDict[record.getPerson()] == nil){
+                        peopleDict[record.getPerson()] = PeopleRecord()
+                    }
+                    peopleDict[record.getPerson()]!.income += loadAmountByCurrency(value:record.income!.amount)
+                }
+                else if(record.getPerson() != "" && filterReportByDate(date: record.getDate(), by: filterBy) && record.expense != nil)
+                {
+                    if(peopleDict[record.getPerson()] == nil){
+                        peopleDict[record.getPerson()] = PeopleRecord()
 
-        
+                    }
+                    peopleDict[record.getPerson()]?.expense += loadAmountByCurrency(value: record.expense!.amount)
+                
+                }
+            }
+            var i = 0;
+            for name in peopleDict.keys{
+                peopleString.append(name)
+                incomeEntries.append(BarChartDataEntry(x: Double(i), y: Double(peopleDict[name]!.income)))
+                expenseEntries.append(BarChartDataEntry(x: Double(i), y: Double(peopleDict[name]!.expense)))
+                i += 1
+                
+            }
+            let incomeDataSet = BarChartDataSet(entries: incomeEntries, label: "income")
+            incomeDataSet.colors = [UIColor.green]
+            let expenseDataSet = BarChartDataSet(entries: expenseEntries, label: "expense")
+            expenseDataSet.colors = [UIColor.red]
+            barChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values:peopleString)
+            let groupSpace = 0.3
+            let barSpace = 0.05
+            let barWidth = 0.3
+                    // (0.3 + 0.05) * 2 + 0.3 = 1.00 -> interval per "group"
+
+            let groupCount = peopleString.count
+            let startYear = 0
+
+            let chartData = BarChartData(dataSets: [incomeDataSet,expenseDataSet])
+            chartData.barWidth = barWidth;
+            barChartView.xAxis.axisMinimum = 0
+            let gg = chartData.groupWidth(groupSpace: groupSpace, barSpace: barSpace)
+            barChartView.xAxis.axisMaximum = Double(startYear) + gg * Double(groupCount)
+            chartData.groupBars(fromX: Double(startYear), groupSpace: groupSpace, barSpace: barSpace)
+            chartData.groupWidth(groupSpace: groupSpace, barSpace: barSpace)
+            barChartView.xAxis.labelCount = groupCount
+            barChartView.chartDescription?.text = "Person"
+            barChartView.data = chartData
+        }
         
     }
+
     override func viewDidLoad() {
+        loadData()
+        setting = settingObserve(user: userInfor!)
+        settingObser = settingObserver(object: setting!)
+        setting?.delegate = self
         chooseTypeBtn.semanticContentAttribute = .forceRightToLeft
         chooseTypeBtn.clipsToBounds = true
         chooseTypeBtn.layer.cornerRadius = chooseTypeBtn.frame.width/8
@@ -186,7 +257,7 @@ class chartType3VC: UITableViewController {
             chooseTypeBtn.setTitle("Person", for: .normal)
 
         }
-        loadData()
+
         barChartView.noDataText = "You need to provide data for the chart."
   
 
@@ -235,6 +306,22 @@ class chartType3VC: UITableViewController {
         // #warning Incomplete implementation, return the number of rows
         return 3
     }
-
+    func loadAmountByCurrency(value: Float) -> Float
+    {
+        if userInfor?.currency == 0
+        {
+            return value
+        }
+        return value * Float(currencyBase().valueBaseDolar[userInfor!.currency])
+    }
+    func changedHideAmountValue(value: Bool) {
+        
+    }
+    
+    func changedCurrency(value: Int) {
+        currency = value
+        drawChart()
+        
+    }
 
 }
