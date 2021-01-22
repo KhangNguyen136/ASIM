@@ -214,10 +214,10 @@ class chartType1VC: UITableViewController, settingDelegate {
             var borrowList:[Borrow] = []
             for record in recordList{
                 if((record.lend) != nil){
-                    lendList.append(record.lend!)
+                    lendList.append(Lend(value:record.lend!))
                 }
                 else if(record.borrow != nil){
-                    borrowList.append(record.borrow!)
+                    borrowList.append(Borrow(value: record.borrow!))
                 }
             }
             for lend in lendList{
@@ -288,6 +288,7 @@ class chartType1VC: UITableViewController, settingDelegate {
     func loadData()
     {
         userInfor = realm.objects(User.self)[0]
+        recordList = []
         recordList.append(contentsOf: userInfor!.records)
         currency = userInfor!.currency
     }

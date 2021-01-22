@@ -23,6 +23,12 @@ struct PeopleRecord{
 }
 class chartType3VC: UITableViewController, settingDelegate {
 
+    @IBOutlet weak var title1: UILabel!
+    @IBOutlet weak var title2: UILabel!
+    
+    @IBOutlet weak var mostEx: UILabel!
+    @IBOutlet weak var mostIn: UILabel!
+    
     var filterBy = 1
     @IBOutlet weak var filterBtn: UIButton!
     @IBAction func chooseOptionFilter(_ sender: Any) {
@@ -103,6 +109,7 @@ class chartType3VC: UITableViewController, settingDelegate {
 
     func drawChart(){
         if(type==0){
+            
         var locationDict:[String:locationRecord]=[:]
         var incomeEntries:[BarChartDataEntry]=[]
         var expenseEntries:[BarChartDataEntry]=[]
@@ -181,9 +188,22 @@ class chartType3VC: UITableViewController, settingDelegate {
         barChartView.xAxis.labelCount = groupCount
         barChartView.chartDescription?.text = "location"
         barChartView.data = chartData
+            let mostSpent = locationDict.max(by: {a,b in a.value.expense < b.value.expense})
+            let mostEarn = locationDict.max(by: {a,b in a.value.income < b.value.income})
+            if mostEarn != nil
+            {
+                mostIn.text = mostEarn!.key + " ( \(mostEarn!.value.income) " + currencyBase().symbol[currency] + " )"
+            }
+            if mostEx != nil
+            {
+            mostEx.text = mostSpent!.key + " ( \(mostSpent!.value.expense) " + currencyBase().symbol[currency] + " )"
+            }
+        
         }
         else
         {
+            title1.text = "Most payee: "
+            title2.text = "Most payer: "
             var peopleDict:[String:PeopleRecord]=[:]
             var peopleString:[String]=[]
             var incomeEntries:[BarChartDataEntry]=[]
@@ -237,6 +257,16 @@ class chartType3VC: UITableViewController, settingDelegate {
             barChartView.xAxis.labelCount = groupCount
             barChartView.chartDescription?.text = "Person"
             barChartView.data = chartData
+            let mostSpent = peopleDict.max(by: {a,b in a.value.expense < b.value.expense})
+            let mostEarn = peopleDict.max(by: {a,b in a.value.income < b.value.income})
+            if mostEarn != nil
+            {
+            mostIn.text = mostEarn!.key + " ( \(mostEarn!.value.income) " + currencyBase().symbol[currency] + " )"
+            }
+            if mostEx != nil
+            {
+            mostEx.text = mostSpent!.key + " ( \(mostSpent!.value.expense) " + currencyBase().symbol[currency] + " )"
+            }
         }
         
     }

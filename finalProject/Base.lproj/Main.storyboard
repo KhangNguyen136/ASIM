@@ -104,28 +104,124 @@
                                                         <constraint firstAttribute="height" constant="200" id="jio-e7-tx1"/>
                                                     </constraints>
                                                 </view>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This month expense vs income" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pB8-MV-5wX">
+                                                    <rect key="frame" x="89.666666666666686" y="226" width="235" height="20.333333333333343"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Kq-3a-jGS">
+                                                    <rect key="frame" x="354" y="246.33333333333337" width="55" height="22"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="55" id="95x-AI-Jxt"/>
+                                                        <constraint firstAttribute="height" constant="22" id="gOX-Nt-gLk"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <state key="normal" title="More" image="chevron.forward" catalog="system">
+                                                        <color key="titleColor" name="AccentColor"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="moreHistory:" destination="Cku-6B-2rz" eventType="touchUpInside" id="UkY-3Q-u2p"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Vkl-Tu-KF7" secondAttribute="trailing" constant="5" id="E6q-Qf-4aZ"/>
                                                 <constraint firstItem="Vkl-Tu-KF7" firstAttribute="leading" secondItem="BTO-y4-8Cc" secondAttribute="leadingMargin" constant="5" id="IiZ-XB-gLz"/>
+                                                <constraint firstItem="pB8-MV-5wX" firstAttribute="centerX" secondItem="BTO-y4-8Cc" secondAttribute="centerX" id="ZSZ-QX-O9w"/>
+                                                <constraint firstAttribute="trailing" secondItem="6Kq-3a-jGS" secondAttribute="trailing" constant="5" id="jDS-Wx-Wn9"/>
                                                 <constraint firstItem="Vkl-Tu-KF7" firstAttribute="top" secondItem="BTO-y4-8Cc" secondAttribute="topMargin" constant="10" id="nwQ-bQ-ivb"/>
+                                                <constraint firstItem="6Kq-3a-jGS" firstAttribute="top" secondItem="pB8-MV-5wX" secondAttribute="bottom" id="u7c-p7-vu2"/>
+                                                <constraint firstItem="pB8-MV-5wX" firstAttribute="top" secondItem="Vkl-Tu-KF7" secondAttribute="bottom" constant="5" id="xey-uo-5He"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="122" id="Sc3-4n-yOY">
-                                        <rect key="frame" x="0.0" y="448" width="414" height="122"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="257" id="Sc3-4n-yOY">
+                                        <rect key="frame" x="0.0" y="448" width="414" height="257"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Sc3-4n-yOY" id="x68-Nh-KjE">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="122"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="257"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="obW-q4-Tvm" customClass="PieChartView" customModule="Charts">
+                                                    <rect key="frame" x="25" y="5" width="364" height="200"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="200" id="wdb-uo-HYm"/>
+                                                    </constraints>
+                                                </view>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expense in this month" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="32z-ph-X1m">
+                                                    <rect key="frame" x="123.33333333333333" y="210" width="167.33333333333337" height="20"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GXD-sf-FaH">
+                                                    <rect key="frame" x="354" y="230" width="55" height="22"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="55" id="N5l-Ug-JbU"/>
+                                                        <constraint firstAttribute="height" constant="22" id="vzR-SV-5gW"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <state key="normal" title="More" image="chevron.forward" catalog="system">
+                                                        <color key="titleColor" name="AccentColor"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="moreReport:" destination="Cku-6B-2rz" eventType="touchUpInside" id="dAK-sa-TAq"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="32z-ph-X1m" firstAttribute="top" secondItem="obW-q4-Tvm" secondAttribute="bottom" constant="5" id="27G-2q-sJ5"/>
+                                                <constraint firstItem="32z-ph-X1m" firstAttribute="centerX" secondItem="x68-Nh-KjE" secondAttribute="centerX" id="Iqd-Mb-USh"/>
+                                                <constraint firstAttribute="trailing" secondItem="GXD-sf-FaH" secondAttribute="trailing" constant="5" id="RBG-L4-2pN"/>
+                                                <constraint firstAttribute="bottom" secondItem="GXD-sf-FaH" secondAttribute="bottom" constant="5" id="Vfk-mg-JsG"/>
+                                                <constraint firstItem="obW-q4-Tvm" firstAttribute="top" secondItem="x68-Nh-KjE" secondAttribute="top" constant="5" id="c6Q-Dl-esw"/>
+                                                <constraint firstItem="obW-q4-Tvm" firstAttribute="leading" secondItem="x68-Nh-KjE" secondAttribute="leadingMargin" constant="5" id="op4-ar-y9N"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="obW-q4-Tvm" secondAttribute="trailing" constant="5" id="tO5-RQ-fI8"/>
+                                                <constraint firstItem="GXD-sf-FaH" firstAttribute="top" secondItem="32z-ph-X1m" secondAttribute="bottom" id="v8h-5d-MaR"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="T2C-0F-RWI">
-                                        <rect key="frame" x="0.0" y="570" width="414" height="43.666667938232422"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="114" id="T2C-0F-RWI">
+                                        <rect key="frame" x="0.0" y="705" width="414" height="114"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="T2C-0F-RWI" id="h9r-oV-nNF">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="114"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Budget" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hDZ-6y-PrN">
+                                                    <rect key="frame" x="9.9999999999999964" y="5" width="56.666666666666657" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Togethre with ASIM create budget for better financial management" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uKV-5o-JZC">
+                                                    <rect key="frame" x="18" y="28.000000000000004" width="378" height="38.333333333333343"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e1t-9w-pYS">
+                                                    <rect key="frame" x="150.66666666666666" y="71.333333333333329" width="112.99999999999997" height="22"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <state key="normal" title="Add budget" image="plus" catalog="system">
+                                                        <color key="titleColor" name="AccentColor"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="toAddAccount:" destination="Cku-6B-2rz" eventType="touchUpInside" id="eUY-MX-dRJ"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="e1t-9w-pYS" firstAttribute="top" secondItem="uKV-5o-JZC" secondAttribute="bottom" constant="5" id="OGr-Jo-Mea"/>
+                                                <constraint firstItem="hDZ-6y-PrN" firstAttribute="leading" secondItem="h9r-oV-nNF" secondAttribute="leading" constant="10" id="V9K-XO-aE9"/>
+                                                <constraint firstItem="hDZ-6y-PrN" firstAttribute="top" secondItem="h9r-oV-nNF" secondAttribute="top" constant="5" id="bX1-Hr-cXd"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="uKV-5o-JZC" secondAttribute="trailing" constant="10" id="e4O-AF-M4N"/>
+                                                <constraint firstItem="uKV-5o-JZC" firstAttribute="leading" secondItem="h9r-oV-nNF" secondAttribute="leadingMargin" constant="10" id="jLy-gG-MCX"/>
+                                                <constraint firstItem="e1t-9w-pYS" firstAttribute="centerX" secondItem="h9r-oV-nNF" secondAttribute="centerX" id="lYg-GL-lu4"/>
+                                                <constraint firstItem="uKV-5o-JZC" firstAttribute="top" secondItem="hDZ-6y-PrN" secondAttribute="bottomMargin" constant="10" id="uCd-hI-i59"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -164,7 +260,11 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="barChartView" destination="Vkl-Tu-KF7" id="FMM-uL-17B"/>
                         <outlet property="hiMsg" destination="fXY-Ru-pR6" id="vVu-hU-SsD"/>
+                        <outlet property="moreBtn1" destination="6Kq-3a-jGS" id="yqz-Ni-QAD"/>
+                        <outlet property="moreBtn2" destination="GXD-sf-FaH" id="Ydd-Ik-5xh"/>
+                        <outlet property="pieChartView" destination="obW-q4-Tvm" id="BWi-lM-hWK"/>
                         <outlet property="totalBalanceTF" destination="JLr-9k-K3c" id="Teu-l2-mlg"/>
                     </connections>
                 </tableViewController>
@@ -3803,6 +3903,7 @@
         <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="checkmark.rectangle" catalog="system" width="128" height="93"/>
         <image name="chevron.down" catalog="system" width="128" height="72"/>
+        <image name="chevron.forward" catalog="system" width="96" height="128"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="chevron.up" catalog="system" width="128" height="72"/>
         <image name="decrease.indent" catalog="system" width="128" height="89"/>
@@ -3816,6 +3917,7 @@
         <image name="location.fill" catalog="system" width="128" height="121"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="photo" catalog="system" width="128" height="93"/>
+        <image name="plus" catalog="system" width="128" height="113"/>
         <image name="plus.circle" catalog="system" width="128" height="121"/>
         <image name="plus.circle.fill" catalog="system" width="128" height="121"/>
         <image name="repeat" catalog="system" width="128" height="99"/>

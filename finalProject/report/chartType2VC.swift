@@ -31,7 +31,9 @@ class chartType2VC: UITableViewController,settingDelegate {
     
 
     
+    @IBOutlet weak var mostTitle: UILabel!
     
+    @IBOutlet weak var mostValue: UILabel!
     @IBOutlet weak var totalLabel: UILabel!
     @IBOutlet weak var filterLabel: UILabel!
     @IBOutlet weak var filterBtn: UIButton!
@@ -123,6 +125,7 @@ func loadData()
 func drawChart(){
     if (type == 1)
     {
+        mostTitle.text = "Most income from: "
         var total:Float = 0
         chooseTypeBtn.setTitle("Income", for: .normal)
         var incomeList:[Income] = []
@@ -166,8 +169,11 @@ func drawChart(){
         let currencyType = currencyBase().symbol[currency]
         filterLabel.text = filterLabels[filterBy]
         totalLabel.text = currencyFormatter.string(from: NSNumber(value: total))! + currencyType
+        var expenseMost = categories.max(by: {a,b in a.amount < b.amount})
+        mostValue.text = incomeNames[expenseMost!.label]
     }
     else{
+        mostTitle.text = "Spent most on: "
         chooseTypeBtn.setTitle("Expense", for: .normal)
         var total:Float = 0
         var expenseList:[Expense] = []
@@ -214,7 +220,8 @@ func drawChart(){
         filterLabel.text = "Total Expense " + filterLabels[filterBy]
         totalLabel.text = currencyFormatter.string(from: NSNumber(value: total))! + currencyType
         
-        
+        var expenseMost = categories.max(by: {a,b in a.amount < b.amount})
+        mostValue.text = categorieNames[expenseMost!.label]
         
     }
     
