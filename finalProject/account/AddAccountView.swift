@@ -31,6 +31,8 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var currView: UIView!
     var currency: String = currencyBase().nameEnglish[0]
     var imgName = "bank"
+    let currencyFormatter = NumberFormatter()
+    
     //Edit mode
     var active = true
     var balance: String = "0"
@@ -45,6 +47,7 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
     var typeAccList: [String] = infoChoice().typeAccountEnglish
     var typeCurrency = 0
     override func viewDidLoad() {
+      
         typeAccountView.layer.borderWidth = 1
         typeAccountView.layer.borderColor = UIColor.lightGray.cgColor
         accountView.layer.borderWidth = 1
@@ -72,6 +75,7 @@ class AddAccountView: UIViewController, UITextFieldDelegate {
                 txtDescription.placeholder = "Diễn giải"
                 typeAccList = infoChoice().typeAccountVietnamese
                }
+        lblCurr.text = currencyList[0]
         lblAccType.text = typeAccList[0]
        lblCurrency.text = currencySymbol[0]
         super.viewDidLoad()

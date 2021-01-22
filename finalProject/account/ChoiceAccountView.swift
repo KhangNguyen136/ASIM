@@ -99,7 +99,8 @@ extension ChoiceAccountView: UITableViewDataSource, UITableViewDelegate {
          if currencyMode == true {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ChoiceAccountViewCell", for: indexPath) as! ChoiceAccountViewCell
             cell.txtText.text = currencyLabel[indexPath.row]
-            cell.imgIcon.image = UIImage(named: currencyLabel[indexPath.row])
+            print("currency\([indexPath.row])")
+            cell.imgIcon.image = UIImage(named: "currency\(indexPath.row)")
             return cell
                }
                else if accountMode == true{
