@@ -101,7 +101,12 @@ class loginVC: UITableViewController {
         alert.addAction(title: "Cancel", style: .cancel)
         alert.show()
     }
+    
+    @IBAction func changeHidePass(_ sender: Any) {
+        passwordTF.isSecureTextEntry = !passwordTF.isSecureTextEntry
+    }
     override func viewDidLoad() {
+
         GIDSignIn.sharedInstance()?.presentingViewController = self
         
 //        GIDSignIn.sharedInstance()?.signIn()

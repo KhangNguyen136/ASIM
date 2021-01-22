@@ -7,10 +7,20 @@
 
 import UIKit
 import RealmSwift
+import ProgressHUD
+import SCLAlertView
 
 class dashboardVC: UITableViewController,settingDelegate{
+    
+    @IBOutlet weak var hiMsg: UILabel!
+    @IBOutlet weak var totalBalanceTF: UITextField!
+
+    @IBAction func changeHideAmount(_ sender: Any) {
+        totalBalanceTF.isSecureTextEntry = !totalBalanceTF.isSecureTextEntry
+    }
+    
     func changedHideAmountValue(value: Bool) {
-        
+        totalBalanceTF.isSecureTextEntry = value
     }
     
     func changedCurrency(value: Int) {
@@ -19,10 +29,15 @@ class dashboardVC: UITableViewController,settingDelegate{
     
 
     @IBAction func clickSyncData(_ sender: Any) {
-        
+        ProgressHUD.show("Sync your data...")
+        userInfor?.syncData()
+        ProgressHUD.dismiss()
+        SCLAlertView().showSuccess("Sync data successfully!", subTitle: "")
+        return
     }
     let realm = try! Realm()
     var userInfor: User? = nil
+    var currency = -1
     var setting: settingObserve? = nil
     var settingObser: settingObserver? = nil
     
@@ -30,49 +45,55 @@ class dashboardVC: UITableViewController,settingDelegate{
     
     func loadAmount(value: Float) -> Float
     {
-        if userInfor?.currency == 0
+        if currency == 0
         {
             return value
         }
-        return value * Float(currencyBase().valueBaseDolar[userInfor!.currency])
+        return value * Float(currencyBase().valueBaseDolar[currency])
     }
     @IBAction func toNotify(_ sender: Any) {
         let sb = UIStoryboard(name: "other", bundle: nil)
         let dest = sb.instantiateViewController(identifier: "notificationVC") as! notificationVC
         self.navigationController?.pushViewController(dest, animated: false)
     }
-    func loadBalance() {
-        _balance = 0
+    func loadBalance() -> Float{
+        var result:Float = 0.0
         for i in userInfor!.accounts
         {
             if i.type == 0
             {
-                _balance += i.cashAcc!.balance
+                result += i.cashAcc!.balance
             }
             else if i.type == 1
             {
-                _balance += i.bankingAcc!.balance
+                result += i.bankingAcc!.balance
+            }
+            else if i.type == 2
+            {
+                result += i.savingAcc!.ammount
             }
         }
-        print(_balance)
+        return result
     }
     func loadData()
     {
         userInfor = realm.objects(User.self)[0]
+        currency = userInfor!.currency
         setting = settingObserve(user: userInfor!)
         settingObser = settingObserver(object: setting!)
         setting?.delegate = self
+        _balance = loadBalance()
+
+    }
+    func setData()  {
+        hiMsg.text = "Hi \(userInfor?.displayName ?? "")!"
+        totalBalanceTF.text = String(loadAmount(value: _balance)) + " \(currencyBase().symbol[currency])"
     }
     override func viewDidLoad() {
         loadData()
-        loadBalance()
+        setData()
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
     }
 
     // MARK: - Table view data source

@@ -15,6 +15,7 @@ class reportVC: UITableViewController {
     @IBOutlet weak var btn4: UIButton!
     @IBOutlet weak var btn5: UIButton!
     @IBOutlet weak var btn6: UIButton!
+
     @IBAction func toChart1_0(_ sender: Any) {
         let dest = self.storyboard?.instantiateViewController(identifier: "chartType1VC") as! chartType1VC
         dest.type = 0

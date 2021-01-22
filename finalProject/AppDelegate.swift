@@ -7,7 +7,6 @@ import UIKit
 import Firebase
 import RealmSwift
 import GoogleSignIn
-import FBSDKCoreKit
 import ProgressHUD
 import SCLAlertView
 
@@ -48,7 +47,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate,GIDSignInDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         
-        FBSDKCoreKit.ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
 //        Database.database().isPersistenceEnabled = false
@@ -95,9 +93,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate,GIDSignInDelegate {
     }
     @available(iOS 9.0, *)
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        let handledFB = FBSDKCoreKit.ApplicationDelegate.shared.application(app, open: url, options: options)
         let handledGoogle = GIDSignIn.sharedInstance().handle(url)
-        return handledFB || handledGoogle
+        return handledGoogle
     }
+        
 }
 
