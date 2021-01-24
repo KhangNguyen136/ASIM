@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   finalProject
 
@@ -23,3 +23,32 @@
 "Day" = "day";
 "Term" = "Term";
 "Amount" = "Amount";
+"TotalSave" = "Total save";
+"Folowings" = "Followings";
+"goal" = "What is the goal?";
+"howLong" = "For how long?";
+"EndDate" = "End Date";
+"Time" = "Time";
+"Remain" = "Remain";
+"NeedMore" = "Need more";
+"Month" = "month";
+"Year" = "year";
+"FromAccount" = "From account";
+"ToAccount" = "To account";
+"TransferFee" = "Transfer fee";
+"ChooseAccount" = "Choose account";"TotalIncome" = "Tổng thu";
+"TotalExpense" = "Total expense";
+"TotalIncome" = "Total income";
+"Balance" = "Balance";
+"All" = "All";
+"BankName" = "Bank name";
+"ChooseCategory" = "Choose category";
+"Payee" = "Payee";
+"Location" = "Location";
+"Event" = "Event, trip";
+"Borrower" = "Borrower";
+"Repayed/Collected" = "Repayed/Collected";
+"BalanceInAccount" = "Balance in account";
+"Difference" = "Difference";
+"ActualBalance" = "ActualBalance";
+"Lender" = "Lender";

@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import SCLAlertView
 
 class AddSavingAccount: UIViewController, UITextFieldDelegate {
 
@@ -150,7 +151,6 @@ class AddSavingAccount: UIViewController, UITextFieldDelegate {
                 imgAccount.image = UIImage(named: obj!.name)
                 lblNameAccount.text = obj?.name
             }
-        
         }
         else{
             objDest = notification.object as! polyAccount
@@ -457,6 +457,8 @@ InterestPaid.setupAutolocalization(withKey: "InterestPaid", keyPath: "text")
                 transfer.add()
             }
         }
+        SCLAlertView().showSuccess("Saving account added!", subTitle: "")
+
        self.navigationController?.popViewController(animated: true)
        }
     }

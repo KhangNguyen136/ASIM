@@ -13,22 +13,34 @@ class DetailAccount: UIViewController {
     var allRecord: [polyRecord] = []
     var recordByDate: [(key:String,value :[polyRecord])]? = nil
     @IBOutlet weak var lblIncome: UILabel!
+    @IBOutlet weak var All: UILabel!
+    @IBOutlet weak var TotalExpense: UILabel!
+    @IBOutlet weak var TotalIncome: UILabel!
+    @IBOutlet weak var Balance: UILabel!
     @IBOutlet weak var lblExpense: UILabel!
     @IBOutlet weak var lblBalance: UILabel!
+    var totalIncome: Float = 0.0
+    var totalExpense: Float = 0.0
     override func viewDidLoad() {
+        self.navigationItem.title = Acc?.getname()
+       loadRecord()
         if Acc?.type == 0{
             lblBalance.text = "\(round((Acc?.cashAcc?.balance as! Float)*Float(currencyBase().valueBaseDolar[(Acc?.cashAcc!.currency)!]))) \(currencyBase().symbol[(Acc?.cashAcc?.currency)!])"
+            lblIncome.text = "\(totalIncome*Float(currencyBase().valueBaseDolar[(Acc?.cashAcc!.currency)!])) \(currencyBase().symbol[(Acc?.cashAcc?.currency)!])"
+            lblExpense.text = "\(totalExpense*Float(currencyBase().valueBaseDolar[(Acc?.cashAcc!.currency)!])) \(currencyBase().symbol[(Acc?.cashAcc?.currency)!])"
         }
         else{
-            lblBalance.text = "\(round((Acc?.bankingAcc?.balance as! Float)*Float(currencyBase().valueBaseDolar[(Acc?.cashAcc!.currency)!]))) \(currencyBase().symbol[(Acc?.cashAcc?.currency)!])"
+              lblBalance.text = "\(round((Acc?.bankingAcc?.balance as! Float)*Float(currencyBase().valueBaseDolar[(Acc?.bankingAcc!.currency)!]))) \(currencyBase().symbol[(Acc?.bankingAcc?.currency)!])"
+              lblIncome.text = "\(totalIncome*Float(currencyBase().valueBaseDolar[(Acc?.bankingAcc!.currency)!])) \(currencyBase().symbol[(Acc?.bankingAcc?.currency)!])"
+              lblExpense.text = "\(totalExpense*Float(currencyBase().valueBaseDolar[(Acc?.bankingAcc!.currency)!])) \(currencyBase().symbol[(Acc?.bankingAcc?.currency)!])"
         }
+        
         super.viewDidLoad()
         self.navigationController?.navigationBar.titleTextAttributes = [
                    .foregroundColor: UIColor.white,
                    .font: UIFont(name: "MarkerFelt-Thin", size: 20)!]
         self.view.backgroundColor = UIColor(red: 71/255, green: 181/255, blue: 190/255, alpha: 1)
-        self.navigationItem.title = "Detail Account"
-        loadRecord()
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
         
@@ -37,15 +49,30 @@ class DetailAccount: UIViewController {
         recordByDate = dictionary.sorted { (first, second) -> Bool in
             return dateFormatter.date(from: first.key)! > dateFormatter.date(from: second.key)!
         }
-
+        setLanguage()
         //print("Dictionary",dictionary[0][0])
         // Do any additional setup after loading the view.
     }
+    func setLanguage(){
+           TotalIncome.setupAutolocalization(withKey: "TotalIncome", keyPath: "text")
+        TotalExpense.setupAutolocalization(withKey: "TotalExpense", keyPath: "text")
+        Balance.setupAutolocalization(withKey: "Balance", keyPath: "text")
+        All.setupAutolocalization(withKey: "All", keyPath: "text")
+        
+       }
     func loadRecord(){
         let realm = try! Realm()
         let record = Array(realm.objects(polyRecord.self))
+       
         for obj in record{
             let srcAcc = obj.srcAccount()
+            if obj.type == 1 || obj.type == 3{
+                totalIncome += obj.getAmount()
+            }
+            else if obj.type == 0 || obj.type == 5 || obj.type == 2{
+                totalExpense += obj.getAmount()
+            }
+            
             if Acc?.getname() == srcAcc.getname(){
                 allRecord.append(obj)
             }

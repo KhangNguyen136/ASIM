@@ -54,10 +54,20 @@ class loginVC: UITableViewController {
                 try! self.realm.write{
                     self.realm.add(self.userInforRealm!)
                 }
-                self.toApp()
-                ProgressHUD.dismiss()
-                SCLAlertView().showSuccess("Login successfully", subTitle: "This app will reload your data in server automatically.")
-                return
+                userInforRealm?.reloadData()
+                { result, currency,isHide in
+                    
+                    try! self.realm.write{
+                        userInforRealm?.currency = currency
+                        userInforRealm?.isHideAmount = isHide
+                    }
+                    self.toApp()
+                    ProgressHUD.dismiss()
+                    SCLAlertView().showSuccess("Login successfully", subTitle: "This app had reloaded your data in server automatically.")
+
+                    return
+                }
+                
             }
         })
     }

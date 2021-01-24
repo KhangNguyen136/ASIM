@@ -11,16 +11,29 @@ import RealmSwift
 class personInforVC: UIViewController {
     let realm = try! Realm()
     var userInfor: User!
-    let _title = ["Display name: ","Numberphone: ","","Address: ","Job: ","Email: "]
+    var _title = ["Display name: ","Numberphone: ","","Address: ","Job: ","Email: "]
     var content:[String] = []
     @IBOutlet weak var avtImg: UIImageView!
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var listTV: UITableView!
     override func viewDidLoad() {
+        let lang = self.realm.objects(User.self).first?.isVietnamese
+               if lang == true{
+                  _title = ["Tên hiển thị: ","Số điện thoại: ","","Địa chỉ: ","Công việc: ","Email: "]
+              self.navigationItem.title = "Thông tin cá nhân "
+
+               }
+               else{
+                self.navigationItem.title = "Personal information"
+
+        }
         listTV.register(inforTextFieldCell.self, forCellReuseIdentifier: "inforTextFieldCell")
         listTV.register(dobInforCell.self, forCellReuseIdentifier: "dobInforCell")
         listTV.register(submitInforCell.self, forCellReuseIdentifier: "submitInforCell")
         loadData()
+            
+        self.navigationController?.navigationBar.barTintColor = UIColor(red: 0/255, green: 123/255, blue: 164/255, alpha: 1)
+        
         super.viewDidLoad()
 
     }

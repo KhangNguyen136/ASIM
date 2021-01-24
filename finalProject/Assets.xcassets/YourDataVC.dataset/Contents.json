@@ -1,6 +1,7 @@
 {
-  "colors" : [
+  "data" : [
     {
+      "filename" : "YourDataVC.swift",
       "idiom" : "universal"
     }
   ],

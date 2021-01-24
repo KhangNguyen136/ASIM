@@ -147,7 +147,7 @@ class User: Object{
                 tempRef.child("active").setValue(tempAcc?.active)
                 tempRef.child("descrip").setValue(tempAcc?.descrip)
                 tempRef.child("bank").setValue(tempAcc?.bank)
-                print("Synced an banking account.")
+                print("Synced a banking account.")
             case 2:
                 let tempAcc = i.savingAcc
                 tempRef.child("type").setValue(2)
@@ -155,7 +155,14 @@ class User: Object{
                 tempRef.child("name").setValue(tempAcc?.name)
                 tempRef.child("ammount").setValue(tempAcc?.ammount)
                 tempRef.child("srcAccount").setValue(tempAcc?.srcAccount?.id)
+                if tempAcc?.destAccount != nil
+                {
                 tempRef.child("destAccount").setValue(tempAcc?.destAccount?.id)
+                }
+                else
+                {
+                    tempRef.child("destAccount").setValue(-1)
+                }
                 tempRef.child("startdate").setValue(tempAcc?.startdate.timeIntervalSince1970)
                 tempRef.child("currency").setValue(tempAcc?.currency)
                 tempRef.child("bank").setValue(tempAcc?.bank)
@@ -170,9 +177,19 @@ class User: Object{
                 tempRef.child("interest").setValue(tempAcc?.interest)
                 tempRef.child("nextTermDate").setValue(tempAcc?.nextTermDate.timeIntervalSince1970)
                 tempRef.child("state").setValue(tempAcc?.state)
-                print("Synced an saving account.")
+                print("Synced a saving account.")
             default:
-                print("Ignore accummulate")
+                let tempAcc = i.accumulate!
+                tempRef.child("type").setValue(3)
+                tempRef.child("id").setValue(tempAcc.id)
+                tempRef.child("goal").setValue(tempAcc.goal)
+                tempRef.child("balance").setValue(tempAcc.balance)
+                tempRef.child("addbalance").setValue(tempAcc.addbalance)
+                tempRef.child("includeReport").setValue(tempAcc.includeReport)
+                tempRef.child("currency").setValue(tempAcc.currency)
+                tempRef.child("startdate").setValue(tempAcc.startdate.timeIntervalSince1970)
+                tempRef.child("enddate").setValue(tempAcc.enddate.timeIntervalSince1970)
+                print("Synced an accummulate.")
                 continue
             }
             try! realm!.write
@@ -529,8 +546,10 @@ class User: Object{
                     realm!.delete(i.cashAcc!)
                 case 1:
                     realm!.delete(i.bankingAcc!)
-                default:
+                case 2:
                     realm!.delete(i.savingAcc!)
+                default:
+                    realm?.delete(i.accumulate!)
                 }
                 realm!.delete(i)
             }
@@ -617,29 +636,29 @@ class User: Object{
     }
     func reloadData(completionHandler: @escaping (_ result: Bool, _ currency: Int, _ isHide: Bool) -> Void)
     {
-        var tempCurrency = -1
+        var tempCurrency = 0
         var tempIsHide = false
         print("Begin reload infor...")
         let userRef = ref.child("users").child(username)
         userRef.observeSingleEvent(of: .value, with: { [self] snapshot in
             if snapshot.exists() == false
             {
-                completionHandler(false,-1,false)
+                completionHandler(false,0,false)
                 return
             }
             let data = snapshot.value as? [String: Any]
-            try! realm?.write{
-            numberPhone = data!["numberPhone"] as! String
-            address = data!["address"] as! String
-            job = data!["job"] as! String
-            birthDay = Date(timeIntervalSince1970: (data!["birthDay"] as! TimeInterval))
-            isMale = data!["isMale"] as! Bool
+            try! self.realm?.write{
+                self.numberPhone = data!["numberPhone"] as! String
+                self.address = data!["address"] as! String
+                self.job = data!["job"] as! String
+                self.birthDay = Date(timeIntervalSince1970: (data!["birthDay"] as! TimeInterval))
+                self.isMale = data!["isMale"] as! Bool
             
-            isVietnamese = data!["isVietnamese"] as! Bool
-            tempCurrency = data!["currency"] as! Int
-            defaultScreen = data!["defaultScreen"] as! Int
-            dateFormat = data!["dateFormat"] as! String
-            tempIsHide = data!["isHideAmount"] as! Bool
+                self.isVietnamese = data!["isVietnamese"] as! Bool
+                tempCurrency = data!["currency"] as! Int
+                self.defaultScreen = data!["defaultScreen"] as! Int
+                self.dateFormat = data!["dateFormat"] as! String
+                tempIsHide = data!["isHideAmount"] as! Bool
             }
             
             let accountsData = snapshot.childSnapshot(forPath: "accounts")
@@ -697,20 +716,43 @@ class User: Object{
                     tempPolyAcc.savingAcc?.termEnded = temp["termEnded"] as! Int
                     tempPolyAcc.savingAcc?.termEnded = temp["termEnded"] as! Int
                     let tempSrcAcc = temp["srcAccount"] as! Int
-                    tempPolyAcc.savingAcc?.srcAccount = getAccountByID(id: tempSrcAcc)
+                    tempPolyAcc.savingAcc?.srcAccount = self.getAccountByID(id: tempSrcAcc)
                     let tempDestAcc = temp["destAccount"] as! Int
-                    tempPolyAcc.savingAcc?.destAccount = getAccountByID(id: tempDestAcc)
+                    if tempDestAcc == -1 {
+                        tempPolyAcc.savingAcc?.destAccount = nil
+                    }
+                    else
+                    {
+                    tempPolyAcc.savingAcc?.destAccount = self.getAccountByID(id: tempDestAcc)
+                    }
                     tempPolyAcc.savingAcc?.descrip = temp["descrip"] as! String
                     tempPolyAcc.savingAcc?.includeRecord = temp["includeRecord"] as! Bool
                     tempPolyAcc.savingAcc?.ammount = temp["ammount"] as! Float
                     tempPolyAcc.savingAcc?.state = temp["state"] as! Bool
                     tempPolyAcc.savingAcc?.interest = temp["interest"] as! Float
                     resultAccount.append(tempPolyAcc)
-                    print("Reload an saving account.")
+                    print("Reloaded a saving account.")
                 }
-                try! realm?.write{
-                    realm?.add(tempPolyAcc)
-                    accounts.append(tempPolyAcc)
+                if tempPolyAcc.type == 3
+                {
+                    tempPolyAcc.accumulate = Accumulate()
+                    tempPolyAcc.accumulate?.id = temp["id"] as! Int
+                    tempPolyAcc.accumulate?.goal = temp["goal"] as! String
+                    tempPolyAcc.accumulate?.balance = temp["balance"] as! Float
+                    tempPolyAcc.accumulate?.addbalance = temp["addbalance"] as! Float
+                    tempPolyAcc.accumulate?.includeReport = temp["includeReport"] as! Bool
+                    tempPolyAcc.accumulate?.currency = temp["currency"] as! Int
+                    let tempStartDate = temp["startdate"] as! TimeInterval
+                    tempPolyAcc.accumulate?.startdate = Date(timeIntervalSince1970: tempStartDate)
+                    let tempEndDate = temp["enddate"] as! TimeInterval
+                    tempPolyAcc.accumulate?.enddate = Date(timeIntervalSince1970: tempEndDate)
+                    resultAccount.append(tempPolyAcc)
+                    print("Reloaded an accumulate account.")
+
+                }
+                try! self.realm?.write{
+                    self.realm?.add(tempPolyAcc)
+                    self.accounts.append(tempPolyAcc)
                 }
             }
             //reload records
@@ -909,24 +951,14 @@ class User: Object{
                     tempRecord.adjustment = tempAdjustment
                     recordsResult.append(tempRecord)
                 }
-//                let hasImg = temp["img"] as! Bool
-//                print(hasImg)
-//                if hasImg == true
-//                {
-//                    let imgStore = imgClass()
-//                    imgStore.id = tempRecord.id
-//                    try! realm?.write{
-//                        realm?.add(imgStore)
-//                    }
-//                    tempRecord.setImg(img: imgStore)
-//                }
+
             }
             if parentIndex.isEmpty == false
             {
                 for index in 0...parentIndex.count-1
             {
                 //get record by id
-                let temp = findRecordByID(arr: recordsResult,id: childID[index])
+                let temp = self.findRecordByID(arr: recordsResult,id: childID[index])
                     switch recordsResult[parentIndex[index]].type {
                     case 0:
                         recordsResult[parentIndex[index]].expense?.borrowRecord = temp
@@ -939,11 +971,11 @@ class User: Object{
                     }
             }
             }
-            try! realm?.write{
+            try! self.realm?.write{
                 for i in recordsResult{
-                    realm?.add(i)
+                    self.realm?.add(i)
                 }
-            records.append(objectsIn: recordsResult)
+                self.records.append(objectsIn: recordsResult)
             }
             completionHandler(true,tempCurrency,tempIsHide)
         })

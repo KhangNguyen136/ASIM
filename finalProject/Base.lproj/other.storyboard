@@ -263,10 +263,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Other" id="e2R-Cz-oEh">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="yjm-LI-mfj">
+                        <barButtonItem key="rightBarButtonItem" image="bell.fill" catalog="system" style="plain" id="yjm-LI-mfj">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="7fb-lt-WnG">
-                                <rect key="frame" x="364" y="5" width="30" height="34"/>
+                                <rect key="frame" x="374" y="11" width="20" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="bell.fill" catalog="system"/>
                                 <connections>
                                     <segue destination="cOI-UV-fec" kind="push" id="Mip-XS-ctP"/>
                                 </connections>
@@ -390,20 +391,14 @@
                                                         <action selector="clickSyncData:" destination="0fa-ew-RQE" eventType="touchUpInside" id="b68-8W-ooI"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pJr-kJ-jim">
+                                                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pJr-kJ-jim">
                                                     <rect key="frame" x="50" y="46" width="334" height="20"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20" id="pXm-0V-ZWy"/>
                                                     </constraints>
-                                                    <state key="normal">
-                                                        <attributedString key="attributedTitle">
-                                                            <fragment content="Last sync">
-                                                                <attributes>
-                                                                    <color key="NSColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <font key="NSFont" metaFont="system" size="17"/>
-                                                                </attributes>
-                                                            </fragment>
-                                                        </attributedString>
+                                                    <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
+                                                    <state key="normal" title="Last sync">
+                                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
                                                     </state>
                                                 </button>
@@ -1142,6 +1137,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="bell.fill" catalog="system" width="128" height="124"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="icloud.and.arrow.down.fill" catalog="system" width="128" height="112"/>
         <image name="other" width="30" height="30"/>

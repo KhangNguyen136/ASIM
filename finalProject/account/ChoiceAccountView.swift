@@ -99,7 +99,8 @@ extension ChoiceAccountView: UITableViewDataSource, UITableViewDelegate {
          if currencyMode == true {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ChoiceAccountViewCell", for: indexPath) as! ChoiceAccountViewCell
             cell.txtText.text = currencyLabel[indexPath.row]
-            cell.imgIcon.image = UIImage(named: currencyLabel[indexPath.row])
+            print("currency\([indexPath.row])")
+            cell.imgIcon.image = UIImage(named: "currency\(indexPath.row)")
             return cell
                }
                else if accountMode == true{
@@ -139,7 +140,7 @@ extension ChoiceAccountView: UITableViewDataSource, UITableViewDelegate {
             self.navigationController?.popViewController(animated: true)
         }
         else if accountMode == true{
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "accountNotification"), object: nil, userInfo: ["accountType": accountLabel[indexPath.row]])
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "accountNotification"), object: nil, userInfo: ["accountType": "\(indexPath.row)"])
             self.navigationController?.popViewController(animated: true)
         }
         else if timeMode == true{
@@ -169,4 +170,5 @@ static let bankNotification = Notification.Name("bankNotification")
 static let accountNotification = Notification.Name("accountNotification")
 static let timeNotification = Notification.Name("timeNotification")
 static let termNotification = Notification.Name("termNotification")
+static let updateNotification = Notification.Name("updateNotification")
 }

@@ -52,6 +52,7 @@ struct categoryValues {
     let income = [["Bonus","Interest","Salary","Savings interesst","Collecting debts","Other"]]
     let other = [["Lend","Borrow","Repayment","Collecting debts"]]
     let typeRecord = ["Expense", "Income", "Lend","Borrow","Transfer","Adjustment"]
+    let typeRecordVietnamese = ["Khoản chi", "Thu nhập", "Mượn tiền","Cho mượn tiền","Chuyển khoản","Điều chỉnh số dư"]
     
 }
 class Notify: Object{
@@ -93,7 +94,7 @@ class Notify: Object{
         for obj in lend{
             if obj.lend!.collectionDate != nil{
                 if obj.lend!.collectionDate! <= Date(){
-                    SCLAlertView().showInfo("Thu nợ", subTitle: "Chỗ nãy tui hông biết nó thông báo gì, có gì ông sửa hộ")
+                    SCLAlertView().showInfo("Thu nợ", subTitle: obj.lend!.descript)
                 }
             }
         }
@@ -101,7 +102,7 @@ class Notify: Object{
         for obj in borrow{
             if obj.borrow?.repaymentDate != nil{
                 if obj.borrow!.repaymentDate! <= Date(){
-                    SCLAlertView().showInfo("Trả nợ", subTitle: "Chỗ nãy tui hông biết nó thông báo gì, có gì ông sửa hộ")
+                    SCLAlertView().showInfo("Trả nợ", subTitle: obj.borrow?.descript ?? "")
                 }
             }
         }
@@ -229,11 +230,13 @@ class polyAccount: Object{
     }
     func del(){
         //marked if account had been uploaded
+        try! realm?.write{
         if isUploaded == true
         {
             isDeleted = true
             //delete infor with this account
             return
+        }
         }
         let realm = try! Realm()
         if self.type == 0{
@@ -275,13 +278,14 @@ class Accumulate: Object{
     @objc dynamic var balance: Float = 0
     @objc dynamic var addbalance: Float = 0
     @objc dynamic var includeReport: Bool = true
-    @objc dynamic var currency: String = ""
+    @objc dynamic var currency: Int = 0
     @objc dynamic var startdate: Date = Date()
     @objc dynamic var enddate: Date = Date()
     func add(){
         let realm = try! Realm()
         let polyAcc = polyAccount()
         polyAcc.accumulate = self
+        polyAcc.id = polyAccount().incrementID()
         polyAcc.type = 3
         try! realm.write {
             realm.add(self)

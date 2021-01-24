@@ -20,6 +20,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
     var userInfor: User? = nil
     var srcAccount: polyAccount? = nil
 
+    @IBOutlet weak var AmountL: UILabel!
     @IBOutlet weak var unit: UILabel!
     @IBOutlet weak var amount: UITextField!
 
@@ -27,6 +28,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
     
     @IBOutlet weak var locationTF: SearchTextField!
     
+    @IBOutlet weak var Description: UITextField!
     @IBOutlet weak var categoryLogo: UIImageView!
     @IBOutlet weak var chooseCategoryBtn: UIButton!
     @IBOutlet weak var selectTypeRecord: UIButton!
@@ -76,20 +78,37 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         {
             type = 3
             amount.textColor = UIColor.green
-            personTF.placeholder = "Lender"
+            personTF.setupAutolocalization(withKey: "Lender", keyPath: "placeholder")
             descript.text = "Borrowed money from " + personTF.text!
             selectTypeRecord.setTitle("Borrow", for: .normal)
             categoryLogo.image = UIImage(named: "other1")
             chooseCategoryBtn.setTitle(categoryValues().other[0][category], for: .normal)
         }
     }
+    func setLanguage(){
+        descript.setupAutolocalization(withKey: "Description", keyPath: "placeholder");
+        locationTF.setupAutolocalization(withKey: "Location", keyPath: "text")
+        doneTitle.setupAutolocalization(withKey: "Repayed/Collected", keyPath: "text")
+        AmountL.setupAutolocalization(withKey: "Amount", keyPath: "text")
+        
+    }
     override func viewWillAppear(_ animated: Bool) {
+        setLanguage()
         userInfor = realm.objects(User.self)[0]
         
         selectTypeRecord.semanticContentAttribute = .forceRightToLeft
-        selectTypeRecord.setTitle(categoryValues().typeRecord[type],for: .normal)
+        let lang = realm.objects(User.self).first?.isVietnamese
+         
+        if lang == true{
+            selectTypeRecord.setTitle(categoryValues().typeRecordVietnamese[type],for: .normal)
+        }
+        else{
+            selectTypeRecord.setTitle(categoryValues().typeRecord[type],for: .normal)
+        }
+
         selectTypeRecord.clipsToBounds = true
-        selectTypeRecord.layer.cornerRadius = selectTypeRecord.frame.width/8
+//        selectTypeRecord.backgroundColor = .white
+        selectTypeRecord.layer.cornerRadius = selectTypeRecord.frame.width/10
 
         category = type - 2
 
@@ -97,13 +116,15 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         chooseCategoryBtn.setTitle(categoryValues().other[0][category], for: .normal)
         if type == 2 {
             amount.textColor = UIColor.red
-            personTF.placeholder = "Borrower"
+            personTF.setupAutolocalization(withKey: "Borrower", keyPath: "placeholder")
+
             reDateBtn.setTitle("Collecting date", for: .normal)
         }
         else
         {
             amount.textColor = UIColor.green
-            personTF.placeholder = "Lender"
+            personTF.setupAutolocalization(withKey: "Lender", keyPath: "placeholder")
+
             reDateBtn.setTitle("Repayment date", for: .normal)
 
         }
@@ -170,7 +191,14 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
         dropDown.anchorView = sender // UIView or UIBarButtonItem
 
         // The list of items to display. Can be changed dynamically
-        dropDown.dataSource = categoryValues().typeRecord
+        let lang = realm.objects(User.self).first?.isVietnamese
+        if lang == true{
+            dropDown.dataSource = categoryValues().typeRecordVietnamese
+        }
+        else{
+             dropDown.dataSource = categoryValues().typeRecord
+        }
+       
 
         /*** IMPORTANT PART FOR CUSTOM CELLS ***/
         dropDown.cellNib = UINib(nibName: "typeRecord", bundle: nil)
@@ -203,7 +231,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
                     if index == 2
                     {
                         self!.amount.textColor = UIColor.red
-                        self!.personTF.placeholder = "Borrower"
+                        self!.personTF.setupAutolocalization(withKey: "Borrower", keyPath: "placeholder")
 
                         
                         self!.selectTypeRecord.setTitle("Lend", for: .normal)
@@ -215,7 +243,7 @@ class addLendOrBorrowVC: UITableViewController, selectCategoryDelegate,selectAcc
                     {
                         
                         self!.amount.textColor = UIColor.green
-                        self!.personTF.placeholder = "Lender"
+                        self!.personTF.setupAutolocalization(withKey: "Lender", keyPath: "placeholder")
 
                         self!.selectTypeRecord.setTitle("Borrow", for: .normal)
                         self!.categoryLogo.image = UIImage(named: "other1")

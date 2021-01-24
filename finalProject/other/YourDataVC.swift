@@ -10,7 +10,6 @@ import RealmSwift
 import FirebaseDatabase
 import ProgressHUD
 import SCLAlertView
-import FirebaseStorage
 
 struct accountTempClass: Codable{
     let type: Int
@@ -43,7 +42,7 @@ class yourDataVC: UITableViewController {
     }
     func getLastSync()
     {
-        if userInfor?.lastSync != nil
+        if userInfor!.lastSync != nil
         {
             let formatter = DateFormatter()
             formatter.dateFormat = userInfor?.dateFormat
@@ -86,9 +85,10 @@ class yourDataVC: UITableViewController {
     func syncData(){
         ProgressHUD.show("Sync your data...")
         userInfor?.syncData()
+        print("Synced!")
         ProgressHUD.dismiss()
-        getLastSync()
         SCLAlertView().showSuccess("Sync data successfully!", subTitle: "")
+        getLastSync()
         return
     }
     
@@ -119,6 +119,11 @@ class yourDataVC: UITableViewController {
     func deleteLocalData(){
         print("Begin delete local data...")
         try! realm.write {
+//            let tempUsername = userInfor!.username
+//            realm.deleteAll()
+//            userInfor = User()
+//            userInfor?.username = tempUsername
+//            realm.add(userInfor!)
             for i in userInfor!.accounts
             {
                 switch i.type {
@@ -126,17 +131,15 @@ class yourDataVC: UITableViewController {
                     realm.delete(i.cashAcc!)
                 case 1:
                     realm.delete(i.bankingAcc!)
-                default:
+                case 2:
                     realm.delete(i.savingAcc!)
+                default:
+                    realm.delete(i.accumulate!)
                 }
                 realm.delete(i)
             }
             for i in userInfor!.records
             {
-                if i.getImg() != nil
-                {
-                    realm.delete(i.getImg()!)
-                }
                 switch i.type {
                 case 0:
                     realm.delete(i.expense!)
@@ -166,19 +169,18 @@ class yourDataVC: UITableViewController {
             print(result)
             if result == true
             {
-                    self.reloadView()
-                    try! self.realm.write{
-                        self.userInfor?.currency = currency
-                        self.userInfor?.isHideAmount = isHide
-                    }
-                    SCLAlertView().showSuccess("Reload data successfully", subTitle: "")
-                    ProgressHUD.dismiss()
+                self.reloadView()
+                try! self.realm.write{
+                    self.userInfor?.currency = currency
+                    self.userInfor?.isHideAmount = isHide
+                }
+                SCLAlertView().showSuccess("Reload data successfully", subTitle: "")
             }
             else
             {
                 SCLAlertView().showError("Reload data fail", subTitle: "There is no data in server!")
-                ProgressHUD.dismiss()
             }
+            ProgressHUD.dismiss()
             print("End reload data from firebase.")
         }
     }
@@ -225,9 +227,6 @@ class yourDataVC: UITableViewController {
         tempRef = ref.child("users").child(userInfor!.username).child("event")
         tempRef.removeValue()
         
-        let storageRef = Storage.storage().reference().child(userInfor!.username)
-        storageRef.delete(completion: nil)
-    
         reloadView()
         ProgressHUD.dismiss()
         SCLAlertView().showSuccess("All data had been deleted!", subTitle: "")

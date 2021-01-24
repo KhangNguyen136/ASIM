@@ -10,12 +10,11 @@ import SearchTextField
 import DropDown
 import RealmSwift
 import SCLAlertView
-
+import LocalizationSystem
 
 class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectAccountDelegate,settingDelegate,delteImageDelegate {
     
-    
-    
+        
     var type = 0
     var category = -1
     var detailCategory = -1
@@ -36,13 +35,9 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
     
     @IBOutlet weak var amount: UITextField!
     
-    let currencyFormatter = NumberFormatter()
-    @IBAction func changeAmount(_ sender: UITextField) {
-         
-    }
-    
     @IBOutlet weak var chooseTypeRecordBtn: UIButton!
     
+    @IBOutlet weak var AmountL: UILabel!
     @IBOutlet weak var categoryLogo: UIImageView!
     @IBOutlet weak var chooseCategoryBtn: UIButton!
     
@@ -83,19 +78,29 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
         settingObser = settingObserver(object: setting!)
         unit.text = currencyBase().symbol[userInfor!.currency]
     }
+    func setLanguage(){
+        AmountL.setupAutolocalization(withKey: "Amount", keyPath: "text")
+        descript.setupAutolocalization(withKey: "Description", keyPath: "placeholder")
+       personTF.setupAutolocalization(withKey: "Payee", keyPath: "placeholder")
+        locationTF.setupAutolocalization(withKey: "Location", keyPath: "placeholder")
+        eventTF.setupAutolocalization(withKey: "Event", keyPath: "placeholder")
+        //chooseCategoryBtn.setTitle(ChooseCategory, for: .normal)
+     }
     func loadData() {
+
         chooseTypeRecordBtn.setTitle(categoryValues().typeRecord[type],for: .normal)
+//        chooseTypeRecordBtn.backgroundColor = .white
         chooseTypeRecordBtn.clipsToBounds = true
-        chooseTypeRecordBtn.layer.cornerRadius = chooseTypeRecordBtn.frame.width/8
+        chooseTypeRecordBtn.layer.cornerRadius = chooseTypeRecordBtn.frame.width/10
         if(type == 0)
         {
             self.amount.textColor = UIColor.red
-            personTF.placeholder = "Payee"
+            personTF.setupAutolocalization(withKey: "Payee", keyPath: "placeholder")
         }
         else
         {
             self.amount.textColor = UIColor.green
-            personTF.placeholder = "Payer"
+           personTF.setupAutolocalization(withKey: "Payer", keyPath: "placeholder")
         }
         userInfor = realm.objects(User.self)[0]
         setting = settingObserve(user: userInfor!)
@@ -299,11 +304,12 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
     
     @IBAction func chooseType(_ sender: UIButton) {
         let dropDown = DropDown()
-        // The view to which the drop down will appear on
         dropDown.anchorView = sender // UIView or UIBarButtonItem
-        // The list of items to display. Can be changed dynamically
         dropDown.dataSource = categoryValues().typeRecord
-        /*** IMPORTANT PART FOR CUSTOM CELLS ***/
+        let lang = realm.objects(User.self).first?.isVietnamese
+        if lang == true{
+            dropDown.dataSource = categoryValues().typeRecordVietnamese
+        }
         dropDown.cellNib = UINib(nibName: "typeRecord", bundle: nil)
 
         dropDown.customCellConfiguration = { (index: Index, item: String, cell: DropDownCell) -> Void in
@@ -329,12 +335,12 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
                     if index == 0
                     {
                         self?.amount.textColor = UIColor.red
-                        self?.personTF.placeholder = "Payee"
+                        self!.personTF.setupAutolocalization(withKey: "Payee", keyPath: "placeholder")
                     }
                     else
                     {
                         self?.amount.textColor = UIColor.green
-                        self?.personTF.placeholder = "Payer"
+                        self!.personTF.setupAutolocalization(withKey: "Payer", keyPath: "placeholder")
                     }
                     
                 case 2,3:
@@ -369,16 +375,22 @@ class addExpenseOrIncomeVC: UITableViewController,selectCategoryDelegate,selectA
         dropDown.show()
         }
     override func viewDidLoad() {
-        currencyFormatter.usesGroupingSeparator = true
-        currencyFormatter.numberStyle = .currency
-        currencyFormatter.locale = .none
+
+//        self.navigationController?.navigationBar.barTintColor = UIColor(red: 0/255, green: 123/255, blue: 164/255, alpha: 1)
+                             // Do any additional setup after loading the view.
+               
+//        self.navigationController?.navigationBar.titleTextAttributes = [
+//                                 .foregroundColor: UIColor.white,
+//                                 .font: UIFont(name: "MarkerFelt-Thin", size: 20)!]
         loadData()
+        setLanguage()
         chooseTypeRecordBtn.semanticContentAttribute = .forceRightToLeft
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         let reviewImg = UITapGestureRecognizer(target: self, action: #selector(clickImg))
         imgView.isUserInteractionEnabled = true
         imgView.addGestureRecognizer(reviewImg)
+        
         super.viewDidLoad()
     }
     @objc func clickImg() {

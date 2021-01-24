@@ -27,6 +27,13 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
     var detailCategory = -1
     
     @IBOutlet weak var selectTypeRecord: UIButton!
+    @IBOutlet weak var Difference: UILabel!
+    @IBOutlet weak var BalanceInAccount: UILabel!
+
+    @IBOutlet weak var ActualBalance: UILabel!
+    @IBOutlet weak var Payee: SearchTextField!
+    @IBOutlet weak var Location: SearchTextField!
+    @IBOutlet weak var Description: UITextField!
     @IBOutlet weak var chooseAccountBtn: UIButton!
     @IBOutlet weak var categoryLogo: UIImageView!
     @IBOutlet weak var chooseCategoryBtn: UIButton!
@@ -100,7 +107,14 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
         
 
     }
-    
+    func setLanguage(){
+        BalanceInAccount.setupAutolocalization(withKey: "BalanceInAccount", keyPath: "text")
+        Difference.setupAutolocalization(withKey: "Difference", keyPath: "text")
+        Description.setupAutolocalization(withKey: "Description", keyPath: "placeholder")
+        Payee.setupAutolocalization(withKey: "Payee", keyPath: "placeholder")
+        Location.setupAutolocalization(withKey: "Location", keyPath: "placeholder")
+        ActualBalance.setupAutolocalization(withKey: "ActualBalance", keyPath: "text")
+    }
     func didSelectAccount(temp: polyAccount, name: String) {
         srcAccount = temp
         chooseAccountBtn.setTitle(name, for: .normal)
@@ -163,7 +177,8 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
         
         selectTypeRecord.semanticContentAttribute = .forceRightToLeft
         selectTypeRecord.clipsToBounds = true
-        selectTypeRecord.layer.cornerRadius = selectTypeRecord.frame.width/8
+//        selectTypeRecord.backgroundColor = .white
+        selectTypeRecord.layer.cornerRadius = selectTypeRecord.frame.width/10
         
         let reviewImg = UITapGestureRecognizer(target: self, action: #selector(clickImg))
         imgView.isUserInteractionEnabled = true
@@ -172,6 +187,7 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         super.viewDidLoad()
+        setLanguage()
     }
     @objc func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
@@ -194,7 +210,13 @@ class addAdjustmentVC: UITableViewController,selectAccountDelegate,selectCategor
         dropDown.anchorView = sender // UIView or UIBarButtonItem
 
         // The list of items to display. Can be changed dynamically
-        dropDown.dataSource = categoryValues().typeRecord
+        let lang = realm.objects(User.self).first?.isVietnamese
+        if lang == true{
+            dropDown.dataSource = categoryValues().typeRecordVietnamese
+        }
+        else{
+             dropDown.dataSource = categoryValues().typeRecord
+        }
 
         /*** IMPORTANT PART FOR CUSTOM CELLS ***/
         dropDown.cellNib = UINib(nibName: "typeRecord", bundle: nil)
