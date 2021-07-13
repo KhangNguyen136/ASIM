@@ -11,37 +11,37 @@
 ## Main functions:
 -   **Manage money**:
 
-    - *Account*:
+    Account:
 
 <img src="https://imgur.com/HPoF0B6.png" width="250" height="600"> <img src="https://imgur.com/goznqVS.png" width="250" height="600">
 
-    - *Accumulate*:
+    Accumulate:
 
 <img src="https://imgur.com/saNK5HN.png" width="250" height="600"> <img src="https://imgur.com/XySBrBn.png" width="250" height="600">
 
-    - *Saving account*:
+    Saving account:
 
 <img src="https://imgur.com/SPvtX2c.png" width="250" height="600"> <img src="https://imgur.com/jpoVSiQ.png" width="250" height="600">
 
 -   **Record transaction**: 
-    - *Expense*:
+    Expense:
 
 <img src="https://imgur.com/NgpF0St.png" width="250" height="600"> <img src="https://imgur.com/pxceUiB.png" width="250" height="600">
 
-    - *Income*:
+    Income:
 
 <img src="https://imgur.com/ynm5CJq.png" width="250" height="600"> <img src="https://imgur.com/80FzrJq.png" width="250" height="600">
 
-    - *Lend and borrow*:
+    Lend and borrow:
 
 <img src="https://imgur.com/8EdQgL6.png" width="250" height="600"> <img src="https://imgur.com/DTmV4fj.png" width="250" height="600">
 
-    - *Transfer*:
+    Transfer:
 
  <img src="https://imgur.com/K0AWlpa.png" width="250" height="600">
 
-    - *Adjustment*:
-    
+    Adjustment:
+
 <img src="https://imgur.com/pYNGnJV.png" width="250" height="600">
 
 - **View hisotory record by date**:
