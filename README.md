@@ -6,7 +6,7 @@
 -   **Dev**: Nguyen Tan Khang, Nguyen Binh Nguyen.
 -   **Run project**: 'pod install' and run in simulator
 
-<img src="https://imgur.com/DqtS82V.png" width="250" height="600">
+<img src="https://imgur.com/DqtS82V.png" width="300" height="650">
 
 ## Main functions:
 -   **Manage money**:
